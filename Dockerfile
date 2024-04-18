@@ -1,4 +1,4 @@
-FROM python:3.9 as builder
+FROM python:3.12 as builder
 RUN pip install poetry
 RUN apt-get update
 RUN apt-get install -y libgl1-mesa-dev ghostscript python3-tk
