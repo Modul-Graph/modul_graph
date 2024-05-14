@@ -9,6 +9,7 @@ readme = "README.md"
 python = "~3.12"
 pandas = "^2.2.1"
 loguru = "^0.7.2"
+neomodel = "^5.2.1"
 
 [tool.poetry.group.dev.dependencies]
 pylint = "^3.1.0"
