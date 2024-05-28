@@ -4,7 +4,6 @@ from neomodel import StructuredNode, StringProperty, RelationshipTo, ZeroOrMore,
 class Competence(StructuredNode):
     name = StringProperty(required=True, unique_index=True)
     is_part_of = RelationshipTo('Competence', 'IS_PART_OF', cardinality=ZeroOrMore)
-# lalala
 
 class Requirement(StructuredNode):
     semester = IntegerProperty(required=True)
