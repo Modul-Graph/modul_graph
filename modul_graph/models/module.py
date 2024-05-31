@@ -1,10 +1,10 @@
-from neomodel import JSONProperty, StructuredNode, StringProperty, RelationshipTo, ZeroOrMore, OneOrMore, IntegerProperty, One, RelationshipFrom
+from neomodel import JSONProperty, StructuredNode, StringProperty, RelationshipTo, ZeroOrMore, OneOrMore, RelationshipFrom
 
 
 class Module(StructuredNode):
 
     # attributes
-    name = StringProperty()
+    name = StringProperty(required=True, unique_index=True)
     moduleDescription = StringProperty()
     cpPlusDescription = JSONProperty()
 
@@ -17,5 +17,7 @@ class Module(StructuredNode):
     provided_by_micro_unit = RelationshipFrom('MicroUnit', 'PROVIDES', cardinality=ZeroOrMore)
 
     # connection to StudyExamRules
+    belongs_to_SER = RelationshipTo('StudyExamRules', 'BELONGS_TO', cardinality=OneOrMore)
 
-    # connection to ModuleArea.
+    # connection to ModuleArea
+    fills_module_area = RelationshipTo('ModuleArea', 'FILLS', cardinality=OneOrMore)
