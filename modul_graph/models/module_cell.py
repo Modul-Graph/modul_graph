@@ -1,0 +1,14 @@
+from neomodel import StructuredNode, StringProperty, RelationshipTo, ZeroOrMore, OneOrMore, One, RelationshipFrom
+
+
+class ModuleCell(StructuredNode):
+    identifier = StringProperty(required=True, unique_index=True)
+
+    # connection to ModuleArea
+    filled_by_module_area = RelationshipFrom('ModuleArea', 'FILLS', cardinality=OneOrMore)
+
+    # connection to Semester
+    is_in_semester = RelationshipTo('Semester', 'IS_IN', cardinality=One)
+
+    # connection to CpCluster
+    is_component_of_cp_cluster = RelationshipFrom('CpCluster', 'CONSISTS_OF', cardinality=ZeroOrMore)
