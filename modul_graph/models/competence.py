@@ -6,4 +6,4 @@ class Competence(StructuredNode):
     name = StringProperty(required=True, unique_index=True)
     #relationships
     is_needed_by = RelationshipFrom('Module', 'NEEDS', cardinality=ZeroOrMore)
-    is_provided_by = RelationshipFrom('Module', 'PROVIDES', cardinality=OneOrMore)
+    is_provided_by = RelationshipTo('Module', 'PROVIDES', cardinality=OneOrMore)
