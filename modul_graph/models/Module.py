@@ -18,4 +18,4 @@ class Module(StructuredNode):
 
     # connection to StudyExamRules
 
-    # connection to ModuleArea
+    # connection to ModuleArea.
