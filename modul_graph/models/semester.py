@@ -2,7 +2,7 @@ from neomodel import StructuredNode, OneOrMore, RelationshipTo, ZeroOrMore, Inte
 
 
 class Semester(StructuredNode):
-    number = IntegerProperty(required=True, unique_index=True)
+    number = IntegerProperty(required=True, unique=True)
 
     # connection to CpCluster
     consists_of_cp_cluster = RelationshipTo('CpCluster', 'CONSISTS_OF', ZeroOrMore)

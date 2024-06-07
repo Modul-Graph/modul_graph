@@ -9,12 +9,13 @@ class TwoOrMore (RelationshipManager):
     pass
 
 class CpCluster(StructuredNode):
-    identifier = StringProperty(required=True, unique_index=True)
+    identifier = StringProperty(required=True, unique=True)
     cp_number = IntegerProperty()
     cp_number_grade = IntegerProperty
 
     # connection to ModuleCell
-    consists_of_module_cell = RelationshipTo('ModuleCell', 'CONSISTS_OF', cardinality=TwoOrMore)
+    # should be TwoOrMore but that doesn't exist
+    consists_of_module_cell = RelationshipTo('ModuleCell', 'CONSISTS_OF', cardinality=OneOrMore)
 
     # connection to Semester
     is_component_of_semester = RelationshipFrom('Semester', 'CONSISTS_OF', cardinality=OneOrMore)

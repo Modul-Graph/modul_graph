@@ -2,7 +2,7 @@ from neomodel import StructuredNode, OneOrMore, StringProperty, RelationshipTo, 
 
 
 class ModuleArea(StructuredNode):
-    name = StringProperty(required=True, unique_index=True)
+    name = StringProperty(required=True, unique=True)
 
     # connection to Module
     filled_by_module = RelationshipFrom('Module', 'FILLS', cardinality=OneOrMore)

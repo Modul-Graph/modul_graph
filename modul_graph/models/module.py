@@ -4,7 +4,7 @@ from neomodel import JSONProperty, StructuredNode, StringProperty, RelationshipT
 class Module(StructuredNode):
 
     # attributes
-    name = StringProperty(required=True, unique_index=True)
+    name = StringProperty(required=True, unique=True)
     moduleDescription = StringProperty()
     cpPlusDescription = JSONProperty()
 
