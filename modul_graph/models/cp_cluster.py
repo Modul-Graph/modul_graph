@@ -1,5 +1,8 @@
 from neomodel import RelationshipManager, StructuredNode, OneOrMore, StringProperty, RelationshipTo, IntegerProperty, RelationshipFrom
 
+from models.module_cell import ModuleCell
+from models.semester import Semester
+
 
 class TwoOrMore (RelationshipManager):
     """
@@ -15,7 +18,7 @@ class CpCluster(StructuredNode):
 
     # connection to ModuleCell
     # should be TwoOrMore but that doesn't exist
-    consists_of_module_cell = RelationshipTo('ModuleCell', 'CONSISTS_OF', cardinality=OneOrMore)
+    consists_of_module_cell = RelationshipTo(ModuleCell, 'CONSISTS_OF', cardinality=OneOrMore)
 
     # connection to Semester
-    is_component_of_semester = RelationshipFrom('Semester', 'CONSISTS_OF', cardinality=OneOrMore)
+    is_component_of_semester = RelationshipFrom(Semester, 'CONSISTS_OF', cardinality=OneOrMore)
