@@ -1,4 +1,4 @@
-from neomodel import JSONProperty, StructuredNode, StringProperty, RelationshipTo, ZeroOrMore, OneOrMore, RelationshipFrom
+from neomodel import JSONProperty, StructuredNode, StringProperty, RelationshipTo, ZeroOrMore, OneOrMore, RelationshipFrom, BooleanProperty
 
 from models.competence import Competence
 from models.micro_unit import MicroUnit
@@ -12,6 +12,8 @@ class Module(StructuredNode):
     name = StringProperty(required=True, unique=True)
     moduleDescription = StringProperty()
     cpPlusDescription = JSONProperty()
+    is_in_summer = BooleanProperty(required=True)
+    is_in_winter = BooleanProperty(required=True)
 
     # connection to Competence
     needs_competence = RelationshipTo(Competence, 'NEEDS', cardinality=ZeroOrMore)
