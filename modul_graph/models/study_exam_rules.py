@@ -2,7 +2,7 @@ from neomodel import StructuredNode, StringProperty, OneOrMore, RelationshipTo, 
 
 
 class StudyExamRules(StructuredNode):
-    name = StringProperty(required=True, unique_index=True)
+    name = StringProperty(required=True, unique=True)
 
     # connection to Module
     has_module = RelationshipFrom('Module', 'BELONGS_TO', cardinality=OneOrMore)
