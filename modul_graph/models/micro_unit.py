@@ -4,7 +4,7 @@ from models.module import Module
 
 
 class MicroUnit(StructuredNode):
-    name = StringProperty(required=True, unique_index=True)
+    name = StringProperty(required=True, unique=True)
     level = IntegerProperty(required=True)
 
     # connection to Module
