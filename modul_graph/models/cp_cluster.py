@@ -3,14 +3,6 @@ from neomodel import RelationshipManager, StructuredNode, OneOrMore, StringPrope
 from models.module_cell import ModuleCell
 from models.semester import Semester
 
-
-class TwoOrMore (RelationshipManager):
-    """
-    A relationship to two or more nodes
-    todo: implement
-    """
-    pass
-
 class CpCluster(StructuredNode):
     identifier = StringProperty(required=True, unique=True)
     cp_number = IntegerProperty()
