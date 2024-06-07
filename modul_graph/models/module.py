@@ -7,11 +7,9 @@ from models.study_exam_rules import StudyExamRules
 
 
 class Module(StructuredNode):
-
-    # attributes
     name = StringProperty(required=True, unique=True)
-    moduleDescription = StringProperty()
-    cpPlusDescription = JSONProperty()
+    module_description = StringProperty()
+    cp_plus_description = JSONProperty()
     is_in_summer = BooleanProperty(required=True)
     is_in_winter = BooleanProperty(required=True)
 
