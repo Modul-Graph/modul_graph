@@ -1,8 +1,8 @@
 from neomodel import StructuredNode, OneOrMore, RelationshipTo, ZeroOrMore, IntegerProperty, One, RelationshipFrom
 
-from models.cp_cluster import CpCluster
-from models.module_cell import ModuleCell
-from models.study_exam_rules import StudyExamRules
+from .cp_cluster import CpCluster
+from .module_cell import ModuleCell
+from .study_exam_rules import StudyExamRules
 
 
 class Semester(StructuredNode):

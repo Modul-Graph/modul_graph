@@ -1,7 +1,7 @@
 from neomodel import StructuredNode, StringProperty, OneOrMore, RelationshipTo, ZeroOrMore, IntegerProperty, One, RelationshipFrom
 
-from models.module import Module
-from models.semester import Semester
+from .module import Module
+from .semester import Semester
 
 
 class StudyExamRules(StructuredNode):

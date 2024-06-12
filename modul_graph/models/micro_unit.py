@@ -1,6 +1,6 @@
 from neomodel import (StructuredNode, StringProperty, IntegerProperty, RelationshipTo, RelationshipFrom, ZeroOrMore, OneOrMore)
 
-from models.module import Module
+from .module import Module
 
 
 class MicroUnit(StructuredNode):
