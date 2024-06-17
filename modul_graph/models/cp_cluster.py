@@ -24,13 +24,13 @@ class CpCluster(StructuredNode):
 
     # connection to ModuleCell
     # should be TwoOrMore but that doesn't exist
-    consists_of_module_cell = RelationshipTo(ModuleCell, 'CONSISTS_OF', cardinality=OneOrMore)
+    consists_of_module_cell = RelationshipTo('modul_graph.models.module_cell.ModuleCell', 'CONSISTS_OF', cardinality=OneOrMore)
     """
     Connection to ModuleCell
     """
 
     # connection to Semester
-    is_component_of_semester = RelationshipFrom('Semester', 'CONSISTS_OF', cardinality=OneOrMore)
+    is_component_of_semester = RelationshipFrom('modul_graph.models.semester.Semester', 'CONSISTS_OF', cardinality=OneOrMore)
     """
     Connection to a semester
     """

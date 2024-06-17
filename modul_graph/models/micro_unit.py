@@ -6,5 +6,5 @@ class MicroUnit(StructuredNode):
     level = IntegerProperty(required=True)
 
     # connection to Module
-    needs_from_module = RelationshipFrom('Module', 'NEEDS', cardinality=ZeroOrMore)
-    provide_to_module = RelationshipTo('Module', 'PROVIDES', cardinality=OneOrMore)
+    needs_from_module = RelationshipFrom('modul_graph.models.module.Module', 'NEEDS', cardinality=ZeroOrMore)
+    provide_to_module = RelationshipTo('modul_graph.models.module.Module', 'PROVIDES', cardinality=OneOrMore)

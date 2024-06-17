@@ -13,13 +13,13 @@ class ModuleArea(StructuredNode):
     """
 
     # connection to Module
-    filled_by_module = RelationshipFrom('Module', 'FILLS', cardinality=OneOrMore)
+    filled_by_module = RelationshipFrom('modul_graph.models.module.Module', 'FILLS', cardinality=OneOrMore)
     """
     Connection to module(s) which can be visited to fulfill this module area
     """
 
     # connection to ModuleCell
-    fills_module_cell = RelationshipTo('ModuleCell', 'FILLS', cardinality=OneOrMore)
+    fills_module_cell = RelationshipTo('modul_graph.models.module_cell.ModuleCell', 'FILLS', cardinality=OneOrMore)
     """
     Connection to module cell(s) in which it resides
     """

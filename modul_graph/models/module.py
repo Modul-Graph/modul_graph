@@ -34,29 +34,29 @@ class Module(StructuredNode):
     """
 
     # connection to Competence
-    needs_competence = RelationshipTo('Competence', 'NEEDS', cardinality=ZeroOrMore)
+    needs_competence = RelationshipTo('modul_graph.models.competence.Competence', 'NEEDS', cardinality=ZeroOrMore)
     """
     Connection to competence node which is required by this module. Might be multiple connections
     """
 
-    provided_by_competence = RelationshipFrom('Competence', 'PROVIDES', cardinality=OneOrMore)
+    provided_by_competence = RelationshipFrom('modul_graph.models.competence.Competence', 'PROVIDES', cardinality=OneOrMore)
     """
     Connection to competence which is provided by the module
     """
 
 
     # connection to MicroUnit
-    needs_micro_unit = RelationshipTo('MicroUnit', 'NEEDS', cardinality=ZeroOrMore)
+    needs_micro_unit = RelationshipTo('modul_graph.models.micro_unit.MicroUnit', 'NEEDS', cardinality=ZeroOrMore)
     provided_by_micro_unit = RelationshipFrom('MicroUnit', 'PROVIDES', cardinality=ZeroOrMore)
 
     # connection to StudyExamRules
-    belongs_to_SER = RelationshipTo('StudyExamRules', 'BELONGS_TO', cardinality=OneOrMore)
+    belongs_to_SER = RelationshipTo('modul_graph.models.study_exam_rules.StudyExamRules', 'BELONGS_TO', cardinality=OneOrMore)
     """
     Connection indicates in which SERs the module can be visited
     """
 
     # connection to ModuleArea
-    fills_module_area = RelationshipTo('ModuleArea', 'FILLS', cardinality=OneOrMore)
+    fills_module_area = RelationshipTo('modul_graph.models.module_area.ModuleArea', 'FILLS', cardinality=OneOrMore)
     """
     Connection to module are if module can be visited as an elected subject
     """

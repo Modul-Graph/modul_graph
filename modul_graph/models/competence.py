@@ -1,5 +1,7 @@
-from neomodel import StructuredNode, StringProperty, RelationshipTo, ZeroOrMore, OneOrMore, IntegerProperty, One, RelationshipFrom
+from neomodel import StructuredNode, StringProperty, RelationshipTo, ZeroOrMore, OneOrMore, IntegerProperty, One, \
+    RelationshipFrom
 import unstructured_entry
+
 
 class Competence(StructuredNode):
     """
@@ -11,14 +13,13 @@ class Competence(StructuredNode):
     Human readable name of the competence
     """
 
-
     # connection to Module
-    is_needed_by = RelationshipFrom('Module', 'NEEDS', cardinality=ZeroOrMore)
+    is_needed_by = RelationshipFrom('modul_graph.models.module.Module', 'NEEDS', cardinality=ZeroOrMore)
     """
     Connection to module which needs this competence
     """
 
-    is_provided_by = RelationshipFrom('Module', 'PROVIDES', cardinality=OneOrMore)
+    is_provided_by = RelationshipFrom('modul_graph.models.module.Module', 'PROVIDES', cardinality=OneOrMore)
     """
     Connection to model which provides this competence
     """
