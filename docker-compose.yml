@@ -4,7 +4,7 @@ version: '3.8'
 services:
   neo4j:
     # The image to use
-    image: neo4j:latest
+    image: neo4j:enterprise
     # map the ports so we can check the db server is up
     ports:
       - 7474:7474
