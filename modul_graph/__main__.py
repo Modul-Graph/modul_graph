@@ -1,10 +1,11 @@
 from neomodel import config, db, remove_all_labels, install_all_labels
 
-from .models.unstructured_entry import Competence, Module, Requirement
-from neomodel import install_labels
-
 config.DATABASE_URL = 'bolt://neo4j:dev_pw@neo4j:7687'  # default
 results, meta = db.cypher_query("MATCH (n) DETACH DELETE n")
+
+import modul_graph.static.spo_2017_inf_wise.SER
+
+"""
 print(results)
 remove_all_labels()
 install_all_labels()
@@ -36,4 +37,4 @@ m3.fulfills.connect(r3)
 m4.requires.connect(r1)
 m4.requires.connect(r2)
 m4.requires.connect(r3)
-
+"""
