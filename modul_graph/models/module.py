@@ -1,11 +1,6 @@
 from neomodel import JSONProperty, StructuredNode, StringProperty, RelationshipTo, ZeroOrMore, OneOrMore, \
     RelationshipFrom, BooleanProperty
 
-from .competence import Competence
-from .micro_unit import MicroUnit
-from .module_area import ModuleArea
-from .study_exam_rules import StudyExamRules
-
 
 class Module(StructuredNode):
     """
@@ -39,28 +34,29 @@ class Module(StructuredNode):
     """
 
     # connection to Competence
-    needs_competence = RelationshipTo(Competence, 'NEEDS', cardinality=ZeroOrMore)
+    needs_competence = RelationshipTo('Competence', 'NEEDS', cardinality=ZeroOrMore)
     """
     Connection to competence node which is required by this module. Might be multiple connections
     """
 
-    provides_competence = RelationshipTo(Competence, 'PROVIDES', cardinality=OneOrMore)
+    provided_by_competence = RelationshipFrom('Competence', 'PROVIDES', cardinality=OneOrMore)
     """
     Connection to competence which is provided by the module
     """
 
+
     # connection to MicroUnit
-    needs_micro_unit = RelationshipTo(MicroUnit, 'NEEDS', cardinality=ZeroOrMore)
-    provided_by_micro_unit = RelationshipFrom(MicroUnit, 'PROVIDES', cardinality=ZeroOrMore)
+    needs_micro_unit = RelationshipTo('MicroUnit', 'NEEDS', cardinality=ZeroOrMore)
+    provided_by_micro_unit = RelationshipFrom('MicroUnit', 'PROVIDES', cardinality=ZeroOrMore)
 
     # connection to StudyExamRules
-    belongs_to_SER = RelationshipTo(StudyExamRules, 'BELONGS_TO', cardinality=OneOrMore)
+    belongs_to_SER = RelationshipTo('StudyExamRules', 'BELONGS_TO', cardinality=OneOrMore)
     """
     Connection indicates in which SERs the module can be visited
     """
 
     # connection to ModuleArea
-    fills_module_area = RelationshipTo(ModuleArea, 'FILLS', cardinality=ZeroOrMore)
+    fills_module_area = RelationshipTo('ModuleArea', 'FILLS', cardinality=OneOrMore)
     """
     Connection to module are if module can be visited as an elected subject
     """

@@ -1,9 +1,6 @@
 from neomodel import RelationshipManager, StructuredNode, OneOrMore, StringProperty, RelationshipTo, IntegerProperty, \
     RelationshipFrom
 
-from .module_cell import ModuleCell
-from .semester import Semester
-
 
 class CpCluster(StructuredNode):
     """
@@ -33,7 +30,7 @@ class CpCluster(StructuredNode):
     """
 
     # connection to Semester
-    is_component_of_semester = RelationshipFrom(Semester, 'CONSISTS_OF', cardinality=OneOrMore)
+    is_component_of_semester = RelationshipFrom('Semester', 'CONSISTS_OF', cardinality=OneOrMore)
     """
     Connection to a semester
     """
