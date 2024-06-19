@@ -5,8 +5,6 @@ results, meta = db.cypher_query("MATCH (n) DETACH DELETE n")
 
 import modul_graph.static.spo_2017_inf_wise.SER
 
-results, meta = db.cypher_query("MATCH (n) RETURN n")c
-
 """
 print(results)
 remove_all_labels()
