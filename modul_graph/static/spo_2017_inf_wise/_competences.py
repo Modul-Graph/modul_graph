@@ -108,4 +108,8 @@ analytische_geometrie = Competence()
 analytische_geometrie.name = "Analytische Geometrie"
 analytische_geometrie.save()
 
+dummy_competence = Competence()
+dummy_competence.name = "Dummy Competence"
+dummy_competence.save()
+
 

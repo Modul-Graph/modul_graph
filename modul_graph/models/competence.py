@@ -1,6 +1,5 @@
 from neomodel import StructuredNode, StringProperty, RelationshipTo, ZeroOrMore, OneOrMore, IntegerProperty, One, \
     RelationshipFrom
-import unstructured_entry
 
 
 class Competence(StructuredNode):

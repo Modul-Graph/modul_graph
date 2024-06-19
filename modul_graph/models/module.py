@@ -44,10 +44,9 @@ class Module(StructuredNode):
     Connection to competence which is provided by the module
     """
 
-
     # connection to MicroUnit
     needs_micro_unit = RelationshipTo('modul_graph.models.micro_unit.MicroUnit', 'NEEDS', cardinality=ZeroOrMore)
-    provided_by_micro_unit = RelationshipFrom('MicroUnit', 'PROVIDES', cardinality=ZeroOrMore)
+    provided_by_micro_unit = RelationshipFrom('modul_graph.models.micro_unit.MicroUnit', 'PROVIDES', cardinality=ZeroOrMore)
 
     # connection to StudyExamRules
     belongs_to_SER = RelationshipTo('modul_graph.models.study_exam_rules.StudyExamRules', 'BELONGS_TO', cardinality=OneOrMore)

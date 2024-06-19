@@ -1,5 +1,6 @@
 from modul_graph.models.module import Module
 from modul_graph.static.spo_2017_inf_wise._competences import *
+from modul_graph.static.spo_2017_inf_wise._competences import algorithmen_und_datenstrukturen as algorithmen_und_datenstrukturen_
 
 
 algorithmen_und_datenstrukturen = Module()
@@ -10,13 +11,13 @@ algorithmen_und_datenstrukturen.is_in_summer = True
 algorithmen_und_datenstrukturen.is_in_winter = True
 algorithmen_und_datenstrukturen.save()
 
-algorithmen_und_datenstrukturen.needs_competence.connect(algorithmen_und_datenstrukturen)
+algorithmen_und_datenstrukturen.needs_competence.connect(algorithmen_und_datenstrukturen_)
 algorithmen_und_datenstrukturen.needs_competence.connect(betriebssysteme)
 algorithmen_und_datenstrukturen.needs_competence.connect(analysis)
 algorithmen_und_datenstrukturen.needs_competence.connect(datenbanken_und_informationssysteme)
 algorithmen_und_datenstrukturen.needs_competence.connect(numerik)
 algorithmen_und_datenstrukturen.provides_competence.connect(analysis)
-algorithmen_und_datenstrukturen.provides_competence.connect(algorithmen_und_datenstrukturen)
+algorithmen_und_datenstrukturen.provides_competence.connect(algorithmen_und_datenstrukturen_)
 
 bachelorarbeit = Module()
 bachelorarbeit.name = "Bachelorarbeit"
@@ -27,9 +28,9 @@ bachelorarbeit.is_in_winter = True
 bachelorarbeit.save()
 
 bachelorarbeit.needs_competence.connect(analysis)
-bachelorarbeit.needs_competence.connect(algorithmen_und_datenstrukturen)
+bachelorarbeit.needs_competence.connect(algorithmen_und_datenstrukturen_)
 bachelorarbeit.provides_competence.connect(analysis)
-bachelorarbeit.provides_competence.connect(algorithmen_und_datenstrukturen)
+bachelorarbeit.provides_competence.connect(algorithmen_und_datenstrukturen_)
 bachelorarbeit.provides_competence.connect(betriebssysteme)
 bachelorarbeit.provides_competence.connect(numerik)
 
@@ -42,9 +43,9 @@ computer_aided_geometric_design.is_in_winter = True
 computer_aided_geometric_design.save()
 
 computer_aided_geometric_design.needs_competence.connect(analysis)
-computer_aided_geometric_design.needs_competence.connect(algorithmen_und_datenstrukturen)
+computer_aided_geometric_design.needs_competence.connect(algorithmen_und_datenstrukturen_)
 computer_aided_geometric_design.needs_competence.connect(numerik)
-computer_aided_geometric_design.provides_competence.connect(algorithmen_und_datenstrukturen)
+computer_aided_geometric_design.provides_competence.connect(algorithmen_und_datenstrukturen_)
 computer_aided_geometric_design.provides_competence.connect(betriebssysteme)
 computer_aided_geometric_design.provides_competence.connect(analysis)
 computer_aided_geometric_design.provides_competence.connect(datenbanken_und_informationssysteme)
@@ -59,11 +60,11 @@ computergraphik_i.is_in_winter = True
 computergraphik_i.save()
 
 computergraphik_i.needs_competence.connect(analysis)
-computergraphik_i.needs_competence.connect(algorithmen_und_datenstrukturen)
+computergraphik_i.needs_competence.connect(algorithmen_und_datenstrukturen_)
 computergraphik_i.needs_competence.connect(betriebssysteme)
 computergraphik_i.needs_competence.connect(numerik)
 computergraphik_i.provides_competence.connect(analysis)
-computergraphik_i.provides_competence.connect(algorithmen_und_datenstrukturen)
+computergraphik_i.provides_competence.connect(algorithmen_und_datenstrukturen_)
 computergraphik_i.provides_competence.connect(numerik)
 
 computernetze = Module()
@@ -74,9 +75,9 @@ computernetze.is_in_summer = True
 computernetze.is_in_winter = True
 computernetze.save()
 
-computernetze.needs_competence.connect(algorithmen_und_datenstrukturen)
+computernetze.needs_competence.connect(algorithmen_und_datenstrukturen_)
 computernetze.provides_competence.connect(analysis)
-computernetze.provides_competence.connect(algorithmen_und_datenstrukturen)
+computernetze.provides_competence.connect(algorithmen_und_datenstrukturen_)
 
 computernetze_2 = Module()
 computernetze_2.name = "Computernetze 2"
@@ -86,22 +87,22 @@ computernetze_2.is_in_summer = True
 computernetze_2.is_in_winter = True
 computernetze_2.save()
 
-computernetze_2.needs_competence.connect(algorithmen_und_datenstrukturen)
+computernetze_2.needs_competence.connect(algorithmen_und_datenstrukturen_)
 computernetze_2.provides_competence.connect(analysis)
-computernetze_2.provides_competence.connect(algorithmen_und_datenstrukturen)
+computernetze_2.provides_competence.connect(algorithmen_und_datenstrukturen_)
 computernetze_2.provides_competence.connect(numerik)
 
-datenbanken = Module()
-datenbanken.name = "Datenbanken"
-datenbanken.cp_plus_description = {'DEFAULT':5.0}
-datenbanken.module_description = "Eigenschaften von DatenbanksystemenArchitekturen Konzeptueller Entwurf einer relationalen Datenbank Relationales Datenbankmodell Abbildung ER-Schema auf Relationen Datenbanksprachen (Relationenalgebra, SQL) Formale Entwurfskriterien und Normalisierungstheorie Anwendungsprogrammierung Weitere Datenbankkonzepte wie Sichten, Trigger, Rechtevergabe"
-datenbanken.is_in_summer = True
-datenbanken.is_in_winter = True
-datenbanken.save()
+datenbanken_module = Module()
+datenbanken_module.name = "Datenbanken"
+datenbanken_module.cp_plus_description = {'DEFAULT':5.0}
+datenbanken_module.module_description = "Eigenschaften von DatenbanksystemenArchitekturen Konzeptueller Entwurf einer relationalen Datenbank Relationales Datenbankmodell Abbildung ER-Schema auf Relationen Datenbanksprachen (Relationenalgebra, SQL) Formale Entwurfskriterien und Normalisierungstheorie Anwendungsprogrammierung Weitere Datenbankkonzepte wie Sichten, Trigger, Rechtevergabe"
+datenbanken_module.is_in_summer = True
+datenbanken_module.is_in_winter = True
+datenbanken_module.save()
 
-datenbanken.needs_competence.connect(analysis)
-datenbanken.needs_competence.connect(algorithmen_und_datenstrukturen)
-datenbanken.needs_competence.connect(numerik)
+datenbanken_module.needs_competence.connect(analysis)
+datenbanken_module.needs_competence.connect(algorithmen_und_datenstrukturen_)
+datenbanken_module.needs_competence.connect(numerik)
 
 einführung_in_die_informatik = Module()
 einführung_in_die_informatik.name = "Einführung in die Informatik"
@@ -112,7 +113,7 @@ einführung_in_die_informatik.is_in_winter = True
 einführung_in_die_informatik.save()
 
 einführung_in_die_informatik.needs_competence.connect(analysis)
-einführung_in_die_informatik.needs_competence.connect(algorithmen_und_datenstrukturen)
+einführung_in_die_informatik.needs_competence.connect(algorithmen_und_datenstrukturen_)
 einführung_in_die_informatik.needs_competence.connect(betriebssysteme)
 einführung_in_die_informatik.needs_competence.connect(numerik)
 
@@ -125,10 +126,10 @@ einführung_in_digitale_spiele.is_in_winter = True
 einführung_in_digitale_spiele.save()
 
 einführung_in_digitale_spiele.needs_competence.connect(analysis)
-einführung_in_digitale_spiele.needs_competence.connect(algorithmen_und_datenstrukturen)
+einführung_in_digitale_spiele.needs_competence.connect(algorithmen_und_datenstrukturen_)
 einführung_in_digitale_spiele.needs_competence.connect(numerik)
 einführung_in_digitale_spiele.provides_competence.connect(analysis)
-einführung_in_digitale_spiele.provides_competence.connect(algorithmen_und_datenstrukturen)
+einführung_in_digitale_spiele.provides_competence.connect(algorithmen_und_datenstrukturen_)
 einführung_in_digitale_spiele.provides_competence.connect(numerik)
 
 ethische_herausforderungen_im_digitalen_zeitalter = Module()
@@ -140,11 +141,11 @@ ethische_herausforderungen_im_digitalen_zeitalter.is_in_winter = True
 ethische_herausforderungen_im_digitalen_zeitalter.save()
 
 ethische_herausforderungen_im_digitalen_zeitalter.needs_competence.connect(analysis)
-ethische_herausforderungen_im_digitalen_zeitalter.needs_competence.connect(algorithmen_und_datenstrukturen)
+ethische_herausforderungen_im_digitalen_zeitalter.needs_competence.connect(algorithmen_und_datenstrukturen_)
 ethische_herausforderungen_im_digitalen_zeitalter.needs_competence.connect(betriebssysteme)
 ethische_herausforderungen_im_digitalen_zeitalter.needs_competence.connect(numerik)
 ethische_herausforderungen_im_digitalen_zeitalter.provides_competence.connect(analysis)
-ethische_herausforderungen_im_digitalen_zeitalter.provides_competence.connect(algorithmen_und_datenstrukturen)
+ethische_herausforderungen_im_digitalen_zeitalter.provides_competence.connect(algorithmen_und_datenstrukturen_)
 
 grundlagen_der_bildverarbeitung = Module()
 grundlagen_der_bildverarbeitung.name = "Grundlagen der Bildverarbeitung"
@@ -154,14 +155,14 @@ grundlagen_der_bildverarbeitung.is_in_summer = True
 grundlagen_der_bildverarbeitung.is_in_winter = True
 grundlagen_der_bildverarbeitung.save()
 
-grundlagen_der_bildverarbeitung.needs_competence.connect(algorithmen_und_datenstrukturen)
+grundlagen_der_bildverarbeitung.needs_competence.connect(algorithmen_und_datenstrukturen_)
 grundlagen_der_bildverarbeitung.needs_competence.connect(betriebssysteme)
 grundlagen_der_bildverarbeitung.needs_competence.connect(digitaltechnik_und_rechnerorganisation)
 grundlagen_der_bildverarbeitung.needs_competence.connect(analysis)
 grundlagen_der_bildverarbeitung.needs_competence.connect(datenbanken_und_informationssysteme)
 grundlagen_der_bildverarbeitung.needs_competence.connect(numerik)
 grundlagen_der_bildverarbeitung.provides_competence.connect(analysis)
-grundlagen_der_bildverarbeitung.provides_competence.connect(algorithmen_und_datenstrukturen)
+grundlagen_der_bildverarbeitung.provides_competence.connect(algorithmen_und_datenstrukturen_)
 grundlagen_der_bildverarbeitung.provides_competence.connect(betriebssysteme)
 grundlagen_der_bildverarbeitung.provides_competence.connect(numerik)
 
@@ -174,9 +175,9 @@ grundlagen_der_cpp_programmierung.is_in_winter = True
 grundlagen_der_cpp_programmierung.save()
 
 grundlagen_der_cpp_programmierung.needs_competence.connect(analysis)
-grundlagen_der_cpp_programmierung.needs_competence.connect(algorithmen_und_datenstrukturen)
+grundlagen_der_cpp_programmierung.needs_competence.connect(algorithmen_und_datenstrukturen_)
 grundlagen_der_cpp_programmierung.provides_competence.connect(analysis)
-grundlagen_der_cpp_programmierung.provides_competence.connect(algorithmen_und_datenstrukturen)
+grundlagen_der_cpp_programmierung.provides_competence.connect(algorithmen_und_datenstrukturen_)
 
 grundlagen_der_theoretischen_informatik = Module()
 grundlagen_der_theoretischen_informatik.name = "Grundlagen der Theoretischen Informatik"
@@ -187,10 +188,10 @@ grundlagen_der_theoretischen_informatik.is_in_winter = True
 grundlagen_der_theoretischen_informatik.save()
 
 grundlagen_der_theoretischen_informatik.needs_competence.connect(analysis)
-grundlagen_der_theoretischen_informatik.needs_competence.connect(algorithmen_und_datenstrukturen)
+grundlagen_der_theoretischen_informatik.needs_competence.connect(algorithmen_und_datenstrukturen_)
 grundlagen_der_theoretischen_informatik.needs_competence.connect(numerik)
 grundlagen_der_theoretischen_informatik.provides_competence.connect(analysis)
-grundlagen_der_theoretischen_informatik.provides_competence.connect(algorithmen_und_datenstrukturen)
+grundlagen_der_theoretischen_informatik.provides_competence.connect(algorithmen_und_datenstrukturen_)
 
 grundlagen_der_theoretischen_informatik_ii = Module()
 grundlagen_der_theoretischen_informatik_ii.name = "Grundlagen der Theoretischen Informatik II"
@@ -201,10 +202,10 @@ grundlagen_der_theoretischen_informatik_ii.is_in_winter = True
 grundlagen_der_theoretischen_informatik_ii.save()
 
 grundlagen_der_theoretischen_informatik_ii.needs_competence.connect(analysis)
-grundlagen_der_theoretischen_informatik_ii.needs_competence.connect(algorithmen_und_datenstrukturen)
+grundlagen_der_theoretischen_informatik_ii.needs_competence.connect(algorithmen_und_datenstrukturen_)
 grundlagen_der_theoretischen_informatik_ii.needs_competence.connect(numerik)
 grundlagen_der_theoretischen_informatik_ii.provides_competence.connect(analysis)
-grundlagen_der_theoretischen_informatik_ii.provides_competence.connect(algorithmen_und_datenstrukturen)
+grundlagen_der_theoretischen_informatik_ii.provides_competence.connect(algorithmen_und_datenstrukturen_)
 grundlagen_der_theoretischen_informatik_ii.provides_competence.connect(numerik)
 
 grundzüge_der_algorithmischen_geometrie = Module()
@@ -216,9 +217,9 @@ grundzüge_der_algorithmischen_geometrie.is_in_winter = True
 grundzüge_der_algorithmischen_geometrie.save()
 
 grundzüge_der_algorithmischen_geometrie.needs_competence.connect(analysis)
-grundzüge_der_algorithmischen_geometrie.needs_competence.connect(algorithmen_und_datenstrukturen)
+grundzüge_der_algorithmischen_geometrie.needs_competence.connect(algorithmen_und_datenstrukturen_)
 grundzüge_der_algorithmischen_geometrie.needs_competence.connect(numerik)
-grundzüge_der_algorithmischen_geometrie.provides_competence.connect(algorithmen_und_datenstrukturen)
+grundzüge_der_algorithmischen_geometrie.provides_competence.connect(algorithmen_und_datenstrukturen_)
 
 idea_engineering = Module()
 idea_engineering.name = "Idea Engineering"
@@ -228,8 +229,8 @@ idea_engineering.is_in_summer = True
 idea_engineering.is_in_winter = True
 idea_engineering.save()
 
-idea_engineering.needs_competence.connect(algorithmen_und_datenstrukturen)
-idea_engineering.provides_competence.connect(algorithmen_und_datenstrukturen)
+idea_engineering.needs_competence.connect(algorithmen_und_datenstrukturen_)
+idea_engineering.provides_competence.connect(algorithmen_und_datenstrukturen_)
 
 intelligente_systeme = Module()
 intelligente_systeme.name = "Intelligente Systeme"
@@ -239,7 +240,7 @@ intelligente_systeme.is_in_summer = True
 intelligente_systeme.is_in_winter = True
 intelligente_systeme.save()
 
-intelligente_systeme.needs_competence.connect(algorithmen_und_datenstrukturen)
+intelligente_systeme.needs_competence.connect(algorithmen_und_datenstrukturen_)
 intelligente_systeme.needs_competence.connect(betriebssysteme)
 intelligente_systeme.needs_competence.connect(digitaltechnik_und_rechnerorganisation)
 intelligente_systeme.needs_competence.connect(analysis)
@@ -248,7 +249,7 @@ intelligente_systeme.needs_competence.connect(diskrete_strukturen)
 intelligente_systeme.needs_competence.connect(logik)
 intelligente_systeme.needs_competence.connect(algebra)
 intelligente_systeme.needs_competence.connect(numerik)
-intelligente_systeme.provides_competence.connect(algorithmen_und_datenstrukturen)
+intelligente_systeme.provides_competence.connect(algorithmen_und_datenstrukturen_)
 intelligente_systeme.provides_competence.connect(betriebssysteme)
 intelligente_systeme.provides_competence.connect(analysis)
 intelligente_systeme.provides_competence.connect(datenbanken_und_informationssysteme)
@@ -262,12 +263,12 @@ interaktive_systeme.is_in_summer = True
 interaktive_systeme.is_in_winter = True
 interaktive_systeme.save()
 
-interaktive_systeme.needs_competence.connect(algorithmen_und_datenstrukturen)
+interaktive_systeme.needs_competence.connect(algorithmen_und_datenstrukturen_)
 interaktive_systeme.needs_competence.connect(betriebssysteme)
 interaktive_systeme.needs_competence.connect(analysis)
 interaktive_systeme.needs_competence.connect(datenbanken_und_informationssysteme)
 interaktive_systeme.needs_competence.connect(numerik)
-interaktive_systeme.provides_competence.connect(algorithmen_und_datenstrukturen)
+interaktive_systeme.provides_competence.connect(algorithmen_und_datenstrukturen_)
 
 introduction_to_deep_learning = Module()
 introduction_to_deep_learning.name = "Introduction to Deep Learning"
@@ -278,9 +279,9 @@ introduction_to_deep_learning.is_in_winter = True
 introduction_to_deep_learning.save()
 
 introduction_to_deep_learning.needs_competence.connect(analysis)
-introduction_to_deep_learning.needs_competence.connect(algorithmen_und_datenstrukturen)
+introduction_to_deep_learning.needs_competence.connect(algorithmen_und_datenstrukturen_)
 introduction_to_deep_learning.provides_competence.connect(analysis)
-introduction_to_deep_learning.provides_competence.connect(algorithmen_und_datenstrukturen)
+introduction_to_deep_learning.provides_competence.connect(algorithmen_und_datenstrukturen_)
 introduction_to_deep_learning.provides_competence.connect(numerik)
 
 introduction_to_robotics = Module()
@@ -292,10 +293,10 @@ introduction_to_robotics.is_in_winter = True
 introduction_to_robotics.save()
 
 introduction_to_robotics.needs_competence.connect(analysis)
-introduction_to_robotics.needs_competence.connect(algorithmen_und_datenstrukturen)
+introduction_to_robotics.needs_competence.connect(algorithmen_und_datenstrukturen_)
 introduction_to_robotics.needs_competence.connect(numerik)
 introduction_to_robotics.provides_competence.connect(analysis)
-introduction_to_robotics.provides_competence.connect(algorithmen_und_datenstrukturen)
+introduction_to_robotics.provides_competence.connect(algorithmen_und_datenstrukturen_)
 
 introduction_to_simulation = Module()
 introduction_to_simulation.name = "Introduction to Simulation"
@@ -305,38 +306,38 @@ introduction_to_simulation.is_in_summer = True
 introduction_to_simulation.is_in_winter = True
 introduction_to_simulation.save()
 
-introduction_to_simulation.needs_competence.connect(algorithmen_und_datenstrukturen)
+introduction_to_simulation.needs_competence.connect(algorithmen_und_datenstrukturen_)
 introduction_to_simulation.needs_competence.connect(betriebssysteme)
 introduction_to_simulation.needs_competence.connect(digitaltechnik_und_rechnerorganisation)
 introduction_to_simulation.needs_competence.connect(analysis)
 introduction_to_simulation.needs_competence.connect(datenbanken_und_informationssysteme)
 introduction_to_simulation.needs_competence.connect(numerik)
-introduction_to_simulation.provides_competence.connect(algorithmen_und_datenstrukturen)
+introduction_to_simulation.provides_competence.connect(algorithmen_und_datenstrukturen_)
 introduction_to_simulation.provides_competence.connect(betriebssysteme)
 introduction_to_simulation.provides_competence.connect(analysis)
 introduction_to_simulation.provides_competence.connect(datenbanken_und_informationssysteme)
 introduction_to_simulation.provides_competence.connect(numerik)
 
-it_projektmanagement_ = Module()
-it_projektmanagement_.name = "IT-Projektmanagement "
-it_projektmanagement_.cp_plus_description = {'DEFAULT':3.0}
-it_projektmanagement_.module_description = "Projektvorbereitung: Projektbeschreibung, Zieldefinition, Aufbau- u. Ablauforganisation, Wirtschaftlichkeitsprognose Projektplanung: Budgetierung, Ablaufplanung, Terminmanagement, Kapazitätsplanung, Analyse kritischer Pfade Projektsteuerung: Fortschrittskontrolle, Budgetüberwachung, Dokumentation und Berichtswesen Projektabschluss: Projektabnahme, Erkenntnissicherung, Projektliquidation Projektunterstützende Maßnahmen: Projektmanagementwerkzeuge, Kreativitäts- und Arbeitstechniken, Konfigurationsmanagement Agiles Projektmanagment, SCRUM"
-it_projektmanagement_.is_in_summer = True
-it_projektmanagement_.is_in_winter = True
-it_projektmanagement_.save()
+it_projektmanagement = Module()
+it_projektmanagement.name = "IT-Projektmanagement "
+it_projektmanagement.cp_plus_description = {'DEFAULT':3.0}
+it_projektmanagement.module_description = "Projektvorbereitung: Projektbeschreibung, Zieldefinition, Aufbau- u. Ablauforganisation, Wirtschaftlichkeitsprognose Projektplanung: Budgetierung, Ablaufplanung, Terminmanagement, Kapazitätsplanung, Analyse kritischer Pfade Projektsteuerung: Fortschrittskontrolle, Budgetüberwachung, Dokumentation und Berichtswesen Projektabschluss: Projektabnahme, Erkenntnissicherung, Projektliquidation Projektunterstützende Maßnahmen: Projektmanagementwerkzeuge, Kreativitäts- und Arbeitstechniken, Konfigurationsmanagement Agiles Projektmanagment, SCRUM"
+it_projektmanagement.is_in_summer = True
+it_projektmanagement.is_in_winter = True
+it_projektmanagement.save()
 
-it_projektmanagement_.needs_competence.connect(analysis)
-it_projektmanagement_.needs_competence.connect(algorithmen_und_datenstrukturen)
+it_projektmanagement.needs_competence.connect(analysis)
+it_projektmanagement.needs_competence.connect(algorithmen_und_datenstrukturen_)
 
-logik = Module()
-logik.name = "Logik"
-logik.cp_plus_description = {'DEFAULT':5.0}
-logik.module_description = "Anwendungsfelder für Logik in der Informatik, Logische Syntax (Formelbegriff und Argumentbegriff für Aussagenlogik und Prädikatenlogik), formale Repräsentation von Wissen, Logische Semantik von zwei- und dreiwertiger Aussagenlogik sowie Prädikatenlogik, Domänenspezifische Sprachen und Abstraktion zu allgemeinen logischen Sprachen, Folgerungsbegriff und logische Folgerung, Regelsysteme (u.a. für Formeln und Beweise), grundlegende Algorithmen für logische Probleme (SAT-Solving, Hornformel-Algorithmus, Überführung in Normalformen)"
-logik.is_in_summer = True
-logik.is_in_winter = True
-logik.save()
+logik_module = Module()
+logik_module.name = "Logik"
+logik_module.cp_plus_description = {'DEFAULT':5.0}
+logik_module.module_description = "Anwendungsfelder für Logik in der Informatik, Logische Syntax (Formelbegriff und Argumentbegriff für Aussagenlogik und Prädikatenlogik), formale Repräsentation von Wissen, Logische Semantik von zwei- und dreiwertiger Aussagenlogik sowie Prädikatenlogik, Domänenspezifische Sprachen und Abstraktion zu allgemeinen logischen Sprachen, Folgerungsbegriff und logische Folgerung, Regelsysteme (u.a. für Formeln und Beweise), grundlegende Algorithmen für logische Probleme (SAT-Solving, Hornformel-Algorithmus, Überführung in Normalformen)"
+logik_module.is_in_summer = True
+logik_module.is_in_winter = True
+logik_module.save()
 
-logik.needs_competence.connect(algorithmen_und_datenstrukturen)
+logik_module.needs_competence.connect(algorithmen_und_datenstrukturen_)
 
 maschinelles_lernen = Module()
 maschinelles_lernen.name = "Maschinelles Lernen"
@@ -347,10 +348,10 @@ maschinelles_lernen.is_in_winter = True
 maschinelles_lernen.save()
 
 maschinelles_lernen.needs_competence.connect(analysis)
-maschinelles_lernen.needs_competence.connect(algorithmen_und_datenstrukturen)
+maschinelles_lernen.needs_competence.connect(algorithmen_und_datenstrukturen_)
 maschinelles_lernen.needs_competence.connect(numerik)
 maschinelles_lernen.provides_competence.connect(analysis)
-maschinelles_lernen.provides_competence.connect(algorithmen_und_datenstrukturen)
+maschinelles_lernen.provides_competence.connect(algorithmen_und_datenstrukturen_)
 
 mathematik_i = Module()
 mathematik_i.name = "Mathematik I (Lineare Algebra und analytische Geometrie)"
@@ -361,7 +362,7 @@ mathematik_i.is_in_winter = True
 mathematik_i.save()
 
 mathematik_i.needs_competence.connect(analysis)
-mathematik_i.needs_competence.connect(algorithmen_und_datenstrukturen)
+mathematik_i.needs_competence.connect(algorithmen_und_datenstrukturen_)
 mathematik_i.needs_competence.connect(numerik)
 
 mathematik_ii = Module()
@@ -373,7 +374,7 @@ mathematik_ii.is_in_winter = True
 mathematik_ii.save()
 
 mathematik_ii.needs_competence.connect(analysis)
-mathematik_ii.needs_competence.connect(algorithmen_und_datenstrukturen)
+mathematik_ii.needs_competence.connect(algorithmen_und_datenstrukturen_)
 
 mathematik_iii = Module()
 mathematik_iii.name = "Mathematik III (Stochastik, Statistik, Numerik, Differentialgleichungen)"
@@ -384,9 +385,9 @@ mathematik_iii.is_in_winter = True
 mathematik_iii.save()
 
 mathematik_iii.needs_competence.connect(analysis)
-mathematik_iii.needs_competence.connect(algorithmen_und_datenstrukturen)
+mathematik_iii.needs_competence.connect(algorithmen_und_datenstrukturen_)
 mathematik_iii.needs_competence.connect(numerik)
-mathematik_iii.provides_competence.connect(algorithmen_und_datenstrukturen)
+mathematik_iii.provides_competence.connect(algorithmen_und_datenstrukturen_)
 
 mesh_processing = Module()
 mesh_processing.name = "Mesh Processing"
@@ -396,28 +397,28 @@ mesh_processing.is_in_summer = True
 mesh_processing.is_in_winter = True
 mesh_processing.save()
 
-mesh_processing.needs_competence.connect(algorithmen_und_datenstrukturen)
+mesh_processing.needs_competence.connect(algorithmen_und_datenstrukturen_)
 mesh_processing.needs_competence.connect(betriebssysteme)
 mesh_processing.needs_competence.connect(digitaltechnik_und_rechnerorganisation)
 mesh_processing.needs_competence.connect(analysis)
 mesh_processing.needs_competence.connect(datenbanken_und_informationssysteme)
 mesh_processing.needs_competence.connect(numerik)
-mesh_processing.provides_competence.connect(algorithmen_und_datenstrukturen)
+mesh_processing.provides_competence.connect(algorithmen_und_datenstrukturen_)
 mesh_processing.provides_competence.connect(betriebssysteme)
 mesh_processing.provides_competence.connect(digitaltechnik_und_rechnerorganisation)
 mesh_processing.provides_competence.connect(analysis)
 mesh_processing.provides_competence.connect(datenbanken_und_informationssysteme)
 mesh_processing.provides_competence.connect(numerik)
 
-modellierung = Module()
-modellierung.name = "Modellierung"
-modellierung.cp_plus_description = {'DEFAULT':4.0}
-modellierung.module_description = "Modellierungstheorie: Von der Diskurswelt zu formalisierten Informationsmodellen Prozesse, Workflows und Geschäftsprozesse Meta-Modelle, Referenzmodellierung Grundsätze ordnungsmäßiger Modellierung Fachkonzeptuelle Modellierung mit höheren Petri-Netzen, der Entity Relationship-Methode und der BPMN Objektorientierte Modellierung mit UML Umsetzung konkreter Aufgabenstellungen"
-modellierung.is_in_summer = True
-modellierung.is_in_winter = True
-modellierung.save()
+modellierung_module = Module()
+modellierung_module.name = "Modellierung"
+modellierung_module.cp_plus_description = {'DEFAULT':4.0}
+modellierung_module.module_description = "Modellierungstheorie: Von der Diskurswelt zu formalisierten Informationsmodellen Prozesse, Workflows und Geschäftsprozesse Meta-Modelle, Referenzmodellierung Grundsätze ordnungsmäßiger Modellierung Fachkonzeptuelle Modellierung mit höheren Petri-Netzen, der Entity Relationship-Methode und der BPMN Objektorientierte Modellierung mit UML Umsetzung konkreter Aufgabenstellungen"
+modellierung_module.is_in_summer = True
+modellierung_module.is_in_winter = True
+modellierung_module.save()
 
-modellierung.needs_competence.connect(algorithmen_und_datenstrukturen)
+modellierung_module.needs_competence.connect(algorithmen_und_datenstrukturen_)
 
 neuronale_netze = Module()
 neuronale_netze.name = "Neuronale Netze"
@@ -428,10 +429,10 @@ neuronale_netze.is_in_winter = True
 neuronale_netze.save()
 
 neuronale_netze.needs_competence.connect(analysis)
-neuronale_netze.needs_competence.connect(algorithmen_und_datenstrukturen)
+neuronale_netze.needs_competence.connect(algorithmen_und_datenstrukturen_)
 neuronale_netze.needs_competence.connect(betriebssysteme)
 neuronale_netze.needs_competence.connect(numerik)
-neuronale_netze.provides_competence.connect(algorithmen_und_datenstrukturen)
+neuronale_netze.provides_competence.connect(algorithmen_und_datenstrukturen_)
 neuronale_netze.provides_competence.connect(betriebssysteme)
 neuronale_netze.provides_competence.connect(digitaltechnik_und_rechnerorganisation)
 neuronale_netze.provides_competence.connect(analysis)
@@ -448,9 +449,9 @@ parallele_programmierung.is_in_winter = True
 parallele_programmierung.save()
 
 parallele_programmierung.needs_competence.connect(analysis)
-parallele_programmierung.needs_competence.connect(algorithmen_und_datenstrukturen)
+parallele_programmierung.needs_competence.connect(algorithmen_und_datenstrukturen_)
 parallele_programmierung.provides_competence.connect(analysis)
-parallele_programmierung.provides_competence.connect(algorithmen_und_datenstrukturen)
+parallele_programmierung.provides_competence.connect(algorithmen_und_datenstrukturen_)
 
 praktikum = Module()
 praktikum.name = "Praktikum"
@@ -461,9 +462,9 @@ praktikum.is_in_winter = True
 praktikum.save()
 
 praktikum.needs_competence.connect(analysis)
-praktikum.needs_competence.connect(algorithmen_und_datenstrukturen)
+praktikum.needs_competence.connect(algorithmen_und_datenstrukturen_)
 praktikum.needs_competence.connect(numerik)
-praktikum.provides_competence.connect(algorithmen_und_datenstrukturen)
+praktikum.provides_competence.connect(algorithmen_und_datenstrukturen_)
 praktikum.provides_competence.connect(betriebssysteme)
 praktikum.provides_competence.connect(analysis)
 praktikum.provides_competence.connect(datenbanken_und_informationssysteme)
@@ -478,10 +479,10 @@ programmierparadigmen.is_in_winter = True
 programmierparadigmen.save()
 
 programmierparadigmen.needs_competence.connect(analysis)
-programmierparadigmen.needs_competence.connect(algorithmen_und_datenstrukturen)
+programmierparadigmen.needs_competence.connect(algorithmen_und_datenstrukturen_)
 programmierparadigmen.needs_competence.connect(numerik)
 programmierparadigmen.provides_competence.connect(analysis)
-programmierparadigmen.provides_competence.connect(algorithmen_und_datenstrukturen)
+programmierparadigmen.provides_competence.connect(algorithmen_und_datenstrukturen_)
 
 schlüsselkompetenzen_i = Module()
 schlüsselkompetenzen_i.name = "Schlüsselkompetenzen I"
@@ -492,7 +493,7 @@ schlüsselkompetenzen_i.is_in_winter = True
 schlüsselkompetenzen_i.save()
 
 schlüsselkompetenzen_i.needs_competence.connect(analysis)
-schlüsselkompetenzen_i.needs_competence.connect(algorithmen_und_datenstrukturen)
+schlüsselkompetenzen_i.needs_competence.connect(algorithmen_und_datenstrukturen_)
 
 schlüsselkompetenzen_ii = Module()
 schlüsselkompetenzen_ii.name = "Schlüsselkompetenzen II"
@@ -503,7 +504,7 @@ schlüsselkompetenzen_ii.is_in_winter = True
 schlüsselkompetenzen_ii.save()
 
 schlüsselkompetenzen_ii.needs_competence.connect(analysis)
-schlüsselkompetenzen_ii.needs_competence.connect(algorithmen_und_datenstrukturen)
+schlüsselkompetenzen_ii.needs_competence.connect(algorithmen_und_datenstrukturen_)
 
 sichere_systeme = Module()
 sichere_systeme.name = "Sichere Systeme"
@@ -514,9 +515,9 @@ sichere_systeme.is_in_winter = True
 sichere_systeme.save()
 
 sichere_systeme.needs_competence.connect(analysis)
-sichere_systeme.needs_competence.connect(algorithmen_und_datenstrukturen)
+sichere_systeme.needs_competence.connect(algorithmen_und_datenstrukturen_)
 sichere_systeme.provides_competence.connect(analysis)
-sichere_systeme.provides_competence.connect(algorithmen_und_datenstrukturen)
+sichere_systeme.provides_competence.connect(algorithmen_und_datenstrukturen_)
 sichere_systeme.provides_competence.connect(numerik)
 
 software_engineering_it_projektmanagement = Module()
@@ -527,12 +528,12 @@ software_engineering_it_projektmanagement.is_in_summer = True
 software_engineering_it_projektmanagement.is_in_winter = True
 software_engineering_it_projektmanagement.save()
 
-software_engineering_it_projektmanagement.needs_competence.connect(algorithmen_und_datenstrukturen)
+software_engineering_it_projektmanagement.needs_competence.connect(algorithmen_und_datenstrukturen_)
 software_engineering_it_projektmanagement.needs_competence.connect(betriebssysteme)
 software_engineering_it_projektmanagement.needs_competence.connect(analysis)
 software_engineering_it_projektmanagement.needs_competence.connect(datenbanken_und_informationssysteme)
 software_engineering_it_projektmanagement.needs_competence.connect(numerik)
-software_engineering_it_projektmanagement.provides_competence.connect(algorithmen_und_datenstrukturen)
+software_engineering_it_projektmanagement.provides_competence.connect(algorithmen_und_datenstrukturen_)
 
 software_engineering_ = Module()
 software_engineering_.name = "Software Engineering "
@@ -543,11 +544,11 @@ software_engineering_.is_in_winter = True
 software_engineering_.save()
 
 software_engineering_.needs_competence.connect(analysis)
-software_engineering_.needs_competence.connect(algorithmen_und_datenstrukturen)
+software_engineering_.needs_competence.connect(algorithmen_und_datenstrukturen_)
 software_engineering_.needs_competence.connect(betriebssysteme)
 software_engineering_.needs_competence.connect(numerik)
 software_engineering_.provides_competence.connect(analysis)
-software_engineering_.provides_competence.connect(algorithmen_und_datenstrukturen)
+software_engineering_.provides_competence.connect(algorithmen_und_datenstrukturen_)
 
 softwareprojekt = Module()
 softwareprojekt.name = "Softwareprojekt"
@@ -558,9 +559,9 @@ softwareprojekt.is_in_winter = True
 softwareprojekt.save()
 
 softwareprojekt.needs_competence.connect(analysis)
-softwareprojekt.needs_competence.connect(algorithmen_und_datenstrukturen)
+softwareprojekt.needs_competence.connect(algorithmen_und_datenstrukturen_)
 softwareprojekt.provides_competence.connect(analysis)
-softwareprojekt.provides_competence.connect(algorithmen_und_datenstrukturen)
+softwareprojekt.provides_competence.connect(algorithmen_und_datenstrukturen_)
 
 technische_informatik_i = Module()
 technische_informatik_i.name = "Technische Informatik I"
@@ -571,7 +572,7 @@ technische_informatik_i.is_in_winter = True
 technische_informatik_i.save()
 
 technische_informatik_i.needs_competence.connect(analysis)
-technische_informatik_i.needs_competence.connect(algorithmen_und_datenstrukturen)
+technische_informatik_i.needs_competence.connect(algorithmen_und_datenstrukturen_)
 technische_informatik_i.needs_competence.connect(numerik)
 
 technische_informatik_ii = Module()
@@ -583,10 +584,10 @@ technische_informatik_ii.is_in_winter = True
 technische_informatik_ii.save()
 
 technische_informatik_ii.needs_competence.connect(analysis)
-technische_informatik_ii.needs_competence.connect(algorithmen_und_datenstrukturen)
+technische_informatik_ii.needs_competence.connect(algorithmen_und_datenstrukturen_)
 technische_informatik_ii.needs_competence.connect(numerik)
 technische_informatik_ii.provides_competence.connect(analysis)
-technische_informatik_ii.provides_competence.connect(algorithmen_und_datenstrukturen)
+technische_informatik_ii.provides_competence.connect(algorithmen_und_datenstrukturen_)
 technische_informatik_ii.provides_competence.connect(numerik)
 
 trainingsmodul_schlüssel_und_methodenkompetenz_ = Module()
@@ -597,7 +598,7 @@ trainingsmodul_schlüssel_und_methodenkompetenz_.is_in_summer = True
 trainingsmodul_schlüssel_und_methodenkompetenz_.is_in_winter = True
 trainingsmodul_schlüssel_und_methodenkompetenz_.save()
 
-trainingsmodul_schlüssel_und_methodenkompetenz_.needs_competence.connect(algorithmen_und_datenstrukturen)
+trainingsmodul_schlüssel_und_methodenkompetenz_.needs_competence.connect(algorithmen_und_datenstrukturen_)
 
 usability_und_ästhetik = Module()
 usability_und_ästhetik.name = "Usability und Ästhetik"
@@ -608,7 +609,7 @@ usability_und_ästhetik.is_in_winter = True
 usability_und_ästhetik.save()
 
 usability_und_ästhetik.needs_competence.connect(analysis)
-usability_und_ästhetik.needs_competence.connect(algorithmen_und_datenstrukturen)
+usability_und_ästhetik.needs_competence.connect(algorithmen_und_datenstrukturen_)
 usability_und_ästhetik.needs_competence.connect(numerik)
 
 visualisierung = Module()
@@ -620,10 +621,10 @@ visualisierung.is_in_winter = True
 visualisierung.save()
 
 visualisierung.needs_competence.connect(analysis)
-visualisierung.needs_competence.connect(algorithmen_und_datenstrukturen)
+visualisierung.needs_competence.connect(algorithmen_und_datenstrukturen_)
 visualisierung.needs_competence.connect(numerik)
 visualisierung.provides_competence.connect(analysis)
-visualisierung.provides_competence.connect(algorithmen_und_datenstrukturen)
+visualisierung.provides_competence.connect(algorithmen_und_datenstrukturen_)
 visualisierung.provides_competence.connect(numerik)
 
 wahlpflichtfach_fin_schlüssel_und_methodenkompetenz = Module()
@@ -634,9 +635,9 @@ wahlpflichtfach_fin_schlüssel_und_methodenkompetenz.is_in_summer = True
 wahlpflichtfach_fin_schlüssel_und_methodenkompetenz.is_in_winter = True
 wahlpflichtfach_fin_schlüssel_und_methodenkompetenz.save()
 
-wahlpflichtfach_fin_schlüssel_und_methodenkompetenz.needs_competence.connect(algorithmen_und_datenstrukturen)
+wahlpflichtfach_fin_schlüssel_und_methodenkompetenz.needs_competence.connect(algorithmen_und_datenstrukturen_)
 wahlpflichtfach_fin_schlüssel_und_methodenkompetenz.provides_competence.connect(analysis)
-wahlpflichtfach_fin_schlüssel_und_methodenkompetenz.provides_competence.connect(algorithmen_und_datenstrukturen)
+wahlpflichtfach_fin_schlüssel_und_methodenkompetenz.provides_competence.connect(algorithmen_und_datenstrukturen_)
 
 wissenschaftliches_seminar = Module()
 wissenschaftliches_seminar.name = "Wissenschaftliches Seminar"
@@ -646,4 +647,14 @@ wissenschaftliches_seminar.is_in_summer = True
 wissenschaftliches_seminar.is_in_winter = True
 wissenschaftliches_seminar.save()
 
-wissenschaftliches_seminar.needs_competence.connect(algorithmen_und_datenstrukturen)
+wissenschaftliches_seminar.needs_competence.connect(algorithmen_und_datenstrukturen_)
+
+
+dummy = Module()
+dummy.name = "DUMMY"
+dummy.cp_plus_description = {'DEFAULT': 5.0}
+dummy.module_description = "DUMMY"
+dummy.is_in_summer = True
+dummy.is_in_winter = True
+dummy.provides_competence.connect(dummy_competence)
+dummy.save()

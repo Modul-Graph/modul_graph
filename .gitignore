@@ -125,6 +125,7 @@ celerybeat.pid
 
 # Environments
 .env
+!.devcontainer/.neo4j.env
 .venv
 env/
 venv/
