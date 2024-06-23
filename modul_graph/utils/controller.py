@@ -1,9 +1,9 @@
-from .service import get_start_competences_plus_semester, enough_modules_to_fill_slots
+from .service import get_start_competences_plus_semester, does_fitting_subgraph_exist
 
 
 def is_feasible(standard_curriculum: str):
     start_comps = list(get_start_competences_plus_semester().keys())
-    feasible: bool = enough_modules_to_fill_slots(start_comps)
+    feasible: bool = does_fitting_subgraph_exist(start_comps)
     print(feasible)
 
 

@@ -91,7 +91,14 @@ def __unwind(nested_list: list[str]):
     return nested_list
 
 
-def enough_modules_to_fill_slots(start_comps: list[str]) -> bool:
-    if not __get_subgraph(start_comps):
+def does_fitting_subgraph_exist(start_comps: list[str]) -> bool:
+    subgraph: list[str] = __get_subgraph(start_comps)
+    # enough modules to fill WPF slots?
+    if not subgraph:
         return False
+    else:
+        return fitting_algorithm(subgraph)
+
+
+def fitting_algorithm(subgraph) -> bool:
     return True
