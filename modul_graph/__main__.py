@@ -1,5 +1,5 @@
 from neomodel import config, db, remove_all_labels, install_all_labels
-from .utils.rune import get_start_competences_plus_semester
+from .utils.computations import get_start_competences_plus_semester
 
 from neomodel import install_labels
 

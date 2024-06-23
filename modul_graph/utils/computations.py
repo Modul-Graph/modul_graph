@@ -1,13 +1,4 @@
-from neomodel import db
-# Funktionen in __main__.py schreiben (nach Dateneintrag in DB)
-# console: python -m modul_graph
-
-
-def test_db_connection() -> bool:
-    result, meta = db.cypher_query('MATCH p=(:Module)-[r:PROVIDES]->(:Competence) RETURN p', resolve_objects=True)
-    if len(result) > 1:
-        return False
-    return True
+from .cypher_queries import get_obl_module_via_module_area, get_semester_for_obl_module_via_module_area, get_module_areas_of_obligatory_modules, get_provided_comps_per_module
 
 
 def get_start_competences_plus_semester() -> dict[str, int]:
@@ -48,17 +39,4 @@ def get_start_competences_plus_semester() -> dict[str, int]:
     return competences_plus_semester
 
 
-def get_module_areas_of_obligatory_modules():
-    return db.cypher_query('MATCH (n:ModuleArea)<-[:FILLS]-(m:Module) WITH n, count(DISTINCT m) AS relCount WHERE relCount = 1 RETURN n.name')
 
-
-def get_semester_for_obl_module_via_module_area(module_area: str) -> int:
-    return db.cypher_query('MATCH (m:ModuleArea {name: \'' + module_area[0] + '\'})-[:FILLS]->(:ModuleCell)-[:IS_IN]->(s:Semester) RETURN s.number')
-
-
-def get_obl_module_via_module_area(module_area: str) -> str:
-    return db.cypher_query('MATCH (m:ModuleArea {name: \'' + module_area[0] + '\'})<-[:FILLS]-(n:Module) RETURN n.name')
-
-
-def get_provided_comps_per_module(module: str) -> list[str]:
-    return db.cypher_query('MATCH (m:Module {name: \'' + module + '\'})-[:PROVIDES]->(c:Competence) RETURN c.name')
