@@ -1,6 +1,4 @@
-from typing import Tuple, List, Dict, Any
-
-from .repository import get_obl_module_via_module_area, get_semester_for_obl_module_via_module_area, get_module_areas_of_obligatory_modules, get_provided_comps_per_module, get_possible_modules_plus_provided_comps_via_existing_comps, get_provided_comps_for_module_list, get_possible_modules_via_existing_comps, get_module_areas_for_optional_modules, get_module_cells_connected_to_module_areas, get_semester_of_module_cell, get_module_areas_for_module, get_module_area_for_module_cell, get_summer_for_module, get_winter_for_module
+from .repository import get_obl_module_via_module_area, get_semester_for_obl_module_via_module_area, get_module_areas_of_obligatory_modules, get_provided_comps_per_module, get_provided_comps_for_module_list, get_possible_modules_via_existing_comps, get_module_areas_for_optional_modules, get_module_cells_connected_to_module_areas, get_semester_of_module_cell, get_module_areas_for_module, get_module_area_for_module_cell, get_summer_for_module, get_winter_for_module
 from neomodel import db
 
 
@@ -109,8 +107,7 @@ def __get_free_slots_by_type_plus_semester_plus_season() -> tuple[list[list[str]
 # find cell/slot to fill for one module, then delete cell and module from lists
 # possible_modules & areas belong together
 # free_slots (contains not IDs but types of module cells, p.ex. "WPF Informatik") & semester & winter belong together
-def fit_possible_modules_to_free_slots(possible_modules: list[str], areas: list[list[str]], free_slots: list[list[str]], semester: list[int], winter: list[bool]) -> \
-tuple[str, list[Any]] | tuple[str, list[str]]:
+def fit_possible_modules_to_free_slots(possible_modules: list[str], areas: list[list[str]], free_slots: list[list[str]], semester: list[int], winter: list[bool]) -> tuple[str, list[str]]:
     possible_mods_season_winter: list[bool] = []
     possible_mods_season_summer: list[bool] = []
     found_modules: list[str] = []
