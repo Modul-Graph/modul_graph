@@ -1,4 +1,6 @@
-from .repository import get_obl_module_via_module_area, get_semester_for_obl_module_via_module_area, get_module_areas_of_obligatory_modules, get_provided_comps_per_module, get_possible_modules_plus_provided_comps_via_existing_comps, get_provided_comps_for_module_list, get_possible_modules_via_existing_comps, get_module_areas_for_optional_modules, get_module_cells_connected_to_module_area
+from typing import Tuple, List, Dict, Any
+
+from .repository import get_obl_module_via_module_area, get_semester_for_obl_module_via_module_area, get_module_areas_of_obligatory_modules, get_provided_comps_per_module, get_possible_modules_plus_provided_comps_via_existing_comps, get_provided_comps_for_module_list, get_possible_modules_via_existing_comps, get_module_areas_for_optional_modules, get_module_cells_connected_to_module_areas, get_semester_of_module_cell, get_module_areas_for_module, get_module_area_for_module_cell, get_summer_for_module, get_winter_for_module
 from neomodel import db
 
 
@@ -9,7 +11,7 @@ def test_db_connection() -> bool:
     return True
 
 
-def get_start_competences_plus_semester() -> dict[str, int]:
+def get_start_competences_plus_semester_and_obl_mods() -> tuple[dict[str, int], list[str]]:
     # get names of moduleAreas connected to obligatory modules
     module_areas, meta1 = get_module_areas_of_obligatory_modules()
 
@@ -44,61 +46,138 @@ def get_start_competences_plus_semester() -> dict[str, int]:
             if comp_unwind not in competences_plus_semester.keys() or competences_plus_semester[comp_unwind] > semester_of_module:
                 competences_plus_semester.update({comp_unwind: semester_of_module})
 
-    return competences_plus_semester
+    return competences_plus_semester, obligatory_modules
 
 
-def __get_next_level_modules(comps: list[str]) -> list[list[str], list[str]]:
+def __get_next_level_modules(comps: list[str], existing_mods: list[str]) -> list[str]:
     result, meta = get_possible_modules_via_existing_comps(comps)
-    return result
+    __unwind(result)
+    # don't include duplicates and bachelor thesis
+    modules = list(set(result) - {'Bachelorarbeit'})
+    # don't include already used modules in next level modules
+    return [item for item in modules if item not in existing_mods]
+
+
+def __get_next_level_modules_plus_areas(comps: list[str], existing_mods: list[str]) -> tuple[list[str], list[list[str]]]:
+    modules: list[str] = __get_next_level_modules(comps, existing_mods)
+    areas: list[list[str]] = []
+    for mod in modules:
+        result, meta = get_module_areas_for_module(mod)
+        areas.append(__unwind(result))
+    return modules, areas
 
 
 def __get_next_level_comps(modules: list[str]) -> list[str]:
     result, meta = get_provided_comps_for_module_list(modules)
-    return result
+    return __unwind(result)
 
 
-def __get_free_slots() -> list[str]:
+def __get_free_slots_and_types() -> tuple[list[str], list[list[str]]]:
     mod_areas_obl, meta1 = get_module_areas_of_obligatory_modules()
     mod_areas_opt, meta2 = get_module_areas_for_optional_modules(__unwind(mod_areas_obl))
-    free_slots, meta3 = get_module_cells_connected_to_module_area(__unwind(mod_areas_opt))
-    return list(set(__unwind(free_slots)))
+    free_slots, meta3 = get_module_cells_connected_to_module_areas(__unwind(mod_areas_opt))
+    __unwind(free_slots)
+    types: list[list[str]] = []
+    for slot in free_slots:
+        # [0] to not get meta data from query
+        types.append(__unwind(get_module_area_for_module_cell(slot)[0]))
+    return list(set(free_slots)), types
 
 
-# returns list of "module + semester" tuples
-def __get_subgraph(start_comps: list[str]) -> list[str]:
+def __get_semester_of_mod_cell(cell: str) -> int:
+    result, meta = get_semester_of_module_cell(cell)
+    return __unwind(result)[0]
+
+
+def __get_free_slots_by_type_plus_semester_plus_season() -> tuple[list[list[str]], list[int], list[bool]]:
+    free_slots_id: list[str] = __get_free_slots_and_types()[0]
+    free_slots: list[list[str]] = __get_free_slots_and_types()[1]
+    semesters: list[int] = []
+    winter: list[bool] = []
+
+    for cell in free_slots_id:
+        semester = __get_semester_of_mod_cell(cell)
+        winter.append(semester % 2 == 1)
+        semesters.append(semester)
+
+    # sort by semester
+    free_slots_id, free_slots, semesters, winter = zip(*sorted(zip(free_slots_id, free_slots, semesters, winter), key=lambda x: x[2]))
+
+    return free_slots, semesters, winter
+
+
+# find cell/slot to fill for one module, then delete cell and module from lists
+# possible_modules & areas belong together
+# free_slots (contains not IDs but types of module cells, p.ex. "WPF Informatik") & semester & winter belong together
+def fit_possible_modules_to_free_slots(possible_modules: list[str], areas: list[list[str]], free_slots: list[list[str]], semester: list[int], winter: list[bool]) -> \
+tuple[str, list[Any]] | tuple[str, list[str]]:
+    possible_mods_season_winter: list[bool] = []
+    possible_mods_season_summer: list[bool] = []
+    found_modules: list[str] = []
+
+    # compute for each module if it can be visited during winter or summer
+    for i, mod in enumerate(possible_modules):
+        possible_mods_season_winter.append(__unwind(get_winter_for_module(mod)[0])[0])
+        possible_mods_season_summer.append(__unwind(get_summer_for_module(mod)[0])[0])
+
+    for i, slot in enumerate(free_slots):
+        found_module: str = ''
+        for j, singleSlot in enumerate(slot):
+            for k, mod in enumerate(possible_modules):
+                matches_summer_winter: bool = (possible_mods_season_summer[k] and not winter) or (possible_mods_season_winter[k] and winter[j])
+                if matches_summer_winter and singleSlot in areas[k]:
+                    found_module = mod
+                    break
+            if found_module != '':
+                found_modules.append(found_module)
+                index_to_remove: int = possible_modules.index(found_module)
+                possible_modules.pop(index_to_remove)
+                areas.pop(index_to_remove)
+                possible_mods_season_summer.pop(index_to_remove)
+                possible_mods_season_winter.pop(index_to_remove)
+                break
+        if found_module == '':
+            return "", found_modules
+
+    return "SUCCESS", found_modules
+
+
+def __get_subgraph_for_feasibility_analysis(start_comps: list[str]) -> list[str]:
     subgraph: list[str] = []
-    free_slots: int = len(__get_free_slots())
+    free_slots, semester, winter = __get_free_slots_by_type_plus_semester_plus_season()
     competence_pool: list[str] = start_comps.copy()
+    status: str = ""
 
-    while free_slots > 0:
-        possible_modules, meta = get_possible_modules_via_existing_comps(competence_pool)
-        __unwind(possible_modules)
+    while status != "SUCCESS":
+        # list[str], list[list[str]]
+        possible_modules, areas = __get_next_level_modules_plus_areas(competence_pool, get_start_competences_plus_semester_and_obl_mods()[1])
+        possible_modules = [item for item in possible_modules if item not in subgraph]
         if len(possible_modules) == 0:
             return []
-        free_slots -= len(possible_modules)
-        while free_slots < 0:
-            possible_modules.pop()
-            free_slots += 1
-        subgraph += possible_modules
-        competence_pool += get_provided_comps_for_module_list(possible_modules)
+
+        status, found_modules = fit_possible_modules_to_free_slots(possible_modules, areas, free_slots, semester, winter)
+
+        subgraph += found_modules
+        competence_pool += __get_next_level_comps(possible_modules)
 
     return subgraph
 
 
-def __unwind(nested_list: list[str]):
+def __unwind(nested_list):
     for i, mod in enumerate(nested_list):
         nested_list[i] = nested_list[i][0]
     return nested_list
 
 
-def does_fitting_subgraph_exist(start_comps: list[str]) -> bool:
-    subgraph: list[str] = __get_subgraph(start_comps)
+def does_feasible_subgraph_exist(start_comps: list[str]) -> bool:
+    subgraph: list[str] = __get_subgraph_for_feasibility_analysis(start_comps)
     # enough modules to fill WPF slots?
+    # 'not subgraph' means __get_subgraph... returned []
     if not subgraph:
         return False
-    else:
-        return fitting_algorithm(subgraph)
+    return True
 
 
 def fitting_algorithm(subgraph) -> bool:
+    # todo: implement
     return True

@@ -1,5 +1,5 @@
 from neomodel import config, db
-from .utils.service import get_start_competences_plus_semester
+from .utils.service import get_start_competences_plus_semester_and_obl_mods
 from .utils.repository import get_possible_modules_plus_provided_comps_via_existing_comps
 from .utils.repository import get_possible_modules_via_existing_comps
 from .utils.repository import get_provided_comps_for_module_list
