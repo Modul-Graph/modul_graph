@@ -1,4 +1,5 @@
-from .data_access import da_get_winter_for_module, da_get_module_areas_of_optional_modules, da_get_semester_for_obl_module_via_module_area, da_get_module_areas_of_obligatory_modules, da_get_semester_of_module_cell, da_get_summer_for_module, da_get_module_area_for_module_cell, da_get_module_cells_connected_to_module_areas, da_get_obl_module_via_module_area, da_get_module_areas_for_module, da_get_provided_comps_for_module_list, da_get_provided_comps_per_module, da_get_possible_modules_via_existing_comps, da_get_obl_module_via_module_area
+from .data_access import da_get_winter_for_module, da_get_module_areas_of_optional_modules, da_get_semester_for_obl_module_via_module_area, da_get_module_areas_of_obligatory_modules, da_get_semester_of_module_cell, da_get_summer_for_module, da_get_module_area_for_module_cell, da_get_module_cells_connected_to_module_areas, da_get_obl_module_via_module_area, da_get_module_areas_for_module, da_get_provided_comps_for_module_list, da_get_provided_comps_per_module, da_get_possible_modules_via_existing_comps, da_get_obl_module_via_module_area, da_get_winter_for_standard_curriculum
+from .std_curr import std_curr
 
 
 # service provides controller with processed data and gets its data from data_access (NOT from repository)
@@ -87,7 +88,9 @@ def __get_free_slots_by_type_plus_semester_plus_season() -> tuple[list[list[str]
         semester = da_get_semester_of_module_cell(cell)
         if semester == -1:
             continue
-        winter.append(semester % 2 == 1)
+        # if standard curriculum starts in winter, semesters with odd numbers are in winter
+        res_modulo: int = 1 if da_get_winter_for_standard_curriculum(std_curr.name) else 0
+        winter.append(semester % 2 == res_modulo)
         semesters.append(semester)
 
     # sort by semester

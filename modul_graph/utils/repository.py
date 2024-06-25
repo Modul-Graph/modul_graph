@@ -8,6 +8,7 @@ from .std_curr import std_curr
 
 
 # ----------------------------------------------------------------------------------------------------------------------
+# get standard curriculum
 def db_get_standard_curricula() -> tuple[list[list[str]], list[str]]:
     return db.cypher_query('MATCH (n:StandardCurriculum) RETURN n.name')
 
@@ -72,10 +73,14 @@ def db_get_module_cells_connected_to_module_areas(module_areas: list[str]) -> tu
 
 
 # ----------------------------------------------------------------------------------------------------------------------
-# get season(s)
+# get season(s) for modules and standard curriculum
 def db_get_summer_for_module(module: str) -> tuple[list[list[bool]], list[str]]:
     return db.cypher_query('MATCH (m:Module {name:\'' + module + '\'})-[:BELONGS_TO]->(:StandardCurriculum {name:\'' + std_curr.name + '\'}) RETURN m.is_in_summer')
 
 
 def db_get_winter_for_module(module: str) -> tuple[list[list[bool]], list[str]]:
     return db.cypher_query('MATCH (m:Module {name:\'' + module + '\'})-[:BELONGS_TO]->(:StandardCurriculum {name:\'' + std_curr.name + '\'}) RETURN m.is_in_winter')
+
+
+def db_get_winter_for_standard_curriculum(name: str) -> tuple[list[list[bool]], list[str]]:
+    return db.cypher_query('MATCH (s:StandardCurriculum {name:\'' + name + '\'}) RETURN s.start_winter')
