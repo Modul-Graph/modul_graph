@@ -1,4 +1,6 @@
 from neomodel import db
+# todo: use std_curr in queries
+from .std_curr import std_curr
 
 
 # repository sends cypher queries to db, each of which returns tuple of result and metadata
