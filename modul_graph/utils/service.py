@@ -37,7 +37,7 @@ def get_start_competences_plus_semester_and_obl_mods() -> tuple[dict[str, int], 
             continue
         for comp in comps:
             semester_of_module: int = obl_modules_plus_semester[module]
-            # if competence is not included in final dict or if the semester of competence provision can be lowered: update dict
+            # if competence is not yet included in dict or if the semester of competence provision can be lowered: update dict
             if comp not in competences_plus_semester.keys() or competences_plus_semester[comp] > semester_of_module:
                 competences_plus_semester.update({comp: semester_of_module})
 
@@ -46,15 +46,10 @@ def get_start_competences_plus_semester_and_obl_mods() -> tuple[dict[str, int], 
 
 def does_feasible_subgraph_exist(start_comps: list[str]) -> bool:
     subgraph: list[str] = __get_subgraph_for_feasibility_analysis(start_comps)
-    # enough modules to fill WPF slots?
+    # enough modules to fill free slots?
     # 'not subgraph' means __get_subgraph... returned []
     if not subgraph:
         return False
-    return True
-
-
-def fitting_algorithm(subgraph) -> bool:
-    # todo: implement
     return True
 
 
@@ -109,7 +104,7 @@ def __get_free_slots_by_type_plus_semester_plus_season() -> tuple[list[list[str]
 # find cell/slot to fill for one module, then delete cell and module from lists
 # possible_modules & areas belong together
 # free_slots (contains not IDs but types of module cells, p.ex. "WPF Informatik") & semester & winter belong together
-def __fit_possible_modules_to_free_slots(possible_modules: list[str], areas: list[list[str]], free_slots: list[list[str]], semester: list[int], winter: list[bool]) -> tuple[str, list[str]]:
+def __fit_possible_modules_to_free_slots(possible_modules: list[str], areas: list[list[str]], free_slots: list[list[str]], winter: list[bool]) -> tuple[str, list[str]]:
     possible_mods_season_winter: list[bool] = []
     possible_mods_season_summer: list[bool] = []
     found_modules: list[str] = []
@@ -154,8 +149,7 @@ def __get_subgraph_for_feasibility_analysis(start_comps: list[str]) -> list[str]
         if len(possible_modules) == 0:
             return []
 
-        status, found_modules = __fit_possible_modules_to_free_slots(possible_modules, areas, free_slots, semester,
-                                                                     winter)
+        status, found_modules = __fit_possible_modules_to_free_slots(possible_modules, areas, free_slots, winter)
 
         subgraph += found_modules
         competence_pool += da_get_provided_comps_for_module_list(possible_modules)
