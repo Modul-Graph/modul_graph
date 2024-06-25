@@ -10,5 +10,5 @@ class Semester(StructuredNode):
     # connection to ModuleCell
     contains_module_cell = RelationshipFrom('modul_graph.models.module_cell.ModuleCell', 'IS_IN', OneOrMore)
 
-    # connection to StudyExamRules
-    specified_by_SER = RelationshipFrom('modul_graph.models.study_exam_rules.StudyExamRules', 'SPECIFIES', One)
+    # connection to StandardCurriculum
+    specified_by_SER = RelationshipFrom('modul_graph.models.study_exam_rules.StandardCurriculum', 'SPECIFIES', One)

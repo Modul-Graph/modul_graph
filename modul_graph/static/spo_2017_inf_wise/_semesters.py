@@ -1,5 +1,5 @@
 from modul_graph.models.semester import Semester
-from modul_graph.models.study_exam_rules import StudyExamRules
+from modul_graph.models.standard_curriculum import StandardCurriculum
 from modul_graph.static.spo_2017_inf_wise._cp_cluster import *
 from modul_graph.static.spo_2017_inf_wise._module_cells import module_cells
 

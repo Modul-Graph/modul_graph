@@ -1,7 +1,7 @@
 from neomodel import StructuredNode, StringProperty, OneOrMore, RelationshipTo, ZeroOrMore, IntegerProperty, One, RelationshipFrom, BooleanProperty
 
 
-class StudyExamRules(StructuredNode):
+class StandardCurriculum(StructuredNode):
     name = StringProperty(required=True, unique=True)
     start_winter = BooleanProperty()
 
