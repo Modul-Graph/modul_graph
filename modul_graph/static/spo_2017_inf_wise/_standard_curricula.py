@@ -15,4 +15,4 @@ for s in semesters:
 
 for v in _modules.__dict__.values():
     if isinstance(v, Module):
-        v.belongs_to_SER.connect(spo_2017_inf_wise)
+        v.belongs_to_standard_curriculum.connect(spo_2017_inf_wise)

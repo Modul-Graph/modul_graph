@@ -49,9 +49,9 @@ class Module(StructuredNode):
     provided_by_micro_unit = RelationshipFrom('modul_graph.models.micro_unit.MicroUnit', 'PROVIDES', cardinality=ZeroOrMore)
 
     # connection to StandardCurriculum
-    belongs_to_SER = RelationshipTo('modul_graph.models.study_exam_rules.StandardCurriculum', 'BELONGS_TO', cardinality=OneOrMore)
+    belongs_to_standard_curriculum = RelationshipTo('modul_graph.models.standard_curriculum.StandardCurriculum', 'BELONGS_TO', cardinality=OneOrMore)
     """
-    Connection indicates in which SERs the module can be visited
+    Connection indicates in which Standard Curricula the module can be visited
     """
 
     # connection to ModuleArea
