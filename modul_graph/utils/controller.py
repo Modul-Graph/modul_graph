@@ -1,5 +1,5 @@
 from .service import get_start_competences_plus_semester_and_obl_mods, does_feasible_subgraph_exist
-from .std_curr import instantiate_std_curr_obj, std_curr
+from .std_curr import instantiate_std_curr_obj
 from .data_access import da_get_standard_curricula
 
 
