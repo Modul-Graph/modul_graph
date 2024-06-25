@@ -56,20 +56,44 @@ def does_feasible_subgraph_exist(start_comps: list[str]) -> bool:
 # ----------------------------------------------------------------------------------------------------------------------
 # private functions
 
-def __get_next_level_modules(comps: list[str], existing_mods: list[str]) -> list[str]:
-    result: list[str] = da_get_possible_modules_via_existing_comps(comps)
-    # don't include duplicates and bachelor thesis
-    modules = list(set(result) - {'Bachelorarbeit'})
-    # don't include already used modules in next level modules
-    return [item for item in modules if item not in existing_mods]
+def __get_subgraph_for_feasibility_analysis(start_comps: list[str]) -> list[str]:
+    subgraph: list[str] = []
+    free_slots, semester, winter = __get_free_slots_by_type_plus_semester_plus_season()
+    competence_pool: list[str] = start_comps.copy()
+    status: str = ""
+
+    while status != "SUCCESS":
+        # list[str], list[list[str]]
+        possible_modules, areas = __get_next_level_modules_plus_areas(competence_pool, get_start_competences_plus_semester_and_obl_mods()[1])
+        possible_modules = [item for item in possible_modules if item not in subgraph]
+        if len(possible_modules) == 0:
+            return []
+
+        status, found_modules = __fit_possible_modules_to_free_slots(possible_modules, areas, free_slots, winter)
+
+        subgraph += found_modules
+        competence_pool += da_get_provided_comps_for_module_list(possible_modules)
+
+    return subgraph
 
 
-def __get_next_level_modules_plus_areas(comps: list[str], existing_mods: list[str]) -> tuple[list[str], list[list[str]]]:
-    modules: list[str] = __get_next_level_modules(comps, existing_mods)
-    areas: list[list[str]] = []
-    for mod in modules:
-        areas.append(da_get_module_areas_for_module(mod))
-    return modules, areas
+def __get_free_slots_by_type_plus_semester_plus_season() -> tuple[list[list[str]], list[int], list[bool]]:
+    free_slots_ids: list[str] = __get_free_slots_and_types()[0]
+    free_slots_types: list[list[str]] = __get_free_slots_and_types()[1]
+    semesters: list[int] = []
+    winter: list[bool] = []
+
+    for cell in free_slots_ids:
+        semester = da_get_semester_of_module_cell(cell)
+        if semester == -1:
+            continue
+        winter.append(semester % 2 == 1)
+        semesters.append(semester)
+
+    # sort by semester
+    free_slots_ids, free_slots_types, semesters, winter = zip(*sorted(zip(free_slots_ids, free_slots_types, semesters, winter), key=lambda x: x[2]))
+
+    return free_slots_types, semesters, winter
 
 
 def __get_free_slots_and_types() -> tuple[list[str], list[list[str]]]:
@@ -82,23 +106,20 @@ def __get_free_slots_and_types() -> tuple[list[str], list[list[str]]]:
     return list(set(free_slots)), types
 
 
-def __get_free_slots_by_type_plus_semester_plus_season() -> tuple[list[list[str]], list[int], list[bool]]:
-    free_slots_id: list[str] = __get_free_slots_and_types()[0]
-    free_slots: list[list[str]] = __get_free_slots_and_types()[1]
-    semesters: list[int] = []
-    winter: list[bool] = []
+def __get_next_level_modules_plus_areas(comps: list[str], existing_mods: list[str]) -> tuple[list[str], list[list[str]]]:
+    modules: list[str] = __get_next_level_modules(comps, existing_mods)
+    areas: list[list[str]] = []
+    for mod in modules:
+        areas.append(da_get_module_areas_for_module(mod))
+    return modules, areas
 
-    for cell in free_slots_id:
-        semester = da_get_semester_of_module_cell(cell)
-        if semester == -1:
-            continue
-        winter.append(semester % 2 == 1)
-        semesters.append(semester)
 
-    # sort by semester
-    free_slots_id, free_slots, semesters, winter = zip(*sorted(zip(free_slots_id, free_slots, semesters, winter), key=lambda x: x[2]))
-
-    return free_slots, semesters, winter
+def __get_next_level_modules(comps: list[str], existing_mods: list[str]) -> list[str]:
+    result: list[str] = da_get_possible_modules_via_existing_comps(comps)
+    # don't include duplicates and bachelor thesis
+    modules = list(set(result) - {'Bachelorarbeit'})
+    # don't include already used modules in next level modules
+    return [item for item in modules if item not in existing_mods]
 
 
 # find cell/slot to fill for one module, then delete cell and module from lists
@@ -134,24 +155,3 @@ def __fit_possible_modules_to_free_slots(possible_modules: list[str], areas: lis
             return "", found_modules
 
     return "SUCCESS", found_modules
-
-
-def __get_subgraph_for_feasibility_analysis(start_comps: list[str]) -> list[str]:
-    subgraph: list[str] = []
-    free_slots, semester, winter = __get_free_slots_by_type_plus_semester_plus_season()
-    competence_pool: list[str] = start_comps.copy()
-    status: str = ""
-
-    while status != "SUCCESS":
-        # list[str], list[list[str]]
-        possible_modules, areas = __get_next_level_modules_plus_areas(competence_pool, get_start_competences_plus_semester_and_obl_mods()[1])
-        possible_modules = [item for item in possible_modules if item not in subgraph]
-        if len(possible_modules) == 0:
-            return []
-
-        status, found_modules = __fit_possible_modules_to_free_slots(possible_modules, areas, free_slots, winter)
-
-        subgraph += found_modules
-        competence_pool += da_get_provided_comps_for_module_list(possible_modules)
-
-    return subgraph
