@@ -1,4 +1,5 @@
-# this class is necessary to pass the 'standard_curriculum' parameter (controller input from frontend) to repository
+# this class is necessary to pass the 'standard_curriculum' parameter (controller input from frontend) to the repository
+# while bypassing the layers of service and data_access in between
 
 class StdCurr:
     name: str

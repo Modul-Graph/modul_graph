@@ -1,4 +1,4 @@
-from .repository import db_get_module_via_module_area, db_get_semester_for_obl_module_via_module_area, db_get_module_areas_of_obligatory_modules, db_get_provided_comps_per_module, db_get_provided_comps_for_module_list, db_get_possible_modules_via_existing_comps, db_get_module_areas_of_optional_modules, db_get_module_cells_connected_to_module_areas, db_get_semester_of_module_cell, db_get_module_areas_for_module, db_get_module_area_for_module_cell, db_get_summer_for_module, db_get_winter_for_module, db_get_possible_modules_plus_provided_comps_via_existing_comps
+from .repository import db_get_module_via_module_area, db_get_semester_for_obl_module_via_module_area, db_get_module_areas_of_obligatory_modules, db_get_provided_comps_per_module, db_get_provided_comps_for_module_list, db_get_possible_modules_via_existing_comps, db_get_module_areas_of_optional_modules, db_get_module_cells_connected_to_module_areas, db_get_semester_of_module_cell, db_get_module_areas_for_module, db_get_module_area_for_module_cell, db_get_summer_for_module, db_get_winter_for_module, db_get_possible_modules_plus_provided_comps_via_existing_comps, db_get_standard_curricula
 from neomodel import db
 
 
@@ -11,6 +11,11 @@ def test_db_connection() -> bool:
     if len(result) > 1:
         return False
     return True
+
+
+def da_get_standard_curricula() -> list[str]:
+    result: list[list[str]] = db_get_standard_curricula()[0]
+    return __unwind(result)
 
 
 # ----------------------------------------------------------------------------------------------------------------------

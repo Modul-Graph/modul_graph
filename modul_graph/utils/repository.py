@@ -9,9 +9,14 @@ from .std_curr import std_curr
 
 
 # ----------------------------------------------------------------------------------------------------------------------
+def db_get_standard_curricula() -> tuple[list[list[str]], list[str]]:
+    return db.cypher_query('MATCH (n:StandardCurriculum) RETURN n.name')
+
+
+# ----------------------------------------------------------------------------------------------------------------------
 # get module area(s)
 def db_get_module_areas_of_obligatory_modules() -> tuple[list[list[str]], list[str]]:
-    return db.cypher_query('MATCH (n:ModuleArea)<-[:FILLS]-(m:Module) WITH n, count(DISTINCT m) AS relCount WHERE relCount = 1 RETURN n.name')
+    return db.cypher_query('MATCH (n:ModuleArea)<-[:FILLS]-(m:Module)-[:BELONGS_TO]->(:StandardCurriculum {name:\'' + std_curr.name + '\'}) WITH n, count(DISTINCT m) AS relCount WHERE relCount = 1 RETURN n.name')
 
 
 def db_get_module_areas_for_module(module: str) -> tuple[list[list[str]], list[str]]:
