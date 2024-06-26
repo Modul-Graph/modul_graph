@@ -7,8 +7,7 @@ def is_feasible(standard_curriculum: str) -> bool:
     if standard_curriculum not in da_get_standard_curricula():
         raise ValueError(f'"{standard_curriculum}" is an invalid name. Valid would be {da_get_standard_curricula()}')
     instantiate_std_curr_obj(standard_curriculum)
-    start_comps = list(get_start_competences_plus_semester_and_obl_mods()[0].keys())
-    return does_feasible_subgraph_exist(start_comps)
+    return does_feasible_subgraph_exist(tuple(get_start_competences_plus_semester_and_obl_mods()))
 
 
 def get_example_graphs() -> list[list[str, int]]:

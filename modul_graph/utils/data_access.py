@@ -1,10 +1,11 @@
-from .repository import db_get_module_via_module_area, db_get_semester_for_obl_module_via_module_area, db_get_module_areas_of_obligatory_modules, db_get_provided_comps_per_module, db_get_provided_comps_for_module_list, db_get_possible_modules_via_existing_comps, db_get_module_areas_of_optional_modules, db_get_module_cells_connected_to_module_areas, db_get_semester_of_module_cell, db_get_module_areas_for_module, db_get_module_area_for_module_cell, db_get_summer_for_module, db_get_winter_for_module, db_get_possible_modules_plus_provided_comps_via_existing_comps, db_get_standard_curricula, db_get_winter_for_standard_curriculum
+from .repository import db_get_module_via_module_area, db_get_semester_for_obl_module_via_module_area, db_get_module_areas_of_obligatory_modules, db_get_provided_comps_per_module, db_get_provided_comps_for_module_list_plus_sem_of_provision, db_get_possible_modules_via_existing_comps, db_get_module_areas_of_optional_modules, db_get_module_cells_connected_to_module_areas, db_get_semester_of_module_cell, db_get_module_areas_for_module, db_get_module_area_for_module_cell, db_get_summer_for_module, db_get_winter_for_module, db_get_possible_modules_plus_provided_comps_via_existing_comps, db_get_standard_curricula, db_get_winter_for_standard_curriculum
 from neomodel import db
 
 
 # data_access processes data for and from repository:
 # - prep for repo: prep list arguments for cypher syntax
 # - processing returned values: unwind nested lists and remove metadata
+
 
 def test_db_connection() -> bool:
     result, meta = db.cypher_query('MATCH p=(:Module)-[r:PROVIDES]->(:Competence) RETURN p', resolve_objects=True)
@@ -32,14 +33,23 @@ def da_get_module_areas_for_module(module: str) -> list[str]:
     return __unwind(result)
 
 
-def da_get_module_areas_of_optional_modules(obl_module_areas: list[str]) -> list[str]:
+def da_get_module_areas_of_optional_modules_unwound_no_duplicates(obl_module_areas: list[str]) -> list[str]:
     result: list[list[str]] = db_get_module_areas_of_optional_modules(__prepare_list_as_cypher_var(obl_module_areas))[0]
-    return __unwind(result)
+    # a module could belong to several areas -> then inner nested list of result won't contain single element -> unwind() can't be used here
+    ret: list[str] = []
+    if len(result) < 1:
+        return ret
+    for nested_list in result:
+        for item in nested_list:
+            ret.append(item)
+            # remove duplicates
+    ret = list(set(ret))
+    return ret
 
 
 def da_get_module_area_for_module_cell(module_cell: str) -> list[str]:
     result: list[list[str]] = db_get_module_area_for_module_cell(module_cell)[0]
-    return __unwind(result)
+    return list(set(__unwind(result)))
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -92,16 +102,43 @@ def da_get_provided_comps_per_module(module: str) -> list[str]:
     return __unwind(result)
 
 
-def da_get_provided_comps_for_module_list(modules: list[str]) -> list[str]:
-    result: list[list[str]] = db_get_provided_comps_for_module_list(__prepare_list_as_cypher_var(modules))[0]
-    return __unwind(result)
+def da_get_provided_comps_for_module_list_plus_sem_of_provision_without_duplicates(modules: list[str]) -> tuple[list[str], list[int]]:
+
+    # result format: list[list['comp', 'semester_of_module']] with several inner lists -> unwind doesn't work
+    result: list[tuple[str | int]] = db_get_provided_comps_for_module_list_plus_sem_of_provision(__prepare_list_as_cypher_var(modules))[0]
+    # comps, sems: tuple[list[str], list[int]] -- or [] if no values in result
+    if len(result) < 1:
+        return [], []
+    comps, sems = zip(*result)
+    # needs to be list because later on, pop() is needed
+    comps = list(comps)
+    # comps are provided one semester AFTER the module took place
+    sems = [x + 1 for x in sems]
+
+    # throw out duplicates and only keep the one with the lowest semester
+    duplicate_comps: list[str] = [item for item in set(comps) if comps.count(item) > 1]
+    indices_to_delete: list[int] = []
+    for i, dupl_comp in enumerate(duplicate_comps):
+        indices_of_double_comp: list[int] = [c for c in range(len(comps)) if comps[c] == dupl_comp]
+        sem_of_comp_provision: int = 100     # random high number, has to be higher than semester count in standard curriculum
+        index_to_keep: int = len(indices_of_double_comp)
+        for ind in indices_of_double_comp:
+            if sems[ind] < sem_of_comp_provision:
+                sem_of_comp_provision = sems[ind]
+                index_to_keep = ind
+        indices_to_delete += [index_to_delete for index_to_delete in indices_of_double_comp if index_to_delete != index_to_keep]
+
+    indices_to_keep: list[int] = [i for i in range(len(comps)) if i not in indices_to_delete]
+    comps_to_keep: list[str] = [comps[i] for i in range(len(comps)) if i in indices_to_keep]
+    sems_to_keep: list[int] = [sems[i] for i in range(len(comps)) if i in indices_to_keep]
+    return comps_to_keep, sems_to_keep
 
 
 # ----------------------------------------------------------------------------------------------------------------------
 # get module cell(s)
-def da_get_module_cells_connected_to_module_areas(module_areas: list[str]) -> list[str]:
+def da_get_module_cells_connected_to_module_areas_without_duplicates(module_areas: list[str]) -> list[str]:
     result: list[list[str]] = db_get_module_cells_connected_to_module_areas(__prepare_list_as_cypher_var(module_areas))[0]
-    return __unwind(result)
+    return list(set(__unwind(result)))
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -141,6 +178,8 @@ def da_get_winter_for_standard_curriculum(name: str) -> bool:
 def __unwind(nested_list: list[list[str | int | bool]]) -> list[str | int | bool]:
     ret: list[str | int | bool] = []
     for i, mod in enumerate(nested_list):
+        if len(nested_list[i]) > 1:
+            print("\nDon't do that, unwind should be used carefully.\n")
         ret.append(nested_list[i][0])
     return ret
 
