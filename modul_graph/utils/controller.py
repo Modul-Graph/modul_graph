@@ -10,6 +10,6 @@ def is_feasible(standard_curriculum: str) -> bool:
     return does_feasible_subgraph_exist(tuple(get_start_competences_plus_semester_and_obl_mods()))
 
 
-def get_example_graphs() -> list[list[str, int]]:
+def get_example_graphs(wanted_competences: list[str]) -> list[list[str, int]]:
     # todo: implement
     pass

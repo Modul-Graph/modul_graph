@@ -174,8 +174,8 @@ def __fit_possible_modules_to_free_slots(possible_modules: list[str], types_of_f
         possible_mods_season_winter.append(da_get_winter_for_module(mod))
         possible_mods_season_summer.append(da_get_summer_for_module(mod))
 
-    # todo: use permutations (itertools) to find all possible combis of slot+module
-    #  reason: slots that can only be filled by few modules (because of their rare type) might not get a module assigned if all possible modules are already in other slots
+    # todo: solve problem: slots that can only be filled by few modules (because of their rare type) might not get a module assigned if all possible modules are already in other slots
+    #   -> see end of file for solution ideas
     # copy because the list itself will be modified in the loop
     for i, slot in enumerate(types_of_free_slots.copy()):
         found_module: str = ''
@@ -186,6 +186,7 @@ def __fit_possible_modules_to_free_slots(possible_modules: list[str], types_of_f
                     found_module = mod
                     break
             if found_module != '':
+                # todo: remove print in final version
                 print(f"Found module '{found_module}' for slot '{single_slot_type}' (semester: {sems_of_free_slots[i]})")
                 found_modules.append(found_module)
                 index_to_remove: int = possible_modules.index(found_module)
@@ -207,3 +208,37 @@ def __remove_indices(list1: list[list[str]], list2: list[bool], list3: list[int]
     ret_list2: list[bool] = [item for i, item in enumerate(list2) if i not in indices]
     ret_list3: list[int] = [item for i, item in enumerate(list3) if i not in indices]
     return ret_list1, ret_list2, ret_list3
+
+
+'''
+Ansatz 1:
+- im projekt berechnen, welche slot types nur wenig module zugeordnet haben
+- wenn in einer iteration für so einen slot typ kein modul gefunden wird: schauen ob im bereits bestehenden subgraph ein modul verbaut ist,
+    was u.a. als dieser slot typ gekennzeichnet ist, aber bei einem slot mit häufigem typ untergebracht ist
+- dieses modul nur dann aus vorherigem slot klauen, wenn der slot anderweitig besetzt werden kann -> dann graph aktualisieren
+    (komplett? welche teile davon? wenn komplett aktualisieren, kann es sein dass er sich ständig nur neu aktualisieren muss und nicht terminiert)
+    weil geklautes modul vlt kompetenzen bereitgestellt hat, die jetzt nicht mehr in dem semester bereitgestellt werden können
+    
+Ansatz 2:
+- ebenfalls im projekt berechnen, welche slot types nur wenig module zugeordnet haben
+- beim filling algorithmus zuerst für slots mit seltenen typen ein modul suchen
+- implementerung: liste von freien slots (mit gepaarten listen) ist bereits nach semester sortiert,
+    innerhalb eines semesters wird danach sortiert, welcher slot den typ mit den wenigsten modulverbindungen hat
+    - mögliche interpretationen: geringste modulverbindungen zu aktueller 'possible_modules' liste, oder generell im regelstudienplan
+    - sind 2 verschiedene metriken, hauptsächlich eine davon bevorzugen, aber falls nicht alle slots des aktuellen semesters gefüllt werden können,
+    mit der anderen nochmal __fit_possible_modules_to_free_slots() ausführen
+    - zuerst als metrik probieren: geringste verbindungen generell im regelstudienplan
+- für slots mit typ der von vielen modulen gefüllt werden kann, modul bevorzugen was keine seltenen slottypen füllen kann
+- implementierung: input 'possible_modules' so sortieren, dass module hinten sind welche die selteneren slottypen bedienen,
+    dabei sortierung innerhalb einer slottyp-gruppe so, dass module weiter vorn sind, die nur einen slottyp bedienen 
+
+Ansatz 3:
+- if after execution of __fit_possible_modules_to_free_slots() there are still free slots in the CURRENT semester (would mean curriculum not possible)
+    permutate order of 'possible_modules' input and execute again
+- it should be checked wether possible_modules contains enough modules to fill all slots, and if for each type of free slots there are enough modules to fill all slots
+- the latter can be done using Counter for a flattened list of module types
+
+Ansatz 2 & 3 sind mit weniger unklarheiten implementierbar, allerdings kann nur Ansatz 1 auf frühere semester zugreifen und dort änderungen vornehmen
+Ansatz 2 ist kontrollierter und granularer als Ansatz 3
+Fav.: Ansatz 2
+'''
