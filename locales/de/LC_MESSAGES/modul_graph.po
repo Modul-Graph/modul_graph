@@ -1,0 +1,20 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+
+# doability analysis success message
+msgid "Doability success message"
+msgstr ""
+    "Der Regelstudienplan ist in Regelstudienzeit machbar!\n"
+    "Das heißt, dass es genügend Module im Modulkatalog des SPOs gibt um alle Zellen des Regelstudienplans zu füllen (unter berücksichtigung von Sommer/Wintersemester)!\n"
+    "\n"
+    "Des weiteren gibt es eine Modulzusammensetzung, wo alle Kompetenzvoraussetzungen eines jeden Moduls mindestens im vorherigen Semester von anderen Modulen erfüllt wurde.\n"
+    "Dadurch können Studenten ihre Module so auslegen, dass sie immer mit dem nötigen \"Vorwissen\" in die Module gehen ohne länger als die Regelstudienzeit zu brauchen."
+
+msgid "Doability error message"
+msgstr ""
+    "Der Regelstudienplam ist nicht in Regelstudienzeit machbar!\n"
+    "\n"
+    "Das bedeutet: Es gibt entweder nicht genügend Module in Modulkatalog des SPOs, nicht genügend Module für das Sommer- oder Wintersemester oder keine Modulzusammensetzung, wo die Modulvorraussetzungen eines jeden Moduls erfüllt werden kann!"
