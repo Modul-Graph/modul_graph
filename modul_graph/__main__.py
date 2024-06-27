@@ -16,4 +16,4 @@ config.DATABASE_URL = 'bolt://neo4j:password@localhost:7687'  # default
 # modules: list = ['Schlüsselkompetenzen I', 'Algorithmen und Datenstrukturen']
 # instantiate_std_curr_obj("SPO 2017 Informatik (Start Wintersemester)")
 
-print(is_feasible("SPO 2017 Informatik (Start Wintersemester)"))
+print(f"\nFeasible? {is_feasible("SPO 2017 Informatik (Start Wintersemester)")}\n")

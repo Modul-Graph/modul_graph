@@ -1,4 +1,4 @@
-from .data_access import da_get_winter_for_module, da_get_module_areas_of_optional_modules_unwound_no_duplicates, da_get_semester_for_obl_module_via_module_area, da_get_module_areas_of_obligatory_modules, da_get_semester_of_module_cell, da_get_summer_for_module, da_get_module_area_for_module_cell, da_get_module_cells_connected_to_module_areas_without_duplicates, da_get_obl_module_via_module_area, da_get_module_areas_for_module, da_get_provided_comps_for_module_list_plus_sem_of_provision_without_duplicates, da_get_provided_comps_per_module, da_get_possible_modules_via_existing_comps, da_get_obl_module_via_module_area, da_get_winter_for_standard_curriculum
+from .data_access import da_get_winter_for_module, da_get_module_areas_of_optional_modules_unwound_no_duplicates, da_get_semester_for_obl_module_via_module_area, da_get_module_areas_of_obligatory_modules, da_get_semester_of_module_cell, da_get_summer_for_module, da_get_module_area_for_module_cell, da_get_module_cells_connected_to_module_areas_without_duplicates, da_get_obl_module_via_module_area, da_get_module_areas_for_module, da_get_provided_comps_for_module_list_plus_sem_of_provision_without_duplicates, da_get_provided_comps_per_module, da_get_possible_modules_via_existing_comps, da_get_obl_module_via_module_area, da_get_winter_for_standard_curriculum, da_get_needed_comps_for_module
 from .std_curr import std_curr
 from collections import Counter
 
@@ -66,21 +66,31 @@ def __get_subgraph_for_feasibility_analysis(start_comps_plus_sem_and_obl_mods: t
     competence_pool: list[str] = list(start_comps_plus_sem_and_obl_mods[0].keys())
     provided_in_sem: list[int] = list(start_comps_plus_sem_and_obl_mods[0].values())
     status: str = ""
+    lowest_sem_of_free_slot: int = min(sems_of_free_slots)
+    highest_sem_of_free_slot: int = max(sems_of_free_slots)
 
-    for curr_sem in range(min(sems_of_free_slots), max(sems_of_free_slots) + 1):
+    for curr_sem in range(lowest_sem_of_free_slot, highest_sem_of_free_slot + 1):
 
         # get provided competences up until current semester
         limited_comps: list[str] = [competence_pool[i] for i in range(len(competence_pool)) if provided_in_sem[i] <= curr_sem]
 
-        # list[str], list[list[str]]
-        possible_modules, areas_of_poss_mods = __get_next_level_modules_plus_areas(limited_comps, subgraph)
-        areas_of_poss_mods = [areas_of_poss_mods[i] for i in range(len(possible_modules)) if possible_modules[i] not in subgraph]
+        possible_modules: list[str] = __get_next_level_modules(limited_comps.copy(), subgraph)
+        # remove duplicates
         possible_modules = [item for item in possible_modules if item not in subgraph]
+        # check if all competences a possible module needs are provided (in current semester)
+        possible_modules = [item for item in possible_modules if set(da_get_needed_comps_for_module(item)) <= set(limited_comps)]
+
+        # when algorithm is at this point, free slots have not been filled -> possible modules have to exist to continue
         if len(possible_modules) == 0:
             return []
 
-        status, found_modules, types_of_free_slots, winter_of_free_slots = __fit_possible_modules_to_free_slots(possible_modules, areas_of_poss_mods, list(types_of_free_slots), list(winter_of_free_slots))
+        found_modules, types_of_free_slots, winter_of_free_slots, sems_of_free_slots = __fit_possible_modules_to_free_slots(possible_modules, list(types_of_free_slots), list(winter_of_free_slots), list(sems_of_free_slots))
+
+        # if free slots left (which also have an entry in sems_of_free_slots) and their semester is the current one or lower -> standard curriculum impossible to fill
+        if [sem for sem in sems_of_free_slots if sem <= curr_sem]:
+            return []
         subgraph += found_modules
+        # when list of free slots empty: standard curriculum filled -> return
         if not types_of_free_slots:
             return subgraph
         comps_of_found_modules, sems_of_comp_provision = da_get_provided_comps_for_module_list_plus_sem_of_provision_without_duplicates(found_modules)
@@ -153,7 +163,7 @@ def __get_next_level_modules(comps: list[str], existing_mods: list[str]) -> list
 # find cell/slot to fill for one module, then delete cell and module from lists
 # possible_modules & areas belong together
 # free_slots (contains not IDs but types of module cells, p.ex. "WPF Informatik") & semester & winter belong together
-def __fit_possible_modules_to_free_slots(possible_modules: list[str], areas_of_poss_mods: list[list[str]], types_of_free_slots: list[list[str]], winter_of_free_slots: list[bool]) -> tuple[str, list[str], list[list[str]], list[bool]]:
+def __fit_possible_modules_to_free_slots(possible_modules: list[str], types_of_free_slots: list[list[str]], winter_of_free_slots: list[bool], sems_of_free_slots: list[int]) -> tuple[list[str], list[list[str]], list[bool], list[int]]:
     possible_mods_season_winter: list[bool] = []
     possible_mods_season_summer: list[bool] = []
     found_modules: list[str] = []
@@ -164,33 +174,36 @@ def __fit_possible_modules_to_free_slots(possible_modules: list[str], areas_of_p
         possible_mods_season_winter.append(da_get_winter_for_module(mod))
         possible_mods_season_summer.append(da_get_summer_for_module(mod))
 
+    # todo: use permutations (itertools) to find all possible combis of slot+module
+    #  reason: slots that can only be filled by few modules (because of their rare type) might not get a module assigned if all possible modules are already in other slots
     # copy because the list itself will be modified in the loop
     for i, slot in enumerate(types_of_free_slots.copy()):
         found_module: str = ''
         for j, single_slot_type in enumerate(slot):
             for k, mod in enumerate(possible_modules):
                 matches_summer_winter: bool = (possible_mods_season_summer[k] and not winter_of_free_slots[j]) or (possible_mods_season_winter[k] and winter_of_free_slots[j])
-                if matches_summer_winter and single_slot_type in areas_of_poss_mods[k]:
+                if matches_summer_winter and single_slot_type in da_get_module_areas_for_module(mod):
                     found_module = mod
                     break
             if found_module != '':
+                print(f"Found module '{found_module}' for slot '{single_slot_type}' (semester: {sems_of_free_slots[i]})")
                 found_modules.append(found_module)
                 index_to_remove: int = possible_modules.index(found_module)
                 possible_modules.pop(index_to_remove)
-                areas_of_poss_mods.pop(index_to_remove)
                 possible_mods_season_summer.pop(index_to_remove)
                 possible_mods_season_winter.pop(index_to_remove)
                 indices_to_remove_from_free_slot_lists.append(i)
                 break
         if found_module == '':
-            remaining_free_slots, and_their_winter = __remove_indices(types_of_free_slots, winter_of_free_slots, indices_to_remove_from_free_slot_lists)
-            return "", found_modules, remaining_free_slots, and_their_winter
+            remaining_free_slots, and_their_winter, and_their_sem = __remove_indices(types_of_free_slots, winter_of_free_slots, sems_of_free_slots, indices_to_remove_from_free_slot_lists)
+            return found_modules, remaining_free_slots, and_their_winter, and_their_sem
 
-    remaining_free_slots, and_their_winter = __remove_indices(types_of_free_slots, winter_of_free_slots, indices_to_remove_from_free_slot_lists)
-    return "SUCCESS", found_modules, remaining_free_slots, and_their_winter
+    remaining_free_slots, and_their_winter, and_their_sem = __remove_indices(types_of_free_slots, winter_of_free_slots, sems_of_free_slots, indices_to_remove_from_free_slot_lists)
+    return found_modules, remaining_free_slots, and_their_winter, and_their_sem
 
 
-def __remove_indices(list1: list[list[str]], list2: list[bool], indices: list[int]) -> tuple[list[list[str]], list[bool]]:
+def __remove_indices(list1: list[list[str]], list2: list[bool], list3: list[int], indices: list[int]) -> tuple[list[list[str]], list[bool], list[int]]:
     ret_list1: list[list[str]] = [item for i, item in enumerate(list1) if i not in indices]
     ret_list2: list[bool] = [item for i, item in enumerate(list2) if i not in indices]
-    return ret_list1, ret_list2
+    ret_list3: list[int] = [item for i, item in enumerate(list3) if i not in indices]
+    return ret_list1, ret_list2, ret_list3

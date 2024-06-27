@@ -1,4 +1,4 @@
-from .repository import db_get_module_via_module_area, db_get_semester_for_obl_module_via_module_area, db_get_module_areas_of_obligatory_modules, db_get_provided_comps_per_module, db_get_provided_comps_for_module_list_plus_sem_of_provision, db_get_possible_modules_via_existing_comps, db_get_module_areas_of_optional_modules, db_get_module_cells_connected_to_module_areas, db_get_semester_of_module_cell, db_get_module_areas_for_module, db_get_module_area_for_module_cell, db_get_summer_for_module, db_get_winter_for_module, db_get_possible_modules_plus_provided_comps_via_existing_comps, db_get_standard_curricula, db_get_winter_for_standard_curriculum
+from .repository import db_get_module_via_module_area, db_get_semester_for_obl_module_via_module_area, db_get_module_areas_of_obligatory_modules, db_get_provided_comps_for_module, db_get_provided_comps_for_module_list_plus_sem_of_provision, db_get_possible_modules_via_existing_comps, db_get_module_areas_of_optional_modules, db_get_module_cells_connected_to_module_areas, db_get_semester_of_module_cell, db_get_module_areas_for_module, db_get_module_area_for_module_cell, db_get_summer_for_module, db_get_winter_for_module, db_get_possible_modules_plus_provided_comps_via_existing_comps, db_get_standard_curricula, db_get_winter_for_standard_curriculum, db_get_needed_comps_for_module
 from neomodel import db
 
 
@@ -98,7 +98,7 @@ def da_get_possible_modules_plus_provided_comps_via_existing_comps(comps: list[s
 # ----------------------------------------------------------------------------------------------------------------------
 # get competence(s)
 def da_get_provided_comps_per_module(module: str) -> list[str]:
-    result: list[list[str]] = db_get_provided_comps_per_module(module)[0]
+    result: list[list[str]] = db_get_provided_comps_for_module(module)[0]
     return __unwind(result)
 
 
@@ -132,6 +132,11 @@ def da_get_provided_comps_for_module_list_plus_sem_of_provision_without_duplicat
     comps_to_keep: list[str] = [comps[i] for i in range(len(comps)) if i in indices_to_keep]
     sems_to_keep: list[int] = [sems[i] for i in range(len(comps)) if i in indices_to_keep]
     return comps_to_keep, sems_to_keep
+
+
+def da_get_needed_comps_for_module(module: str) -> list[str]:
+    result: list[list[str]] = db_get_needed_comps_for_module(module)[0]
+    return __unwind(result)
 
 
 # ----------------------------------------------------------------------------------------------------------------------
