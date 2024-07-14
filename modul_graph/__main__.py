@@ -1,12 +1,10 @@
 import asyncio
 import gettext
-
 import uvicorn
 from neomodel import config, db
+from .utils.controller import is_feasible, get_example_graph
 
-from .utils.controller import is_feasible
-
-config.DATABASE_URL = 'bolt://neo4j:dev_pw@neo4j:7687'  # default
+config.DATABASE_URL = 'bolt://neo4j:password@localhost:7687'  # default
 results, meta = db.cypher_query("MATCH (n) DETACH DELETE n")
 import modul_graph.static.spo_2017_inf_wise._standard_curricula
 
@@ -20,8 +18,76 @@ import modul_graph.static.spo_2017_inf_wise._standard_curricula
 # instantiate_std_curr_obj("SPO 2017 Informatik (Start Wintersemester)")
 
 
-print(f"\nFeasible? {is_feasible("SPO 2017 Informatik (Start Wintersemester)")}\n")
-translation = gettext.translation(domain="modul_graph", localedir="./locales", languages=["de"])
-translation.install()
+# print(f"\nFeasible? {is_feasible("SPO 2017 Informatik (Start Wintersemester)")}\n")
+print(get_example_graph("Digitaltechnik und Rechnerorganisation", "SPO 2017 Informatik (Start Wintersemester)"))
+for item in get_example_graph("Digitaltechnik und Rechnerorganisation", "SPO 2017 Informatik (Start Wintersemester)"):
+    print(item[0])
 
-uvicorn.run(app="modul_graph.fastapi:app", port=8080, reload=True)
+'''
+╒════════════════════════════════════════╕
+│COMPETENCES                             │
+╞════════════════════════════════════════╡
+│"Algorithmen und Datenstrukturen"       │
+├────────────────────────────────────────┤
+│"Analysis"                              │
+├────────────────────────────────────────┤
+│"Numerik"                               │
+├────────────────────────────────────────┤
+│"Betriebssysteme"                       │
+├────────────────────────────────────────┤
+│"Datenbanken und Informationssysteme"   │
+├────────────────────────────────────────┤
+│"Digitaltechnik und Rechnerorganisation"│
+├────────────────────────────────────────┤
+│"Diskrete Strukturen"                   │
+├────────────────────────────────────────┤
+│"Logik"                                 │
+├────────────────────────────────────────┤
+│"Algebra"                               │
+├────────────────────────────────────────┤
+│"lineare Algebra"                       │
+├────────────────────────────────────────┤
+│"Formale Sprachen und Automaten"        │
+├────────────────────────────────────────┤
+│"Informatik als Disziplin"              │
+├────────────────────────────────────────┤
+│"Informatik und Gesellschaft"           │
+├────────────────────────────────────────┤
+│"IT-Sicherheit"                         │
+├────────────────────────────────────────┤
+│"Mensch-Computer-Interaktion"           │
+├────────────────────────────────────────┤
+│"Modellierung"                          │
+├────────────────────────────────────────┤
+│"Programmiersprachen und -methodik"     │
+├────────────────────────────────────────┤
+│"Projekt- und Teamkompetenz"            │
+├────────────────────────────────────────┤
+│"Rechnernetze und verteilte Systeme"    │
+├────────────────────────────────────────┤
+│"Software-Engineering"                  │
+├────────────────────────────────────────┤
+│"Wahrscheinlichkeitstheorie"            │
+├────────────────────────────────────────┤
+│"Statistik"                             │
+├────────────────────────────────────────┤
+│"Topologie"                             │
+├────────────────────────────────────────┤
+│"Differentialgeometrie"                 │
+├────────────────────────────────────────┤
+│"Robotik"                               │
+├────────────────────────────────────────┤
+│"Künstliche Intelligenz"                │
+├────────────────────────────────────────┤
+│"Analytische Geometrie"                 │
+├────────────────────────────────────────┤
+│"Dummy Competence"                      │
+└────────────────────────────────────────┘
+'''
+
+
+
+# stuff that makes everything fail -------------------------------------------------------------------------------------
+# translation = gettext.translation(domain="modul_graph", localedir="./locales", languages=["de"])
+# translation.install()
+# uvicorn.run(app="modul_graph.fastapi:app", port=8080, reload=True)

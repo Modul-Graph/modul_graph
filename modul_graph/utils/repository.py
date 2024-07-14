@@ -41,6 +41,10 @@ def db_get_semester_of_module_cell(module_cell: str) -> tuple[list[list[int]], l
     return db.cypher_query('MATCH (:StandardCurriculum {name:\'' + std_curr.name + '\'})<-[:BELONGS_TO]-(:Module)-[:FILLS]->(:ModuleArea)-[:FILLS]->(:ModuleCell {identifier:\'' + module_cell + '\'})-[:IS_IN]->(s:Semester) RETURN s.number')
 
 
+def db_get_highest_semester_of_std_curr() -> tuple[list[list[int]], list[str]]:
+    return db.cypher_query('MATCH (:StandardCurriculum {name:\'' + std_curr.name + '\'})-[:SPECIFIES]->(s:Semester) RETURN max(s.number)')
+
+
 # ----------------------------------------------------------------------------------------------------------------------
 # get module(s)
 def db_get_module_via_module_area(module_area: str) -> tuple[list[list[str]], list[str]]:
@@ -54,6 +58,16 @@ def db_get_possible_modules_via_existing_comps(comps: list[str]) -> tuple[list[l
 # currently not in use
 def db_get_possible_modules_plus_provided_comps_via_existing_comps(comps: list[str]) -> tuple[list[list[str]], list[str]]:
     return db.cypher_query('MATCH (c1:Competence)<-[:NEEDS]-(m:Module)-[:PROVIDES]->(c2:Competence), (m)-[:BELONGS_TO]->(:StandardCurriculum {name:\'' + std_curr.name + '\'}) WHERE c1.name in [' + ', '.join(comps) + '] RETURN m.name, c2.name')
+
+
+# todo: connection to std_curr node
+def db_get_previous_modules_for_single_module(new_mod: str, existing_mods: list[str]) -> tuple[list[list[str]], list[str]]:
+    return db.cypher_query('MATCH (m1:Module {name:\'' + new_mod + '\'})-[:NEEDS]->(c:Competence)<-[:PROVIDES]-(m2:Module) WHERE m2.name in [' + ', '.join(existing_mods) + '] RETURN m2.name')
+
+
+# todo: connection to std_curr node
+def db_get_modules_indirectly_connected_to_comp(comp: str) -> tuple[list[list[str]], list[str]]:
+    return db.cypher_query('MATCH (m:Module) ((:Module)-[:PROVIDES]->(:Competence)<-[:NEEDS]-(:Module)){0,1} (:Module)-[:PROVIDES]->(:Competence {name:\'' + comp + '\'}) RETURN m.name')
 
 
 # ----------------------------------------------------------------------------------------------------------------------
