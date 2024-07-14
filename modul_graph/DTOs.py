@@ -7,7 +7,7 @@ from pydantic import BaseModel
 
 
 """
-Module DTO
+Module DTOs
 """
 
 
@@ -17,6 +17,15 @@ class ModuleDTO(BaseModel):
     cp_plus_description: dict[int, str]
     summer: bool
     winter: bool
+    
+
+class ModuleRelationshipDTO(BaseModel):
+    std_curr_name: str
+    module_area_name: str
+    needs_competences: str
+    provides_competences: str
+    needs_micro_units: str
+    provides_micro_units: str
 
 
 """

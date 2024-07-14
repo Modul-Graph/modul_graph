@@ -3,7 +3,7 @@ This file contains all routes that get, create, edit or delete modules
 """
 from fastapi import APIRouter
 from utils.router_service import RouterService
-from DTOs import ModuleDTO
+from DTOs import ModuleDTO, ModuleRelationshipDTO
 
 router = APIRouter(prefix="/module")
 
@@ -14,8 +14,8 @@ def get_module(name: str) -> ModuleDTO:
 
 
 @router.post("/")
-def create_module(module: ModuleDTO):
-    return RouterService().create_module(module)
+def create_module(module: ModuleDTO, module_relationships: ModuleRelationshipDTO):
+    return RouterService().create_module(module, module_relationships)
 
 
 @router.delete("/{name}")
@@ -24,5 +24,6 @@ def delete_module(name: str):
 
 
 @router.put("/")
-def update_module(module: ModuleDTO):
-    return RouterService().update_module(module)
+def update_module(module: ModuleDTO, module_relationships: ModuleRelationshipDTO):
+    return RouterService().update_module(module, module_relationships)
+
