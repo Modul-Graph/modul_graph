@@ -3,7 +3,7 @@ This file contains all routes that get, transform or create standard curriculums
 """
 from typing import List
 
-from fastapi import APIRouter
+from fast_api import APIRouter
 from neomodel import NodeSet  # type: ignore
 
 from modul_graph.models.standard_curriculum import StandardCurriculumDTO, StandardCurriculum

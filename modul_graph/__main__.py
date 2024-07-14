@@ -19,7 +19,7 @@ import modul_graph.static.spo_2017_inf_wise._standard_curricula
 
 
 # print(f"\nFeasible? {is_feasible("SPO 2017 Informatik (Start Wintersemester)")}\n")
-print(get_example_graph("Algebra", "SPO 2017 Informatik (Start Wintersemester)"))
+print(get_example_graph("Diskrete Strukturen", "SPO 2017 Informatik (Start Wintersemester)"))
 
 '''
 ╒════════════════════════════════════════╕
