@@ -4,6 +4,7 @@ from modul_graph.DTOs import AnalysisResponseDTO, AnalysisStatus
 from modul_graph.utils.controller import is_feasible
 
 from modul_graph.i18n import _
+from utils.graph_exception import GraphException
 
 router = APIRouter(prefix="/analysis")
 
@@ -19,7 +20,7 @@ def get_doability(sc: str) -> AnalysisResponseDTO:
 
     try:
         is_ok: bool = is_feasible(sc)
-    except ValueError as e:
+    except GraphException as e:
         raise HTTPException(400, "standard curriculum doesn't exist")
 
     res: AnalysisResponseDTO
