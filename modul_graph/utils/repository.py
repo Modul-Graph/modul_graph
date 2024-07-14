@@ -70,6 +70,10 @@ def db_get_modules_indirectly_connected_to_comp(comp: str) -> tuple[list[list[st
     return db.cypher_query('MATCH (m:Module) ((:Module)-[:PROVIDES]->(:Competence)<-[:NEEDS]-(:Module)){0,1} (:Module)-[:PROVIDES]->(:Competence {name:\'' + comp + '\'}) RETURN m.name')
 
 
+def db_get_providing_modules_for_comp(comp: str) -> tuple[list[list[str]], list[str]]:
+    return db.cypher_query('MATCH (m:Module)-[:PROVIDES]->(:Competence {name:\'' + comp + '\'}) RETURN m.name')
+
+
 # ----------------------------------------------------------------------------------------------------------------------
 # get competence(s)
 def db_get_provided_comps_for_module(module: str) -> tuple[list[list[str]], list[str]]:
@@ -82,6 +86,10 @@ def db_get_provided_comps_for_module_list_plus_sem_of_provision(modules: list[st
 
 def db_get_needed_comps_for_module(module: str) -> tuple[list[list[str]], list[str]]:
     return db.cypher_query('MATCH (:StandardCurriculum {name:\'' + std_curr.name + '\'})<-[:BELONGS_TO]-(m:Module {name: \'' + module + '\'})-[:NEEDS]->(c:Competence) RETURN c.name')
+
+
+def db_get_comp_existing(comp: str) -> tuple[list[list[str]], list[str]]:
+    return db.cypher_query('MATCH (c:Competence {name:\'' + comp + '\'}) return c.name')
 
 
 # ----------------------------------------------------------------------------------------------------------------------

@@ -2,6 +2,8 @@ from .data_access import da_get_winter_for_module, da_get_module_areas_of_option
 from .std_curr import std_curr, instantiate_std_curr_obj
 from collections import Counter
 from random import shuffle
+from .graph_exception import GraphException
+from modul_graph.DTOs import AnalysisResponseDTO, AnalysisStatus
 
 # service provides controller with processed data and gets its data from data_access (NOT from repository)
 
@@ -18,7 +20,6 @@ def get_path_to_competence(comp: str, standard_curriculum: str) -> list[list[str
     for i in range(0, 100):
         subgraph = __get_subgraph_for_feasibility_analysis(comp, start_comps_plus_sem_and_obl_mods)
         passed: bool = False
-        print(f"testing {i}")
         if not subgraph:
             continue
 
@@ -28,7 +29,7 @@ def get_path_to_competence(comp: str, standard_curriculum: str) -> list[list[str
         if passed:
             return subgraph
 
-    return []
+    raise GraphException('No suitable standard curriculum has been found, reason not identifiable.')
 
 
 def get_start_competences_plus_sems_and_obl_mods_plus_sems() -> tuple[dict[str, int], dict[str, list[int]]]:
@@ -77,7 +78,7 @@ def does_feasible_subgraph_exist(standard_curriculum: str) -> bool:
     start_comps_plus_sem_and_obl_mods_plus_sems: tuple[dict[str, int], dict[str, list[int]]] = tuple(get_start_competences_plus_sems_and_obl_mods_plus_sems())
     subgraph: list[list[str | list[int]] | list[list[int]]] = __get_subgraph_for_feasibility_analysis('invalid', start_comps_plus_sem_and_obl_mods_plus_sems)
     if not subgraph:
-        return False
+        raise GraphException('No suitable standard curriculum has been found, reason not identifiable.')
     return True
 
 
@@ -95,7 +96,7 @@ def __get_subgraph_for_feasibility_analysis(wanted_comp: str, start_comps_plus_s
     subgraph: list[list[str] | list[int] | list[list[int]]] = [obl_mods, ["Pflichtmodul"] * length, list(start_comps_plus_sem_and_obl_mods_plus_sems[1].values()), links_for_obl_mods]
     types_of_free_slots, sems_of_free_slots, winter_of_free_slots = __get_free_slots_by_type_plus_semester_plus_season()
     if len(types_of_free_slots) == 0:
-        return [['No slots for optional Modules']]
+        raise GraphException('There are no elective slots to be filled.')
     competence_pool: list[str] = list(start_comps_plus_sem_and_obl_mods_plus_sems[0].keys())
     provided_in_sem: list[int] = list(start_comps_plus_sem_and_obl_mods_plus_sems[0].values())
     lowest_sem_of_free_slot: int = min(sems_of_free_slots)
@@ -114,7 +115,7 @@ def __get_subgraph_for_feasibility_analysis(wanted_comp: str, start_comps_plus_s
 
         # when algorithm is at this point, free slots have not been filled -> possible modules have to exist to continue
         if len(possible_modules) == 0:
-            return []
+            raise GraphException('There are not enough modules to fill all elective slots according to their type.')
 
         found_modules: list[str] = []
         found_modules_slot_types: list[str] = []
@@ -129,7 +130,7 @@ def __get_subgraph_for_feasibility_analysis(wanted_comp: str, start_comps_plus_s
 
         # if free slots left (which also have an entry in sems_of_free_slots) and their semester is the current one or lower -> standard curriculum impossible to fill
         if [sem for sem in sems_of_free_slots if sem <= curr_sem]:
-            return []
+            raise GraphException('There are not enough modules to fill all elective slots according to their type.')
 
         subgraph[0] += found_modules
         subgraph[1] += found_modules_slot_types
@@ -154,8 +155,7 @@ def __get_subgraph_for_feasibility_analysis(wanted_comp: str, start_comps_plus_s
         competence_pool = [comp for i, comp in enumerate(competence_pool) if i not in indices_to_delete]
 
     if len(types_of_free_slots) != 0:
-        raise ValueError(f"not all free slots filled")
-        # return []
+        raise GraphException('There are not enough modules to fill all elective slots according to their type.')
 
     return list(zip(subgraph[0], subgraph[1], subgraph[2], subgraph[3]))
 
@@ -176,8 +176,9 @@ def __compute_links_for_obl_mods(obl_mods: list[str], obl_mods_sems: list[list[i
             break
         counter += 1
 
+    # only occurs if backend programmer made a mistake; helps to identify bug
     if len(base_mods) != len(links_for_obl_mods):
-        raise ValueError(f"len base mods: {len(base_mods)}, len links: {len(links_for_obl_mods)}")
+        raise GraphException('Please tell your backend programmer to fix the backend; error id: ge_clfom')
     return links_for_obl_mods
 
 
@@ -186,8 +187,10 @@ def __compute_links(found_mods: list[str], existing_mods: list[str]) -> list[lis
     for fmod in found_mods:
         ret_list.append(da_get_previous_modules_for_single_module(fmod, existing_mods))
 
+    # only occurs if backend programmer made a mistake; helps to identify bug
     if len(found_mods) != len(ret_list):
-        raise ValueError(f"Error in __compute_links\nlen found_mods: {len(found_mods)}, len ret_list: {len(ret_list)}")
+        raise GraphException('Please tell your backend programmer to fix the backend; error id: ge_cl')
+
     return ret_list
 
 
@@ -210,6 +213,8 @@ def __get_free_slots_by_type_plus_semester_plus_season() -> tuple[list[list[str]
     if len(free_slots_ids) != 0:
         sorted_by_sem: list[any] = zip(*sorted(zip(free_slots_ids, free_slots_types, semesters, winter), key=lambda x: x[2]))
         free_slots_ids, free_slots_types, semesters, winter = sorted_by_sem
+
+    # todo: sort by type rarity (optional, implement if performance gets bad again)
 
     return free_slots_types, semesters, winter
 
@@ -255,12 +260,9 @@ def __fit_possible_modules_to_free_slots(wanted_comp: str, possible_modules: lis
     # permutate possible modules
     shuffle(possible_modules)
 
-    print(":::::::::::::::::::::::::::::::::::")
-    print(f"free slots: {types_of_free_slots}")
-    # get modules to the front which provide the wanted competence
+    # get modules to the front which (indirectly) provide the wanted competence
     for i in range(len(possible_modules)):
         if possible_modules[i] in da_get_modules_indirectly_connected_to_comp(wanted_comp) or wanted_comp in da_get_provided_comps_per_module(possible_modules[i]):
-            print(f"putting {possible_modules[i]} to the front")
             possible_modules = [possible_modules[i]] + possible_modules[:i] + possible_modules[i + 1:]
 
     # compute for each module if it can be visited during winter or summer
@@ -278,7 +280,7 @@ def __fit_possible_modules_to_free_slots(wanted_comp: str, possible_modules: lis
                     found_module = mod
                     break
             if found_module != '':
-                print(f"Found module '{found_module}' for slot '{single_slot_type}' (semester: {sems_of_free_slots[i]})")
+                # print(f"Found module '{found_module}' for slot '{single_slot_type}' (semester: {sems_of_free_slots[i]})")
                 found_modules.append(found_module)
                 found_modules_slot_types.append(single_slot_type)
                 found_modules_sem.append([sems_of_free_slots[i]])
