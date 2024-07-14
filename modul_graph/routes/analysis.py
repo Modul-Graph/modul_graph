@@ -18,10 +18,7 @@ def get_doability(sc: str) -> AnalysisResponseDTO:
     :return: analysis result
     """
 
-    try:
-        is_ok: bool = is_feasible(sc)
-    except GraphException as e:
-        raise HTTPException(400, "standard curriculum doesn't exist")
+    is_ok: bool = is_feasible(sc)
 
     res: AnalysisResponseDTO
     if is_ok:

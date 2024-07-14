@@ -3,7 +3,6 @@ from .std_curr import std_curr, instantiate_std_curr_obj
 from collections import Counter
 from random import shuffle
 from .graph_exception import GraphException
-from modul_graph.DTOs import AnalysisResponseDTO, AnalysisStatus
 
 # service provides controller with processed data and gets its data from data_access (NOT from repository)
 
