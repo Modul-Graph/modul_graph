@@ -5,6 +5,20 @@ from enum import Enum
 
 from pydantic import BaseModel
 
+
+"""
+Module DTO
+"""
+
+
+class ModuleDTO(BaseModel):
+    name: str
+    description: str
+    cp_plus_description: dict[int, str]
+    summer: bool
+    winter: bool
+
+
 """
 Standard Curriculum DTOs
 """
