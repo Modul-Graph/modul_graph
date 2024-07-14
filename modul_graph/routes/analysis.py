@@ -1,6 +1,9 @@
-from fastapi import APIRouter, HTTPException
+from typing import Annotated
 
-from modul_graph.DTOs import AnalysisResponseDTO, AnalysisStatus
+from fastapi import APIRouter, HTTPException, Depends, Body
+from loguru import logger
+
+from modul_graph.DTOs import AnalysisResponseDTO, AnalysisStatus, SuggestionRequestDTO, SuggestionResponseDTO
 from modul_graph.utils.controller import is_feasible
 
 from modul_graph.i18n import _
@@ -30,3 +33,18 @@ def get_doability(sc: str) -> AnalysisResponseDTO:
         res = AnalysisResponseDTO(status=AnalysisStatus.error, message=_("Doability error message"))
 
     return res
+
+
+@router.put("/suggestion")
+def get_curriculum_suggestion(
+    req: SuggestionRequestDTO) -> SuggestionResponseDTO:
+    """
+    Get a suggestion for a standard curriculum
+    :param req: request DTO
+    :return: analysis result
+    """
+
+    logger.info(f"{req}")
+
+
+    return SuggestionResponseDTO(nodes=[], edges=[])

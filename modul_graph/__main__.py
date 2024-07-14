@@ -6,7 +6,7 @@ from neomodel import config, db
 
 from .utils.controller import is_feasible
 
-config.DATABASE_URL = 'bolt://neo4j:dev_pw@neo4j:7687'  # default
+config.DATABASE_URL = 'bolt://neo4j:password@localhost:7687'  # default
 results, meta = db.cypher_query("MATCH (n) DETACH DELETE n")
 import modul_graph.static.spo_2017_inf_wise._standard_curricula
 
