@@ -13,14 +13,13 @@ Module DTOs
 
 
 class ModuleDTO(BaseModel):
-    name: str                   # required
+    name: str
     description: Optional[str] = None
     cp_plus_description: Optional[dict[int, str]] = None
-    summer: bool                # required
-    winter: bool                # required
-    # todo: in router_service get_module für ModuleDTO diese 2 Pflichtattribute setzen
-    #std_curr_name: str          # required
-    #module_area_name: str       # required
+    summer: bool
+    winter: bool
+    std_curr_name: str
+    module_areas: list[str]
     needs_competences: Optional[list[str]] = None
     provides_competences: Optional[list[str]] = None
     needs_micro_units: Optional[list[str]] = None
