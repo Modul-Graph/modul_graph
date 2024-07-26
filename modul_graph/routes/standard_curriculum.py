@@ -8,12 +8,12 @@ from neomodel import NodeSet  # type: ignore
 
 from modul_graph.models.standard_curriculum import StandardCurriculumDTO, StandardCurriculum
 
-__router = APIRouter(
+router = APIRouter(
     prefix="/sc",
 )
 
 
-@__router.get("/get_all", tags=["READ"])
+@router.get("/get_all", tags=["READ"])
 async def get_standard_curriculums() -> List[StandardCurriculumDTO]:
     """
     Get all standard curriculums available in the database
@@ -21,7 +21,7 @@ async def get_standard_curriculums() -> List[StandardCurriculumDTO]:
     """
     res: List[StandardCurriculumDTO] = []
 
-    for node in StandardCurriculum.nodes():
+    for node in StandardCurriculum.nodes:
         assert isinstance(node, StandardCurriculum)
 
         res.append(node.serialize)

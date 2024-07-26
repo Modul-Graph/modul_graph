@@ -1,5 +1,5 @@
 from .analysis_service import does_feasible_subgraph_exist, get_path_to_competence
-from .data_access import da_get_standard_curricula, da_get_providing_modules_for_comp, da_get_comp_existing
+from .analysis_DAO import da_get_standard_curricula, da_get_providing_modules_for_comp, da_get_comp_existing
 from .graph_exception import GraphException
 from fastapi import HTTPException
 from modul_graph.DTOs import AnalysisResponseDTO, AnalysisStatus

@@ -1,9 +1,9 @@
 """
 This file contains all routes that get, create, edit or delete modules
 """
-from fastapi import APIRouter
-from utils.router_service import RouterService
-from DTOs import ModuleDTO, ModuleRelationshipDTO
+from fastapi import APIRouter, Response
+from .router_service import RouterService
+from modul_graph.DTOs import ModuleDTO
 
 router = APIRouter(prefix="/module")
 
@@ -14,16 +14,19 @@ def get_module(name: str) -> ModuleDTO:
 
 
 @router.post("/")
-def create_module(module: ModuleDTO, module_relationships: ModuleRelationshipDTO):
-    return RouterService().create_module(module, module_relationships)
+def create_module(module: ModuleDTO) -> Response:
+    RouterService().create_module(module)
+    return Response(status_code=201)
 
 
 @router.delete("/{name}")
-def delete_module(name: str):
-    return RouterService().delete_module(name)
+def delete_module(name: str) -> Response:
+    RouterService().delete_module(name)
+    return Response(status_code=201)
 
 
 @router.put("/")
-def update_module(module: ModuleDTO, module_relationships: ModuleRelationshipDTO):
-    return RouterService().update_module(module, module_relationships)
+def update_module(module: ModuleDTO) -> Response:
+    RouterService().update_module(module)
+    return Response(status_code=201)
 

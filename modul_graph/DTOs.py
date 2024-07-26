@@ -4,6 +4,7 @@ All DTOs needed for the REST-API are defined here.
 from enum import Enum
 
 from pydantic import BaseModel
+from typing import Optional
 
 
 """
@@ -12,20 +13,18 @@ Module DTOs
 
 
 class ModuleDTO(BaseModel):
-    name: str
-    description: str
-    cp_plus_description: dict[int, str]
-    summer: bool
-    winter: bool
-    
-
-class ModuleRelationshipDTO(BaseModel):
-    std_curr_name: str
-    module_area_name: str
-    needs_competences: str
-    provides_competences: str
-    needs_micro_units: str
-    provides_micro_units: str
+    name: str                   # required
+    description: Optional[str] = None
+    cp_plus_description: Optional[dict[int, str]] = None
+    summer: bool                # required
+    winter: bool                # required
+    # todo: in router_service get_module für ModuleDTO diese 2 Pflichtattribute setzen
+    #std_curr_name: str          # required
+    #module_area_name: str       # required
+    needs_competences: Optional[list[str]] = None
+    provides_competences: Optional[list[str]] = None
+    needs_micro_units: Optional[list[str]] = None
+    provides_micro_units: Optional[list[str]] = None
 
 
 """

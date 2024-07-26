@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
 from modul_graph.DTOs import AnalysisResponseDTO, AnalysisStatus
-from modul_graph.utils.controller import is_feasible
+from modul_graph.utils.analysis_controller import is_feasible
 
 from modul_graph.i18n import _
 

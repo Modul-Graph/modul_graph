@@ -1,8 +1,6 @@
-import asyncio
 import gettext
 import uvicorn
-from neomodel import config, db
-from .utils.controller import is_feasible, get_example_graph
+from neomodel import config
 
 config.DATABASE_URL = 'bolt://neo4j:password@localhost:7687'  # default
 # results, meta = db.cypher_query("MATCH (n) DETACH DELETE n")
@@ -83,10 +81,11 @@ config.DATABASE_URL = 'bolt://neo4j:password@localhost:7687'  # default
 └────────────────────────────────────────┘
 '''
 
-from .utils.router_service import RouterService
-RouterService().get_module('Einführung in die Informatik')
+from .routes.router_service import RouterService
+#print(RouterService().get_module('Einführung in die Informatik'))
+#print(RouterService().__get_from_db('Parallele Programmierung'))
 
 
 translation = gettext.translation(domain="modul_graph", localedir="./locales", languages=["de"])
 translation.install()
-#uvicorn.run(app="modul_graph.fast_api:app", port=8080, reload=True)
+uvicorn.run(app="modul_graph.fast_api:app", port=8080, reload=True)
