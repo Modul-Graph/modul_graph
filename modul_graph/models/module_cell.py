@@ -4,7 +4,7 @@ from neomodel import StructuredNode, StringProperty, RelationshipTo, ZeroOrMore,
 class ModuleCell(StructuredNode):
     """
     The module cell is the binding node between a CP Cluster and a module area. It describes a single entry
-    inside an SER and always resides in a specific semester
+    inside a standard curriculum and always resides in a specific semester
     """
 
     identifier = StringProperty(required=True, unique=True)
@@ -16,7 +16,7 @@ class ModuleCell(StructuredNode):
     filled_by_module_area = RelationshipFrom('modul_graph.models.module_area.ModuleArea', 'FILLS', cardinality=OneOrMore)
     """
     Connection to the module area which resides in the module cell. This is the content of the module cell. In terms 
-    of the SER it would be "WPF Informatik" or "Mathe I" 
+    of the standard curriculum it would be "WPF Informatik" or "Mathe I" 
     """
 
     # connection to Semester

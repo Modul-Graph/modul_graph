@@ -1,40 +1,91 @@
-from neomodel import config, db, remove_all_labels, install_all_labels
+import gettext
+import uvicorn
+from neomodel import config
 
-config.DATABASE_URL = 'bolt://neo4j:dev_pw@neo4j:7687'  # default
-results, meta = db.cypher_query("MATCH (n) DETACH DELETE n")
-
-import modul_graph.static.spo_2017_inf_wise.SER
-
-"""
-print(results)
-remove_all_labels()
-install_all_labels()
-
-c1 = Competence(name="C1").save()
-c2 = Competence(name="C2").save()
-c3 = Competence(name="C3").save()
-m1 = Module(name="M1").save()
-m2 = Module(name="M2").save()
-m3 = Module(name="M3").save()
-m4 = Module(name="M4").save()
-r1 = Requirement(name="R1", semester=1).save()
-r2 = Requirement(name="R2", semester=2).save()
-r3 = Requirement(name="R3", semester=3).save()
-
-m1.fulfills.connect(r1)
-m1.fulfills.connect(r2)
-m1.provides.connect(c1)
+config.DATABASE_URL = 'bolt://neo4j:password@localhost:7687'  # default
+# results, meta = db.cypher_query("MATCH (n) DETACH DELETE n")
+# import modul_graph.static.spo_2017_inf_wise._standard_curricula
 
 
-m2.needs.connect(c1)
-m2.provides.connect(c2)
-m2.fulfills.connect(r3)
+# rune's experiments -----------------------------------------------------------------------------------------------------------
+# write functions in __main__.py (after data has been added to DB)
+# console: python -m modul_graph
 
-m3.needs.connect(c2)
-m3.provides.connect(c3)
-m3.fulfills.connect(r3)
+# comps: list = ['Analysis', 'Numerik']
+# modules: list = ['Schlüsselkompetenzen I', 'Algorithmen und Datenstrukturen']
+# instantiate_std_curr_obj("SPO 2017 Informatik (Start Wintersemester)")
 
-m4.requires.connect(r1)
-m4.requires.connect(r2)
-m4.requires.connect(r3)
-"""
+
+# print(f"\nFeasible? {is_feasible("SPO 2017 Informatik (Start Wintersemester)")}\n")
+# print(get_example_graph("Diskrete Strukturen", "SPO 2017 Informatik (Start Wintersemester)"))
+
+'''
+╒════════════════════════════════════════╕
+│COMPETENCES                             │
+╞════════════════════════════════════════╡
+│"Algorithmen und Datenstrukturen"       │
+├────────────────────────────────────────┤
+│"Analysis"                              │
+├────────────────────────────────────────┤
+│"Numerik"                               │
+├────────────────────────────────────────┤
+│"Betriebssysteme"                       │
+├────────────────────────────────────────┤
+│"Datenbanken und Informationssysteme"   │
+├────────────────────────────────────────┤
+│"Digitaltechnik und Rechnerorganisation"│
+├────────────────────────────────────────┤
+│"Diskrete Strukturen"                   │
+├────────────────────────────────────────┤
+│"Logik"                                 │
+├────────────────────────────────────────┤
+│"Algebra"                               │
+├────────────────────────────────────────┤
+│"lineare Algebra"                       │
+├────────────────────────────────────────┤
+│"Formale Sprachen und Automaten"        │
+├────────────────────────────────────────┤
+│"Informatik als Disziplin"              │
+├────────────────────────────────────────┤
+│"Informatik und Gesellschaft"           │
+├────────────────────────────────────────┤
+│"IT-Sicherheit"                         │
+├────────────────────────────────────────┤
+│"Mensch-Computer-Interaktion"           │
+├────────────────────────────────────────┤
+│"Modellierung"                          │
+├────────────────────────────────────────┤
+│"Programmiersprachen und -methodik"     │
+├────────────────────────────────────────┤
+│"Projekt- und Teamkompetenz"            │
+├────────────────────────────────────────┤
+│"Rechnernetze und verteilte Systeme"    │
+├────────────────────────────────────────┤
+│"Software-Engineering"                  │
+├────────────────────────────────────────┤
+│"Wahrscheinlichkeitstheorie"            │
+├────────────────────────────────────────┤
+│"Statistik"                             │
+├────────────────────────────────────────┤
+│"Topologie"                             │
+├────────────────────────────────────────┤
+│"Differentialgeometrie"                 │
+├────────────────────────────────────────┤
+│"Robotik"                               │
+├────────────────────────────────────────┤
+│"Künstliche Intelligenz"                │
+├────────────────────────────────────────┤
+│"Analytische Geometrie"                 │
+├────────────────────────────────────────┤
+│"Dummy Competence"                      │
+└────────────────────────────────────────┘
+'''
+
+from .routes.router_service import RouterService
+#print(RouterService().get_module('Einführung in die Informatik'))
+#print(RouterService().__get_from_db('Parallele Programmierung'))
+
+
+translation = gettext.translation(domain="modul_graph", localedir="./locales", languages=["de"])
+translation.install()
+uvicorn.run(app="modul_graph.fast_api:app", port=8080, reload=True)
