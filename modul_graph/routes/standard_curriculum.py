@@ -21,7 +21,7 @@ async def get_standard_curriculums() -> List[StandardCurriculumDTO]:
     """
     res: List[StandardCurriculumDTO] = []
 
-    for node in StandardCurriculum.nodes:
+    for node in StandardCurriculum.nodes():
         assert isinstance(node, StandardCurriculum)
 
         res.append(node.serialize)
