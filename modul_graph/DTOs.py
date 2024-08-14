@@ -22,6 +22,8 @@ class ModuleDTO(BaseModel):
     cp_plus_description: Optional[dict[int, str]] = None
     summer: bool
     winter: bool
+
+    # connections:
     std_curr_name: str
     module_areas: list[str]
     needs_competences: Optional[list[str]] = None
