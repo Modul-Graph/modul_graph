@@ -25,8 +25,8 @@ def delete_module(name: str) -> Response:
     return Response(status_code=201)
 
 
-@router.put("/")
-def update_module(module: ModuleDTO) -> Response:
-    RouterService().update_module(module)
+@router.put("/{name}")  # old name (unique) as path param
+def update_module(name: str, module: ModuleDTO) -> Response:
+    RouterService().update_module(name, module)
     return Response(status_code=201)
 
