@@ -13,4 +13,3 @@ class StandardCurriculum(StructuredNode):
 
     # connection to Semester
     specifies_semester = RelationshipTo('modul_graph.models.semester.Semester', 'SPECIFIES', cardinality=OneOrMore)
-

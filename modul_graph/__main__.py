@@ -1,10 +1,6 @@
 import gettext
 import uvicorn
-
-import uvicorn
-from neomodel import config, db
-
-from .utils.controller import is_feasible
+from neomodel import config
 
 config.DATABASE_URL = 'bolt://neo4j:password@localhost:7687'  # default
 results, meta = db.cypher_query("MATCH (n) DETACH DELETE n")
@@ -17,6 +13,7 @@ import modul_graph.static.spo_2017_inf_wise._standard_curricula
 # comps: list = ['Analysis', 'Numerik']
 # modules: list = ['Schlüsselkompetenzen I', 'Algorithmen und Datenstrukturen']
 # instantiate_std_curr_obj("SPO 2017 Informatik (Start Wintersemester)")
+
 
 # print(f"\nFeasible? {is_feasible("SPO 2017 Informatik (Start Wintersemester)")}\n")
 # print(get_example_graph("Diskrete Strukturen", "SPO 2017 Informatik (Start Wintersemester)"))
@@ -82,8 +79,12 @@ import modul_graph.static.spo_2017_inf_wise._standard_curricula
 │"Dummy Competence"                      │
 └────────────────────────────────────────┘
 '''
-print(f"\nFeasible? {is_feasible("SPO 2017 Informatik (Start Wintersemester)")}\n")
+
+from .routes.router_service import RouterService
+#print(RouterService().get_module('Einführung in die Informatik'))
+#print(RouterService().__get_from_db('Parallele Programmierung'))
+
+
 translation = gettext.translation(domain="modul_graph", localedir="./locales", languages=["de"])
 translation.install()
-
-uvicorn.run(app="modul_graph.fastapi:app", port=8080, reload=True)
+uvicorn.run(app="modul_graph.fast_api:app", port=8080, reload=True)

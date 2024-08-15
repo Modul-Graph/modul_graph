@@ -1,12 +1,9 @@
-from typing import Annotated
-
-from fastapi import APIRouter, HTTPException, Depends, Body
+from fastapi import APIRouter, HTTPException
 from loguru import logger
 
 from modul_graph.DTOs import AnalysisResponseDTO, AnalysisStatus, SuggestionRequestDTO, SuggestionResponseDTO
-from modul_graph.utils.controller import is_feasible
-
 from modul_graph.i18n import _
+from modul_graph.utils.controller import is_feasible
 
 router = APIRouter(prefix="/analysis")
 

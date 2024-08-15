@@ -2,16 +2,14 @@
 All DTOs needed for the REST-API are defined here.
 """
 from enum import Enum
+from typing import Optional
 from typing import Self, Set
 
-from typing import Optional
 from pydantic import BaseModel, field_validator, ConfigDict, PositiveInt
 
 from modul_graph.models.competence import Competence
 from modul_graph.models.module import Module
 from modul_graph.models.standard_curriculum import StandardCurriculum
-
-
 
 """
 Module DTOs
@@ -30,6 +28,7 @@ class ModuleDTO(BaseModel):
     provides_competences: Optional[list[str]] = None
     needs_micro_units: Optional[list[str]] = None
     provides_micro_units: Optional[list[str]] = None
+
 
 """
 Standard Curriculum DTOs
