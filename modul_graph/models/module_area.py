@@ -23,3 +23,7 @@ class ModuleArea(StructuredNode):
     """
     Connection to module cell(s) in which it resides
     """
+
+    @property
+    def is_wpf(self) -> bool:
+        return len(self.filled_by_module) > 1

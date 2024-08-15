@@ -6,7 +6,9 @@ from typing import List
 from fastapi import APIRouter
 from neomodel import NodeSet  # type: ignore
 
-from modul_graph.models.standard_curriculum import StandardCurriculumDTO, StandardCurriculum
+from modul_graph.DTOs import CompetenceScDTO, StandardCurriculumDTO
+from modul_graph.models.standard_curriculum import StandardCurriculum
+from modul_graph.utils.controller import get_competence_sc as get_competence_sc_service
 
 router = APIRouter(
     prefix="/sc",
@@ -27,3 +29,8 @@ async def get_standard_curriculums() -> List[StandardCurriculumDTO]:
         res.append(node.serialize)
 
     return res
+
+
+@router.get("/competence/{sc}", tags=["READ"])
+async def get_competence_sc(sc: str) -> CompetenceScDTO:
+    return get_competence_sc_service(sc)

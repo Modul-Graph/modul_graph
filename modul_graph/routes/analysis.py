@@ -11,7 +11,7 @@ from modul_graph.i18n import _
 router = APIRouter(prefix="/analysis")
 
 
-@router.get("/doability")
+@router.get("/doability/{sc}")
 def get_doability(sc: str) -> AnalysisResponseDTO:
     """
     Return do

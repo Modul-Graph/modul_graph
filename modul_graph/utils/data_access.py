@@ -196,3 +196,28 @@ def __prepare_list_as_cypher_var(input_list: list[str]):
         if not input_list[i].endswith('\''):
             input_list[i] = input_list[i] + '\''
     return input_list
+
+
+def da_get_semester_to_module_area_for_standard_curriculum(sc: StandardCurriculum) -> dict[int, list[ModuleArea]]:
+    """
+    Get all module cells of a standard curriculum
+    :param sc: standard curriculum to get the module cells for
+    :return: module cells of the standard curriculum
+    """
+
+    semesters: Iterator[Semester] = sc.specifies_semester
+    semester_to_module_area: dict[int, list[ModuleArea]] = {}
+    # module_cells: dict[int, list[ModuleCell]] = {}
+    for semester in semesters:
+        module_cells: Iterator[ModuleCell] = semester.contains_module_cell
+        modules: list[ModuleArea] = []
+        for module_cell in module_cells:
+            modules += list(module_cell.filled_by_module_area)
+
+        semester_to_module_area[semester.number] = modules
+
+        # semester_module_cells = module_cells.get(semester.number, [])
+        # semester_module_cells += list(semester.contains_module_cell)
+        # module_cells[semester.number] = semester_module_cells
+
+    return semester_to_module_area

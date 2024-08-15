@@ -2,11 +2,10 @@
 All DTOs needed for the REST-API are defined here.
 """
 from enum import Enum
-from typing import Self
+from typing import Self, Set
 
-from pydantic import BaseModel, field_validator, ConfigDict
-from pydantic import BaseModel
 from typing import Optional
+from pydantic import BaseModel, field_validator, ConfigDict, PositiveInt
 
 from modul_graph.models.competence import Competence
 from modul_graph.models.module import Module
@@ -191,3 +190,42 @@ class SuggestionResponseDTO(BaseModel):
             edges.add(SuggestionResponseEdgeDTO(source=source.id, target=target.id, id=f"{source.id}-{target.id}"))
 
         return cls(nodes=nodes, edges=edges)
+
+"""
+Competence SC DTOs
+"""
+
+
+class ModuleCompetenceDTO(BaseModel):
+    """
+    Module Competence DTO
+    """
+    name: str
+    competences: list[str]
+
+
+class WpfDTO(BaseModel):
+    """
+    WPF DTO
+    """
+    name: str
+    semesters: Set[PositiveInt]
+    modules: list[ModuleCompetenceDTO]
+
+
+class PflichtmoduleDTO(BaseModel):
+    """
+    Pflichtmodule DTO
+    """
+    name: str
+    semester: PositiveInt
+    competences: list[str]
+
+
+class CompetenceScDTO(BaseModel):
+    """
+    Competence Standard Curriculum DTO
+    """
+
+    WPF: list[WpfDTO]
+    pflichtmodule: list[PflichtmoduleDTO]
