@@ -1,3 +1,6 @@
+from itertools import chain
+from typing import TypeVar
+
 from .analysis_repo import db_get_module_via_module_area, db_get_semester_for_obl_module_via_module_area, db_get_module_areas_of_obligatory_modules, db_get_provided_comps_for_module, db_get_provided_comps_for_module_list_plus_sem_of_provision, db_get_possible_modules_via_existing_comps, db_get_module_areas_of_optional_modules, db_get_module_cells_connected_to_module_areas, db_get_semester_of_module_cell, db_get_module_areas_for_module, db_get_module_area_for_module_cell, db_get_summer_for_module, db_get_winter_for_module, db_get_possible_modules_plus_provided_comps_via_existing_comps, db_get_standard_curricula, db_get_winter_for_standard_curriculum, db_get_needed_comps_for_module, db_get_previous_modules_for_single_module, db_get_highest_semester_of_std_curr, db_get_modules_indirectly_connected_to_comp, db_get_providing_modules_for_comp, db_get_comp_existing
 from neomodel import db
 
@@ -201,19 +204,28 @@ def da_get_winter_for_standard_curriculum(name: str) -> bool:
     return result[0][0]
 
 
+
+
+
 # ----------------------------------------------------------------------------------------------------------------------
 # helper
+
+# Generic type T
+__T = TypeVar('__T')
 
 # should only be used for lists where the inner nested lists contain only one element each
 # that means, the cypher query should have returned one single column
 # unwinding is necessary for nested lists because accessing the inner list of result=list[list[...]] by result[0] might throw "index out of range" error
-def __unwind(nested_list: list[list[str | int | bool]]) -> list[str | int | bool]:
-    ret: list[str | int | bool] = []
-    for i, mod in enumerate(nested_list):
-        if len(nested_list[i]) > 1:
-            print("\nDon't do that, unwind should be used carefully.\n")
-        ret.append(nested_list[i][0])
-    return ret
+def __unwind(nested_list: list[list[__T]]) -> list[__T]:
+    # Flatten list of lists
+    return list(chain.from_iterable(nested_list))
+    #
+    # ret: list[str | int | bool] = []
+    # for i, mod in enumerate(nested_list):
+    #     if len(nested_list[i]) > 1:
+    #         print("\nDon't do that, unwind should be used carefully.\n")
+    #     ret.append(nested_list[i][0])
+    # return ret
 
 
 def __prepare_list_as_cypher_var(input_list: list[str]):
