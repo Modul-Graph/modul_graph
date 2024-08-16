@@ -47,6 +47,7 @@ async def get_std_curr_modules(sc_name: str) -> List[str]:
 
 # todo: get all module areas
 
+
 @router.get("/competence/{sc}", tags=["READ"])
 async def get_competence_sc(sc: str) -> CompetenceScDTO:
     return get_competence_sc_service(sc)
