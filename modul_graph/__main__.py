@@ -1,6 +1,8 @@
+import gettext
+import uvicorn
 from neomodel import config, db # type: ignore
 
-from .utils.analysis_controller import get_example_graph, is_feasible
+# from modul_graph.utils.std_curr import instantiate_std_curr_obj
 
 config.DATABASE_URL = 'bolt://neo4j:password@localhost:7687'  # default
 results, meta = db.cypher_query("MATCH (n) DETACH DELETE n")
@@ -14,7 +16,7 @@ results, meta = db.cypher_query("MATCH (n) DETACH DELETE n")
 # instantiate_std_curr_obj("SPO 2017 Informatik (Start Wintersemester)")
 
 
-print(f"\nFeasible? {is_feasible("SPO 2017 Informatik (Start Wintersemester)")}\n")
+# print(f"\nFeasible? {is_feasible("SPO 2017 Informatik (Start Wintersemester)")}\n")
 # print(get_example_graph("Diskrete Strukturen", "SPO 2017 Informatik (Start Wintersemester)"))
 
 '''
@@ -83,12 +85,9 @@ print(f"\nFeasible? {is_feasible("SPO 2017 Informatik (Start Wintersemester)")}\
 
 # print(RouterService().get_module('Einführung in die Informatik'))
 # print(RouterService().__get_from_db('Parallele Programmierung'))
-print(get_example_graph("Analysis", "SPO 2017 Informatik (Start Wintersemester)"))
+# print(get_example_graph("Analysis", "SPO 2017 Informatik (Start Wintersemester)"))
 
 
-
-"""
 translation = gettext.translation(domain="modul_graph", localedir="./locales", languages=["de"])
 translation.install()
 uvicorn.run(app="modul_graph.fast_api:app", port=8080, reload=True)
-"""

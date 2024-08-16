@@ -24,7 +24,7 @@ class ModuleDTO(BaseModel):
     winter: bool
 
     # connections:
-    std_curr_name: str
+    std_curr_names: list[str]
     module_areas: list[str]
     needs_competences: Optional[list[str]] = None
     provides_competences: Optional[list[str]] = None
