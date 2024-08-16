@@ -60,14 +60,12 @@ def db_get_possible_modules_plus_provided_comps_via_existing_comps(comps: list[s
     return db.cypher_query('MATCH (c1:Competence)<-[:NEEDS]-(m:Module)-[:PROVIDES]->(c2:Competence), (m)-[:BELONGS_TO]->(:StandardCurriculum {name:\'' + std_curr.name + '\'}) WHERE c1.name in [' + ', '.join(comps) + '] RETURN m.name, c2.name')
 
 
-# todo: connection to std_curr node
 def db_get_previous_modules_for_single_module(new_mod: str, existing_mods: list[str]) -> tuple[list[list[str]], list[str]]:
-    return db.cypher_query('MATCH (m1:Module {name:\'' + new_mod + '\'})-[:NEEDS]->(c:Competence)<-[:PROVIDES]-(m2:Module) WHERE m2.name in [' + ', '.join(existing_mods) + '] RETURN m2.name')
+    return db.cypher_query('MATCH (:StandardCurriculum {name:\'' + std_curr.name + '\'})<-[:BELONGS_TO]-(m1:Module {name:\'' + new_mod + '\'})-[:NEEDS]->(c:Competence)<-[:PROVIDES]-(m2:Module) WHERE m2.name in [' + ', '.join(existing_mods) + '] RETURN m2.name')
 
 
-# todo: connection to std_curr node
 def db_get_modules_indirectly_connected_to_comp(comp: str) -> tuple[list[list[str]], list[str]]:
-    return db.cypher_query('MATCH (m:Module) ((:Module)-[:PROVIDES]->(:Competence)<-[:NEEDS]-(:Module)){0,1} (:Module)-[:PROVIDES]->(:Competence {name:\'' + comp + '\'}) RETURN m.name')
+    return db.cypher_query('MATCH (:StandardCurriculum {name:\'' + std_curr.name + '\'})<-[:BELONGS_TO]-(m:Module) ((:Module)-[:PROVIDES]->(:Competence)<-[:NEEDS]-(:Module)){0,1} (:Module)-[:PROVIDES]->(:Competence {name:\'' + comp + '\'}) RETURN m.name')
 
 
 def db_get_providing_modules_for_comp(comp: str) -> tuple[list[list[str]], list[str]]:

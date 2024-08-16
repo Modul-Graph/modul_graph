@@ -39,7 +39,7 @@ class Module(StructuredNode):
     Connection to competence node which is required by this module. Might be multiple connections
     """
 
-    provides_competence = RelationshipTo('modul_graph.models.competence.Competence', 'PROVIDES', cardinality=OneOrMore)
+    provides_competence = RelationshipTo('modul_graph.models.competence.Competence', 'PROVIDES', cardinality=ZeroOrMore)
     """
     Connection to competence which is provided by the module
     """
