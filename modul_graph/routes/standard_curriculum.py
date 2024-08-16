@@ -7,7 +7,7 @@ from fastapi import APIRouter
 from neomodel import NodeSet  # type: ignore
 
 from modul_graph.DTOs import StandardCurriculumDTO, CompetenceScDTO
-from modul_graph.models.standard_curriculum import StandardCurriculum, StandardCurriculumDTO
+from modul_graph.models.standard_curriculum import StandardCurriculum
 from modul_graph.utils.analysis_controller import get_competence_sc as get_competence_sc_service
 from modul_graph.models.module import Module
 
