@@ -1,5 +1,5 @@
 from itertools import chain
-from typing import TypeVar
+from typing import TypeVar, Iterator
 
 from .analysis_repo import db_get_module_via_module_area, db_get_semester_for_obl_module_via_module_area, \
     db_get_module_areas_of_obligatory_modules, db_get_provided_comps_for_module, \
@@ -11,6 +11,35 @@ from .analysis_repo import db_get_module_via_module_area, db_get_semester_for_ob
     db_get_previous_modules_for_single_module, db_get_highest_semester_of_std_curr, \
     db_get_modules_indirectly_connected_to_comp, db_get_providing_modules_for_comp, db_get_comp_existing
 from neomodel import db
+
+from ..models.module_area import ModuleArea
+from ..models.module_cell import ModuleCell
+from ..models.semester import Semester
+
+
+def da_get_semester_to_module_area_for_standard_curriculum(sc: StandardCurriculum) -> dict[int, list[ModuleArea]]:
+    """
+    Get all module cells of a standard curriculum
+    :param sc: standard curriculum to get the module cells for
+    :return: module cells of the standard curriculum
+    """
+
+    semesters: Iterator[Semester] = sc.specifies_semester
+    semester_to_module_area: dict[int, list[ModuleArea]] = {}
+    # module_cells: dict[int, list[ModuleCell]] = {}
+    for semester in semesters:
+        module_cells: Iterator[ModuleCell] = semester.contains_module_cell
+        modules: list[ModuleArea] = []
+        for module_cell in module_cells:
+            modules += list(module_cell.filled_by_module_area)
+
+        semester_to_module_area[semester.number] = modules
+
+        # semester_module_cells = module_cells.get(semester.number, [])
+        # semester_module_cells += list(semester.contains_module_cell)
+        # module_cells[semester.number] = semester_module_cells
+
+    return semester_to_module_area
 
 
 # data_access processes data for and from repository:
