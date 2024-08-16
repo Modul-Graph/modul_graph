@@ -12,7 +12,9 @@ from .std_curr import std_curr, instantiate_std_curr_obj  # type: ignore
 from collections import Counter
 from random import shuffle
 from .graph_exception import GraphException  # type: ignore
-from ..DTOs import PflichtmoduleDTO, WpfDTO
+from ..DTOs import PflichtmoduleDTO, WpfDTO, ModuleCompetenceDTO
+from ..models.competence import Competence
+from ..models.module import Module
 
 
 # service provides controller with processed data and gets its data from data_access (NOT from repository)
@@ -59,6 +61,7 @@ def get_competence_sc(sc: StandardCurriculum) -> CompetenceScDTO:
                                                       competences=list(map(lambda x: x.name, competences))))
 
     return CompetenceScDTO(WPF=list(name_wpf.values()), pflichtmodule=pflichtmodule)
+
 
 # ----------------------------------------------------------------------------------------------------------------------
 # public functions (accessed by controller)
@@ -195,11 +198,9 @@ def __get_subgraph_for_feasibility_analysis(wanted_comp: str, start_comps_plus_s
         if [sem for sem in sems_of_free_slots if sem <= curr_sem]:
             raise GraphException('There are not enough modules to fill all elective slots according to their type.')
 
-
         subgraph[0].extend(found_modules)
         subgraph[1].extend(found_modules_slot_types)
         subgraph[2].extend(found_modules_sems)
-
 
         # module 'Bachelorarbeit' has semester -1 (like all modules which don't have a semester specified in the database), that's why "min(subgraph[2][i]) != -1" is necessary
         existing_mods: list[str] = [x for i, x in enumerate(subgraph[0]) if
