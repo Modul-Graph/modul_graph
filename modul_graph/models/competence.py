@@ -1,5 +1,4 @@
-from neomodel import StructuredNode, StringProperty, RelationshipTo, ZeroOrMore, OneOrMore, IntegerProperty, One, \
-    RelationshipFrom
+from neomodel import StructuredNode, StringProperty, ZeroOrMore, OneOrMore, RelationshipFrom # type: ignore
 
 
 class Competence(StructuredNode):

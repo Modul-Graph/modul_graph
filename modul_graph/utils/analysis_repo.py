@@ -1,4 +1,4 @@
-from neomodel import db
+from neomodel import db # type: ignore
 from .std_curr import std_curr
 
 

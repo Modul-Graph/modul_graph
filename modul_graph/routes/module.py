@@ -2,8 +2,9 @@
 This file contains all routes that get, create, edit or delete modules
 """
 from fastapi import APIRouter, Response
-from utils.router_service import RouterService
+
 from modul_graph.DTOs import ModuleDTO
+from modul_graph.utils.router_service import RouterService
 
 router = APIRouter(prefix="/module")
 
@@ -29,4 +30,3 @@ def delete_module(name: str) -> Response:
 def update_module(module: ModuleDTO) -> Response:
     RouterService().update_module(module)
     return Response(status_code=201)
-

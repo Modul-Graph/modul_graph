@@ -1,21 +1,21 @@
-from typing import Literal
+from collections import Counter
+from random import shuffle
 
 from .analysis_DAO import da_get_winter_for_module, da_get_module_areas_of_optional_modules_unwound_no_duplicates, \
     da_get_semester_for_obl_module_via_module_area, da_get_module_areas_of_obligatory_modules, \
     da_get_semester_of_module_cell, da_get_summer_for_module, da_get_module_area_for_module_cell, \
-    da_get_module_cells_connected_to_module_areas_without_duplicates, da_get_obl_module_via_module_area, \
-    da_get_module_areas_for_module, da_get_provided_comps_for_module_list_plus_sem_of_provision_without_duplicates, \
+    da_get_module_cells_connected_to_module_areas_without_duplicates, da_get_module_areas_for_module, \
+    da_get_provided_comps_for_module_list_plus_sem_of_provision_without_duplicates, \
     da_get_provided_comps_per_module, da_get_possible_modules_via_existing_comps, da_get_obl_module_via_module_area, \
     da_get_winter_for_standard_curriculum, da_get_needed_comps_for_module, da_get_previous_modules_for_single_module, \
     da_get_highest_semester_of_std_curr, da_get_modules_indirectly_connected_to_comp, \
     da_get_semester_to_module_area_for_standard_curriculum
-from .std_curr import std_curr, instantiate_std_curr_obj  # type: ignore
-from collections import Counter
-from random import shuffle
 from .graph_exception import GraphException  # type: ignore
+from .std_curr import std_curr, instantiate_std_curr_obj  # type: ignore
 from ..DTOs import PflichtmoduleDTO, WpfDTO, ModuleCompetenceDTO, CompetenceScDTO
 from ..models.competence import Competence
 from ..models.module import Module
+from ..models.standard_curriculum import StandardCurriculum
 
 
 # service provides controller with processed data and gets its data from data_access (NOT from repository)
@@ -72,7 +72,7 @@ def get_path_to_competence(comp: str, standard_curriculum: str) -> list[
     instantiate_std_curr_obj(standard_curriculum)
     start_comps_plus_sem_and_obl_mods: tuple[
         dict[str, int], dict[str, list[int]]] = get_start_competences_plus_sems_and_obl_mods_plus_sems()
-    subgraph: list[tuple[str, str, list[int], list[str]]] = []
+    subgraph: list[tuple[str, str, list[int], list[str]]]
 
     for i in range(0, 100):
         subgraph = __get_subgraph_for_feasibility_analysis(comp, start_comps_plus_sem_and_obl_mods)
@@ -97,7 +97,10 @@ def get_start_competences_plus_sems_and_obl_mods_plus_sems() -> tuple[dict[str, 
     obligatory_modules: list[str] = []
     # nested list because module 'Nebenfach' has several semesters
     semesters: list[list[int]] = []
+
+    # noinspection PyUnusedLocal
     ignored_modules: list[str] = []  # in case it needs to be accessed at some point
+
     competences_plus_semester: dict[str, int] = dict()
 
     # get obligatory modules and their corresponding semesters
@@ -137,6 +140,7 @@ def does_feasible_subgraph_exist(standard_curriculum: str) -> bool:
         dict[str, int], dict[str, list[int]]] = get_start_competences_plus_sems_and_obl_mods_plus_sems()
     subgraph: list[tuple[str, str, list[int], list[str]]] = __get_subgraph_for_feasibility_analysis('invalid',
                                                                                                     start_comps_plus_sem_and_obl_mods_plus_sems)
+
     if not subgraph:
         raise GraphException('No suitable standard curriculum has been found, reason not identifiable.')
     return True

@@ -1,6 +1,6 @@
 from fastapi import HTTPException
 from modul_graph.DTOs import ModuleDTO
-from neomodel import db
+from neomodel import db # type: ignore
 from ast import literal_eval
 
 from modul_graph.utils.analysis_DAO import da_get_provided_comps_per_module, da_get_needed_comps_for_module, \

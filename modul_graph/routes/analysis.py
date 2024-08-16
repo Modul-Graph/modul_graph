@@ -3,7 +3,7 @@ from loguru import logger
 
 from modul_graph.DTOs import AnalysisResponseDTO, AnalysisStatus, SuggestionRequestDTO, SuggestionResponseDTO
 from modul_graph.i18n import _
-from modul_graph.utils.controller import is_feasible
+from modul_graph.utils.analysis_controller import get_example_graph, is_feasible
 
 router = APIRouter(prefix="/analysis")
 
@@ -19,7 +19,7 @@ def get_doability(sc: str) -> AnalysisResponseDTO:
 
     try:
         is_ok: bool = is_feasible(sc)
-    except ValueError as e:
+    except ValueError:
         raise HTTPException(400, "standard curriculum doesn't exist")
 
     res: AnalysisResponseDTO
@@ -43,5 +43,6 @@ def get_curriculum_suggestion(
 
     logger.info(f"{req}")
 
+    get_example_graph(wanted_competence=req.competences[0].name, standard_curriculum=req.standard_curriculum.name)
 
-    return SuggestionResponseDTO(nodes=[], edges=[])
+    return SuggestionResponseDTO(nodes=set(), edges=set())
