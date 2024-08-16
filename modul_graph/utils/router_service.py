@@ -6,12 +6,7 @@ from modul_graph.models.module import Module
 from modul_graph.models.module_area import ModuleArea
 from modul_graph.models.standard_curriculum import StandardCurriculum
 from modul_graph.DTOs import ModuleDTO
-from neomodel import db
-from ast import literal_eval
-
-from modul_graph.utils.analysis_DAO import da_get_provided_comps_per_module, da_get_needed_comps_for_module, \
-    da_get_module_areas_for_module
-from .std_curr import std_curr, instantiate_std_curr_obj
+from neomodel import db  # type: ignore
 
 """
 This service is at the moment only responsible for 'Module' information.
@@ -22,19 +17,6 @@ Since it's not a lot, it hasn't been separated into service, DAO and repo.
 class RouterService:
 
     def get_module(self, mod_name: str) -> ModuleDTO:
-        # result = db.cypher_query(
-        #     'MATCH (m:Module {name:\'' + mod_name + '\'}) RETURN m.name, m.description, m.is_in_summer, m.is_in_winter, m.cp_plus_description')[
-        #     0][0]
-        # if not result:
-        #     raise HTTPException(status_code=404, detail='Module not found')
-        # instantiate_std_curr_obj(std_curr_name)
-        # provided_comps: list[str] = da_get_provided_comps_per_module(mod_name)
-        # needed_comps: list[str] = da_get_needed_comps_for_module(mod_name)
-        # ret: ModuleDTO = ModuleDTO(name=result[0], description=result[1], cp_plus_description=literal_eval(result[4]),
-        #                            winter=result[3], summer=result[2], needs_competences=needed_comps,
-        #                            provides_competences=provided_comps,
-        #                            # the last two aren't actually important here, but they are required attributes of ModuleDTO
-        #                            std_curr_names=std_curr.name, module_areas=da_get_module_areas_for_module(mod_name))
 
         self.__does_mod_exist__not_found_exception(mod_name)
         ret_mod: Module = Module.nodes.get(name=mod_name)
@@ -127,38 +109,6 @@ class RouterService:
         # disconnect old module areas which are no longer used (disconnect everything in [old module areas minus new module areas])
         for elem in set([x.name for x in mod_db.fills_module_area.all()]) - set(mod_new.module_areas):
             mod_db.fills_module_area.disconnect(elem)
-
-        '''
-        # connect std_curr (required connection)
-        if not mod_new.std_curr_names:
-            raise HTTPException(status_code=404, detail='No standard curricula specified')
-        else:
-            for elem in mod_new.std_curr_names:
-                if elem in [x.name for x in StandardCurriculum.nodes.all()]:
-                    node = StandardCurriculum.nodes.get(name=elem)
-                    mod_db.belongs_to_standard_curriculum.connect(node)
-                else:
-                    raise HTTPException(status_code=404, detail=f'Standard curriculum `{elem}` not found')
-        # connect mod areas (required connection)
-        if not mod_new.module_areas:
-            raise HTTPException(status_code=404, detail='No modules areas specified')
-        else:
-            for elem in mod_new.module_areas:
-                if elem in [x.name for x in ModuleArea.nodes.all()]:
-                    node = ModuleArea.nodes.get(name=elem)
-                    mod_db.fills_module_area.connect(node)
-                else:
-                    raise HTTPException(status_code=404, detail=f'Module area `{elem}` not found')
-
-        # disconnect std_curr
-        for elem in mod_db.belongs_to_standard_curriculum:
-            if elem.name not in mod_new.std_curr_names:
-                mod_db.belongs_to_standard_curriculum.disconnect(elem)
-        # disconnect mod areas
-        for elem in mod_db.fills_module_area:
-            if elem.name not in mod_new.module_areas:
-                mod_db.fills_module_area.disconnect(elem)
-        '''
 
         # disconnect & connect not required attributes -----------------------------------------------------------------
 
