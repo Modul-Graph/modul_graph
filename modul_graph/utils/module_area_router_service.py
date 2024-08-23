@@ -27,10 +27,12 @@ class ModuleAreaRouterService:
         if area_exists_already:
             raise HTTPException(status_code=409, detail=f'A module area with the name {mod_ar.name} already exists')
 
+        # create new ModuleArea
         mod_ar_to_save = ModuleArea()
         mod_ar_to_save.name = mod_ar.name
         mod_ar_to_save.save()
 
+        # connect modules to new module area
         for elem in mod_ar.filled_by_module:
             mod: Module = Module.nodes.get(name=elem)
             if not mod:

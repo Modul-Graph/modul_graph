@@ -63,7 +63,6 @@ class ModuleRouterService:
         if self.__does_mod_exist(mod_name):
             raise HTTPException(status_code=422, detail='The chosen module name exists already.')
 
-
     @db.transaction
     def __create_module(self, moduleDTO: ModuleDTO) -> None:
         # parts of this method are almost a duplicate of the update method
@@ -95,7 +94,6 @@ class ModuleRouterService:
 
         self.__connect_optional_relationships(module, moduleDTO)
 
-
     @db.transaction
     def __update_mod(self, mod_db: Module, mod_new: ModuleDTO) -> None:
 
@@ -103,9 +101,10 @@ class ModuleRouterService:
 
         mod_db.save()
 
-        # update required connections (sadly it's not possible to first disconnect the old ones ------------------------
-        # and then connect the new ones because of AttemptedCardinalityViolation) --------------------------------------
+        # update required connections (it's not possible to first disconnect the old ones and then connect the new ones
+        # because of AttemptedCardinalityViolation):
 
+        # if no standard curriculum or module areas were specified -> invalid request
         if not mod_new.std_curr_names:
             raise HTTPException(status_code=404, detail='No standard curricula specified')
         if not mod_new.module_areas:
