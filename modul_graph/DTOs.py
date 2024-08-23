@@ -32,6 +32,16 @@ class ModuleDTO(BaseModel):
     provides_micro_units: Optional[list[str]] = None
 
 
+class ModuleAreaDTO(BaseModel):
+    name: str
+    filled_by_module: list[str]
+    # according to ModuleArea model, fills_module_cell is required
+    # but since we don't do anything with cells yet, it's not included for now
+    # also, module cells might be confusing for the user to see
+    # since they don't have a name but a random identifier instead
+
+
+
 """
 Standard Curriculum DTOs
 """
