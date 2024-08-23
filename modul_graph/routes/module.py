@@ -22,11 +22,11 @@ async def create_module(module: ModuleDTO) -> Response:
 @router.delete("/{name}")
 async def delete_module(name: str) -> Response:
     ModuleRouterService().delete_module(name)
-    return Response(status_code=201)
+    return Response(status_code=200)
 
 
 @router.put("/{name}")  # old name (unique) as path param
 async def update_module(name: str, module: ModuleDTO) -> Response:
     ModuleRouterService().update_module(name, module)
-    return Response(status_code=201)
+    return Response(status_code=200)
 
