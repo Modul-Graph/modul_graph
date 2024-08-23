@@ -5,8 +5,8 @@ from neomodel import config, db # type: ignore
 # from modul_graph.utils.std_curr import instantiate_std_curr_obj
 
 config.DATABASE_URL = 'bolt://neo4j:password@localhost:7687'  # default
-results, meta = db.cypher_query("MATCH (n) DETACH DELETE n")
-import modul_graph.static.spo_2017_inf_wise._standard_curricula
+# results, meta = db.cypher_query("MATCH (n) DETACH DELETE n")
+# import modul_graph.static.spo_2017_inf_wise._standard_curricula
 
 # rune's experiments -----------------------------------------------------------------------------------------------------------
 # write functions in __main__.py (after data has been added to DB)
@@ -81,12 +81,6 @@ import modul_graph.static.spo_2017_inf_wise._standard_curricula
 │"Dummy Competence"                      │
 └────────────────────────────────────────┘
 '''
-
-#from .routes.router_service import ModuleRouterService
-
-# print(ModuleRouterService().get_module('Einführung in die Informatik'))
-# print(ModuleRouterService().__get_from_db('Parallele Programmierung'))
-# print(get_example_graph("Analysis", "SPO 2017 Informatik (Start Wintersemester)"))
 
 
 translation = gettext.translation(domain="modul_graph", localedir="./locales", languages=["de"])
