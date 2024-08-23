@@ -2,19 +2,11 @@ from typing import TypeVar, Iterator
 
 from neomodel import db # type: ignore
 
-from .analysis_repo import db_get_module_via_module_area, db_get_semester_for_obl_module_via_module_area, \
-    db_get_module_areas_of_obligatory_modules, db_get_provided_comps_for_module, \
-    db_get_provided_comps_for_module_list_plus_sem_of_provision, db_get_possible_modules_via_existing_comps, \
-    db_get_module_areas_of_optional_modules, db_get_module_cells_connected_to_module_areas, \
-    db_get_semester_of_module_cell, db_get_module_areas_for_module, db_get_module_area_for_module_cell, \
-    db_get_summer_for_module, db_get_winter_for_module, db_get_possible_modules_plus_provided_comps_via_existing_comps, \
-    db_get_standard_curricula, db_get_winter_for_standard_curriculum, db_get_needed_comps_for_module, \
-    db_get_previous_modules_for_single_module, db_get_highest_semester_of_std_curr, \
-    db_get_modules_indirectly_connected_to_comp, db_get_providing_modules_for_comp, db_get_comp_existing
-from ..models.module_area import ModuleArea
-from ..models.module_cell import ModuleCell
-from ..models.semester import Semester
-from ..models.standard_curriculum import StandardCurriculum
+from .analysis_repo import db_get_module_via_module_area, db_get_semester_for_obl_module_via_module_area, db_get_module_areas_of_obligatory_modules, db_get_provided_comps_for_module, db_get_provided_comps_for_module_list_plus_sem_of_provision, db_get_possible_modules_via_existing_comps, db_get_module_areas_of_optional_modules, db_get_module_cells_connected_to_module_areas, db_get_semester_of_module_cell, db_get_module_areas_for_module, db_get_module_area_for_module_cell, db_get_summer_for_module, db_get_winter_for_module, db_get_possible_modules_plus_provided_comps_via_existing_comps, db_get_standard_curricula, db_get_winter_for_standard_curriculum, db_get_needed_comps_for_module, db_get_previous_modules_for_single_module, db_get_highest_semester_of_std_curr, db_get_modules_indirectly_connected_to_comp, db_get_providing_modules_for_comp, db_get_comp_existing  # type: ignore
+from ..models.module_area import ModuleArea  # type: ignore
+from ..models.module_cell import ModuleCell  # type: ignore
+from ..models.semester import Semester  # type: ignore
+from ..models.standard_curriculum import StandardCurriculum  # type: ignore
 
 
 def da_get_semester_to_module_area_for_standard_curriculum(sc: StandardCurriculum) -> dict[int, list[ModuleArea]]:
@@ -169,7 +161,6 @@ def da_get_provided_comps_for_module_list_plus_sem_of_provision_without_duplicat
     list[str], list[int]]:
     # result format: list[list['comp', 'semester_of_module']] with several inner lists -> unwind doesn't work
     result: list[tuple[str | int]] = db_get_provided_comps_for_module_list_plus_sem_of_provision(__prepare_list_as_cypher_var(modules))[0]
-    print(result)
 
     # comps, sems: tuple[list[str], list[int]] -- or [] if no values in result
     if len(result) < 1:
