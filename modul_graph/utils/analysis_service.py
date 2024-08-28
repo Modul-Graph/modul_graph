@@ -1,21 +1,13 @@
 from collections import Counter
 from random import shuffle
 
-from .analysis_DAO import da_get_winter_for_module, da_get_module_areas_of_optional_modules_unwound_no_duplicates, \
-    da_get_semester_for_obl_module_via_module_area, da_get_module_areas_of_obligatory_modules, \
-    da_get_semester_of_module_cell, da_get_summer_for_module, da_get_module_area_for_module_cell, \
-    da_get_module_cells_connected_to_module_areas_without_duplicates, da_get_module_areas_for_module, \
-    da_get_provided_comps_for_module_list_plus_sem_of_provision_without_duplicates, \
-    da_get_provided_comps_per_module, da_get_possible_modules_via_existing_comps, da_get_obl_module_via_module_area, \
-    da_get_winter_for_standard_curriculum, da_get_needed_comps_for_module, da_get_previous_modules_for_single_module, \
-    da_get_highest_semester_of_std_curr, da_get_modules_indirectly_connected_to_comp, \
-    da_get_semester_to_module_area_for_standard_curriculum
+from .analysis_DAO import da_get_winter_for_module, da_get_module_areas_of_optional_modules_unwound_no_duplicates, da_get_semester_for_obl_module_via_module_area, da_get_module_areas_of_obligatory_modules, da_get_semester_of_module_cell, da_get_summer_for_module, da_get_module_area_for_module_cell, da_get_module_cells_connected_to_module_areas_without_duplicates, da_get_module_areas_for_module, da_get_provided_comps_for_module_list_plus_sem_of_provision_without_duplicates, da_get_provided_comps_per_module, da_get_possible_modules_via_existing_comps, da_get_obl_module_via_module_area, da_get_winter_for_standard_curriculum, da_get_needed_comps_for_module, da_get_previous_modules_for_single_module, da_get_highest_semester_of_std_curr, da_get_modules_indirectly_connected_to_comp, da_get_semester_to_module_area_for_standard_curriculum  # type: ignore
 from .graph_exception import GraphException  # type: ignore
 from .std_curr import std_curr, instantiate_std_curr_obj  # type: ignore
-from ..DTOs import PflichtmoduleDTO, WpfDTO, ModuleCompetenceDTO, CompetenceScDTO
-from ..models.competence import Competence
-from ..models.module import Module
-from ..models.standard_curriculum import StandardCurriculum
+from ..DTOs import PflichtmoduleDTO, WpfDTO, ModuleCompetenceDTO, CompetenceScDTO  # type: ignore
+from ..models.competence import Competence  # type: ignore
+from ..models.module import Module  # type: ignore
+from ..models.standard_curriculum import StandardCurriculum  # type: ignore
 
 
 # service provides controller with processed data and gets its data from data_access (NOT from repository)
@@ -68,12 +60,13 @@ def get_competence_sc(sc: StandardCurriculum) -> CompetenceScDTO:
 # public functions (accessed by controller)
 
 def get_path_to_competence(comp: str, standard_curriculum: str) -> list[
-    tuple[str, str, list[int], list[str]]]:
+        tuple[str, str, list[int], list[str]]]:
     instantiate_std_curr_obj(standard_curriculum)
     start_comps_plus_sem_and_obl_mods: tuple[
         dict[str, int], dict[str, list[int]]] = get_start_competences_plus_sems_and_obl_mods_plus_sems()
     subgraph: list[tuple[str, str, list[int], list[str]]]
 
+    # generate possible subgraphs and check if they contain the wanted competence
     for i in range(0, 100):
         subgraph = __get_subgraph_for_feasibility_analysis(comp, start_comps_plus_sem_and_obl_mods)
         passed: bool = False
@@ -157,7 +150,7 @@ def __get_subgraph_for_feasibility_analysis(wanted_comp: str, start_comps_plus_s
     links_for_obl_mods = __compute_links_for_obl_mods(obl_mods, obl_mods_sems)
 
     # subgraph initialised to obligatory modules
-    # list content per row: name, slot type, semester, previous_modules
+    # tuple content: name, slot type, semester, previous_modules
     subgraph: tuple[list[str], list[str], list[list[int]], list[list[str]]] = (
         obl_mods, ["Pflichtmodul"] * length, list(start_comps_plus_sem_and_obl_mods_plus_sems[1].values()),
         links_for_obl_mods)

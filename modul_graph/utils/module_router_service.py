@@ -14,15 +14,12 @@ Since it's not a lot, it hasn't been separated into service, DAO and repo.
 """
 
 
-class RouterService:
+class ModuleRouterService:
 
     def get_module(self, mod_name: str) -> ModuleDTO:
 
         self.__does_mod_exist__not_found_exception(mod_name)
         ret_mod: Module = Module.nodes.get(name=mod_name)
-
-        print(f'Module areas: {ret_mod.fills_module_area.all()}')
-        print(f'Standard curricula: {ret_mod.belongs_to_standard_curriculum.all()}')
 
         ret_mod_dto: ModuleDTO = ModuleDTO(name=ret_mod.name,
                                            description=ret_mod.module_description,
@@ -38,7 +35,7 @@ class RouterService:
 
     def create_module(self, mod: ModuleDTO) -> None:
         self.__does_mod_exist__exists_already_exception(mod.name)
-        self.__create_or_update_mod(Module(), mod)
+        self.__create_module(mod)
 
     def delete_module(self, mod_name: str) -> None:
         self.__does_mod_exist__not_found_exception(mod_name)
@@ -52,7 +49,7 @@ class RouterService:
         # the new name should not yet exist if it's different from the old one
         if identifier != mod_new.name:
             self.__does_mod_exist__exists_already_exception(mod_new.name)
-        self.__create_or_update_mod(Module.nodes.get(name=identifier), mod_new)
+        self.__update_mod(Module.nodes.get(name=identifier), mod_new)
 
     def __does_mod_exist(self, mod_name: str) -> bool:
         result = db.cypher_query('MATCH (m:Module {name:\'' + mod_name + '\'}) RETURN m')
@@ -67,18 +64,47 @@ class RouterService:
             raise HTTPException(status_code=422, detail='The chosen module name exists already.')
 
     @db.transaction
-    def __create_or_update_mod(self, mod_db: Module, mod_new: ModuleDTO) -> None:
-        mod_db.name = mod_new.name
-        mod_db.description = mod_new.description
-        mod_db.cp_plus_description = mod_new.cp_plus_description
-        mod_db.is_in_summer = mod_new.summer
-        mod_db.is_in_winter = mod_new.winter
+    def __create_module(self, moduleDTO: ModuleDTO) -> None:
+        # parts of this method are almost a duplicate of the update method
+        # but the update method can't be used to create modules
+        # because the check "elem not in [x.name for x in mod_db.belongs_to_standard_curriculum.all()]"
+        # accesses the connection "belongs_to_standard_curriculum" of the Module entity, which has a cardinality of OneOrMore
+        # for a newly created module, it would raise an exception that there aren't any connections
+
+        module: Module = self.__assign_attributes(Module(), moduleDTO)
+        module.save()
+
+        # connect required relationships:
+        # connect standard curricula
+        for elem in moduleDTO.std_curr_names:
+            # if elem is a valid standard curriculum
+            if elem in [x.name for x in StandardCurriculum.nodes.all()]:
+                node = StandardCurriculum.nodes.get(name=elem)
+                module.belongs_to_standard_curriculum.connect(node)
+            elif elem not in [x.name for x in StandardCurriculum.nodes.all()]:
+                raise HTTPException(status_code=404, detail=f'Standard curriculum `{elem}` not found')
+        # connect module areas
+        for elem in moduleDTO.module_areas:
+            # if elem is a valid module area and is not already connected
+            if elem in [x.name for x in ModuleArea.nodes.all()]:
+                node = ModuleArea.nodes.get(name=elem)
+                module.fills_module_area.connect(node)
+            elif elem not in [x.name for x in ModuleArea.nodes.all()]:
+                raise HTTPException(status_code=404, detail=f'Module area `{elem}` not found')
+
+        self.__connect_optional_relationships(module, moduleDTO)
+
+    @db.transaction
+    def __update_mod(self, mod_db: Module, mod_new: ModuleDTO) -> None:
+
+        self.__assign_attributes(mod_db, mod_new)
 
         mod_db.save()
 
-        # update required connections (sadly it's not possible to first disconnect the old ones ------------------------
-        # and then connect the new ones because of AttemptedCardinalityViolation) --------------------------------------
+        # update required connections (it's not possible to first disconnect the old ones and then connect the new ones
+        # because of AttemptedCardinalityViolation):
 
+        # if no standard curriculum or module areas were specified -> invalid request
         if not mod_new.std_curr_names:
             raise HTTPException(status_code=404, detail='No standard curricula specified')
         if not mod_new.module_areas:
@@ -95,7 +121,7 @@ class RouterService:
 
         # disconnect old standard curricula which are no longer used (disconnect everything in [old connections minus new connections])
         for elem in set([x.name for x in mod_db.belongs_to_standard_curriculum.all()]) - set(mod_new.std_curr_names):
-            mod_db.belongs_to_standard_curriculum.disconnect(elem)
+            mod_db.belongs_to_standard_curriculum.disconnect(StandardCurriculum.nodes.get(name=elem))
 
         # connect new module areas
         for elem in mod_new.module_areas:
@@ -108,53 +134,60 @@ class RouterService:
 
         # disconnect old module areas which are no longer used (disconnect everything in [old module areas minus new module areas])
         for elem in set([x.name for x in mod_db.fills_module_area.all()]) - set(mod_new.module_areas):
-            mod_db.fills_module_area.disconnect(elem)
+            mod_db.fills_module_area.disconnect(ModuleArea.nodes.get(name=elem))
 
-        # disconnect & connect not required attributes -----------------------------------------------------------------
-
-        # disconnect needed comps
+        # disconnect optional relationships
         for elem in mod_db.needs_competence:
-            mod_db.needs_competence.disconnect(elem)
-        # disconnect provided comps
+            mod_db.needs_competence.disconnect(Competence.nodes.get(name=elem))
         for elem in mod_db.provides_competence:
-            mod_db.provides_competence.disconnect(elem)
-        # disconnect needed micro units
+            mod_db.provides_competence.disconnect(Competence.nodes.get(name=elem))
         for elem in mod_db.needs_micro_unit:
-            mod_db.needs_micro_unit.disconnect(elem)
-        # disconnect provided micro units
+            mod_db.needs_micro_unit.disconnect(MicroUnit.nodes.get(name=elem))
         for elem in mod_db.provided_by_micro_unit:
-            mod_db.provided_by_micro_unit.disconnect(elem)
+            mod_db.provided_by_micro_unit.disconnect(MicroUnit.nodes.get(name=elem))
 
+        self.__connect_optional_relationships(mod_db, mod_new)
+
+    def __assign_attributes(self, module: Module, moduleDTO: ModuleDTO) -> Module:
+        module.name = moduleDTO.name
+        module.module_description = moduleDTO.description
+        module.cp_plus_description = moduleDTO.cp_plus_description
+        module.is_in_summer = moduleDTO.summer
+        module.is_in_winter = moduleDTO.winter
+
+        return module
+
+    def __connect_optional_relationships(self, module: Module, moduleDTO: ModuleDTO):
         # connect needed comps
-        if mod_new.needs_competences:
-            for elem in mod_new.needs_competences:
+        if moduleDTO.needs_competences:
+            for elem in moduleDTO.needs_competences:
                 if elem in [x.name for x in Competence.nodes.all()]:
                     node = Competence.nodes.get(name=elem)
-                    mod_db.needs_competence.connect(node)
+                    module.needs_competence.connect(node)
                 else:
                     raise HTTPException(status_code=404, detail=f'Competence `{elem}` found')
-        # connect provided comps (required connection according to Module model, but not according to ModuleDTO)
-        if mod_new.provides_competences:
-            for elem in mod_new.provides_competences:
+        # connect provided comps
+        if moduleDTO.provides_competences:
+            for elem in moduleDTO.provides_competences:
                 if elem in [x.name for x in Competence.nodes.all()]:
                     node = Competence.nodes.get(name=elem)
-                    mod_db.provides_competence.connect(node)
+                    module.provides_competence.connect(node)
                 else:
                     raise HTTPException(status_code=404, detail=f'Competence `{elem}` not found')
         # connect needed micro units
-        if mod_new.needs_micro_units:
-            for elem in mod_new.needs_micro_units:
+        if moduleDTO.needs_micro_units:
+            for elem in moduleDTO.needs_micro_units:
                 if elem in [x.name for x in MicroUnit.nodes.all()]:
                     node = MicroUnit.nodes.get(name=elem)
-                    mod_db.needs_micro_unit.connect(node)
+                    module.needs_micro_unit.connect(node)
                 else:
                     raise HTTPException(status_code=404, detail=f'Micro unit `{elem}` not found')
         # connect provided micro units
-        if mod_new.provides_micro_units:
-            for elem in mod_new.provides_micro_units:
+        if moduleDTO.provides_micro_units:
+            for elem in moduleDTO.provides_micro_units:
                 if elem in [x.name for x in MicroUnit.nodes.all()]:
                     node = MicroUnit.nodes.get(name=elem)
-                    mod_db.provided_by_micro_unit.connect(node)
+                    module.provided_by_micro_unit.connect(node)
                 else:
                     raise HTTPException(status_code=404, detail=f'Micro unit `{elem}` not found')
 
