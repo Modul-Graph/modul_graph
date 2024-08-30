@@ -60,3 +60,7 @@ class Module(StructuredNode):
     """
     Connection to module are if module can be visited as an elected subject
     """
+
+    @property
+    def is_wpf(self) -> bool:
+        return len([x for x in ModuleArea.nodes.all() if x.is_connected(self)]) > 1
