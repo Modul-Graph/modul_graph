@@ -1,4 +1,4 @@
-from neomodel import StructuredNode, StringProperty, RelationshipTo, ZeroOrMore, OneOrMore, One, RelationshipFrom # type: ignore
+from neomodel import StructuredNode, StringProperty, RelationshipTo, ZeroOrMore, One, RelationshipFrom, IntegerProperty  # type: ignore
 
 
 class ModuleCell(StructuredNode):
@@ -12,15 +12,19 @@ class ModuleCell(StructuredNode):
     Unique identifier used for internal purposes
     """
 
+    recommended_cp = IntegerProperty()
+    """
+    """
+
     # connection to ModuleArea
-    filled_by_module_area = RelationshipFrom('modul_graph.models.module_area.ModuleArea', 'FILLS', cardinality=OneOrMore)
+    filled_by_module_area = RelationshipFrom('modul_graph.models.module_area.ModuleArea', 'FILLS', cardinality=ZeroOrMore)
     """
     Connection to the module area which resides in the module cell. This is the content of the module cell. In terms 
     of the standard curriculum it would be "WPF Informatik" or "Mathe I" 
     """
 
     # connection to Semester
-    is_in_semester = RelationshipTo('modul_graph.models.semester.Semester', 'IS_IN', cardinality=One)
+    is_in_semester = RelationshipTo('modul_graph.models.semester.Semester', 'IS_IN', cardinality=ZeroOrMore)
     """
     Connection to the semester in which the module cell resides
     """

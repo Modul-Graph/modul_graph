@@ -1,4 +1,6 @@
-from neomodel import JSONProperty, StructuredNode, StringProperty, RelationshipTo, ZeroOrMore, OneOrMore, RelationshipFrom, BooleanProperty # type: ignore
+from neomodel import JSONProperty, StructuredNode, StringProperty, RelationshipTo, ZeroOrMore, RelationshipFrom, BooleanProperty # type: ignore
+
+from modul_graph.models.module_area import ModuleArea
 
 
 class Module(StructuredNode):
@@ -48,13 +50,13 @@ class Module(StructuredNode):
     provided_by_micro_unit = RelationshipFrom('modul_graph.models.micro_unit.MicroUnit', 'PROVIDES', cardinality=ZeroOrMore)
 
     # connection to StandardCurriculum
-    belongs_to_standard_curriculum = RelationshipTo('modul_graph.models.standard_curriculum.StandardCurriculum', 'BELONGS_TO', cardinality=OneOrMore)
+    belongs_to_standard_curriculum = RelationshipTo('modul_graph.models.standard_curriculum.StandardCurriculum', 'BELONGS_TO', cardinality=ZeroOrMore)
     """
     Connection indicates in which Standard Curricula the module can be visited
     """
 
     # connection to ModuleArea
-    fills_module_area = RelationshipTo('modul_graph.models.module_area.ModuleArea', 'FILLS', cardinality=OneOrMore)
+    fills_module_area = RelationshipTo('modul_graph.models.module_area.ModuleArea', 'FILLS', cardinality=ZeroOrMore)
     """
     Connection to module are if module can be visited as an elected subject
     """
