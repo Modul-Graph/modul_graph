@@ -158,6 +158,9 @@ class SuggestionResponseEdgeDTO(BaseModel):
     target: str
     id: str
 
+    def __hash__(self):
+        return hash(self.id)
+
 
 class SuggestionResponseNodeDTO(BaseModel):
     """
@@ -175,6 +178,9 @@ class SuggestionResponseNodeDTO(BaseModel):
         :return: the constructed DTO
         """
         return cls(id=module.element_id, label=module.name, semester=module.semester)
+
+    def __hash__(self):
+        return hash(self.id)
 
 
 class SuggestionResponseDTO(BaseModel):

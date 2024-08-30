@@ -32,7 +32,7 @@ module_cells[12].filled_by_module_area.connect(itpm)
 module_cells[13].filled_by_module_area.connect(wpf_ti)
 module_cells[14].filled_by_module_area.connect(mathe_3)
 module_cells[15].filled_by_module_area.connect(theo_inf_1)
-module_cells[16].filled_by_module_area.connect(nebenfach)
+module_cells[16].filled_by_module_area.connect(nebenfach1)
 module_cells[17].filled_by_module_area.connect(trainingsmodul_smk)
 
 # Semester 4
@@ -40,7 +40,7 @@ module_cells[18].filled_by_module_area.connect(sisi)
 module_cells[19].filled_by_module_area.connect(pgp)
 module_cells[20].filled_by_module_area.connect(se)
 module_cells[21].filled_by_module_area.connect(theo_inf_2)
-module_cells[22].filled_by_module_area.connect(nebenfach)
+module_cells[22].filled_by_module_area.connect(nebenfach2)
 module_cells[23].filled_by_module_area.connect(softwareproject)
 
 # Semester 5
@@ -48,7 +48,7 @@ module_cells[24].filled_by_module_area.connect(wpf_inf_mat)
 module_cells[25].filled_by_module_area.connect(wpf_inf)
 module_cells[26].filled_by_module_area.connect(wpf_inf)
 module_cells[27].filled_by_module_area.connect(wpf_inf)
-module_cells[28].filled_by_module_area.connect(nebenfach)
+module_cells[28].filled_by_module_area.connect(nebenfach3)
 module_cells[29].filled_by_module_area.connect(wiss_seminar)
 
 # Semester 6

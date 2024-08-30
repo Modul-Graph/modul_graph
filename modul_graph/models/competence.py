@@ -1,4 +1,4 @@
-from neomodel import StructuredNode, StringProperty, ZeroOrMore, OneOrMore, RelationshipFrom # type: ignore
+from neomodel import StructuredNode, StringProperty, ZeroOrMore, OneOrMore, RelationshipFrom  # type: ignore
 
 
 class Competence(StructuredNode):
@@ -21,3 +21,6 @@ class Competence(StructuredNode):
     """
     Connection to model which provides this competence
     """
+
+    def __hash__(self):
+        return hash(self.name)

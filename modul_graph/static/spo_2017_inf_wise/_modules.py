@@ -459,22 +459,22 @@ parallele_programmierung.needs_competence.connect(programmiersprachen_und_method
 parallele_programmierung.provides_competence.connect(programmiersprachen_und_methodik)
 parallele_programmierung.provides_competence.connect(algorithmen_und_datenstrukturen_)
 
-praktikum = Module()
-praktikum.name = "Praktikum"
-praktikum.cp_plus_description = {'DEFAULT': 18.0}
-praktikum.module_description = "Praktikumsspezifisch in Bezug auf den Studiengang"
-praktikum.is_in_summer = True
-praktikum.is_in_winter = True
-praktikum.save()
-
-praktikum.needs_competence.connect(informatik_als_disziplin)
-praktikum.needs_competence.connect(algorithmen_und_datenstrukturen_)
-praktikum.needs_competence.connect(modellierung)
-praktikum.needs_competence.connect(programmiersprachen_und_methodik)
-praktikum.needs_competence.connect(projekt_und_teamkompetenz)
-praktikum.provides_competence.connect(informatik_als_disziplin)
-praktikum.provides_competence.connect(programmiersprachen_und_methodik)
-praktikum.provides_competence.connect(projekt_und_teamkompetenz)
+# praktikum = Module()
+# praktikum.name = "Praktikum"
+# praktikum.cp_plus_description = {'DEFAULT': 18.0}
+# praktikum.module_description = "Praktikumsspezifisch in Bezug auf den Studiengang"
+# praktikum.is_in_summer = True
+# praktikum.is_in_winter = True
+# praktikum.save()
+#
+# praktikum.needs_competence.connect(informatik_als_disziplin)
+# praktikum.needs_competence.connect(algorithmen_und_datenstrukturen_)
+# praktikum.needs_competence.connect(modellierung)
+# praktikum.needs_competence.connect(programmiersprachen_und_methodik)
+# praktikum.needs_competence.connect(projekt_und_teamkompetenz)
+# praktikum.provides_competence.connect(informatik_als_disziplin)
+# praktikum.provides_competence.connect(programmiersprachen_und_methodik)
+# praktikum.provides_competence.connect(projekt_und_teamkompetenz)
 
 programmierparadigmen = Module()
 programmierparadigmen.name = "Programmierparadigmen"
@@ -634,21 +634,40 @@ wahlpflichtfach_fin_schlüssel_und_methodenkompetenz.needs_competence.connect(pr
 wahlpflichtfach_fin_schlüssel_und_methodenkompetenz.needs_competence.connect(projekt_und_teamkompetenz)
 wahlpflichtfach_fin_schlüssel_und_methodenkompetenz.provides_competence.connect(projekt_und_teamkompetenz)
 
-wissenschaftliches_seminar = Module()
-wissenschaftliches_seminar.name = "Wissenschaftliches Seminar"
-wissenschaftliches_seminar.cp_plus_description = {'DEFAULT': 3.0}
-wissenschaftliches_seminar.module_description = "Dieses Modul kann durch unterschiedliche Lehrveranstaltungen implementiert werden. Die fachlichen Inhalte sind angebotsspezifisch."
-wissenschaftliches_seminar.is_in_summer = True
-wissenschaftliches_seminar.is_in_winter = True
-wissenschaftliches_seminar.save()
+# wissenschaftliches_seminar = Module()
+# wissenschaftliches_seminar.name = "Wissenschaftliches Seminar"
+# wissenschaftliches_seminar.cp_plus_description = {'DEFAULT': 3.0}
+# wissenschaftliches_seminar.module_description = "Dieses Modul kann durch unterschiedliche Lehrveranstaltungen implementiert werden. Die fachlichen Inhalte sind angebotsspezifisch."
+# wissenschaftliches_seminar.is_in_summer = True
+# wissenschaftliches_seminar.is_in_winter = True
+# wissenschaftliches_seminar.save()
+#
+# wissenschaftliches_seminar.provides_competence.connect(projekt_und_teamkompetenz)
 
-wissenschaftliches_seminar.provides_competence.connect(projekt_und_teamkompetenz)
+module_nebenfach1 = Module()
+module_nebenfach1.name = "Nebenfach 1"
+module_nebenfach1.cp_plus_description = {'DEFAULT': 5.0}
+module_nebenfach1.module_description = "DUMMY"
+module_nebenfach1.is_in_summer = True
+module_nebenfach1.is_in_winter = True
+module_nebenfach1.provides_competence.connect(dummy_competence)
+module_nebenfach1.save()
 
-dummy = Module()
-dummy.name = "DUMMY"
-dummy.cp_plus_description = {'DEFAULT': 5.0}
-dummy.module_description = "DUMMY"
-dummy.is_in_summer = True
-dummy.is_in_winter = True
-dummy.provides_competence.connect(dummy_competence)
-dummy.save()
+module_nebenfach2 = Module()
+module_nebenfach2.name = "Nebenfach 2"
+module_nebenfach2.cp_plus_description = {'DEFAULT': 5.0}
+module_nebenfach2.module_description = "DUMMY"
+module_nebenfach2.is_in_summer = True
+module_nebenfach2.is_in_winter = True
+module_nebenfach2.provides_competence.connect(dummy_competence)
+module_nebenfach2.save()
+
+module_nebenfach3 = Module()
+module_nebenfach3.name = "Nebenfach 3"
+module_nebenfach3.cp_plus_description = {'DEFAULT': 5.0}
+module_nebenfach3.module_description = "DUMMY"
+module_nebenfach3.is_in_summer = True
+module_nebenfach3.is_in_winter = True
+module_nebenfach3.provides_competence.connect(dummy_competence)
+module_nebenfach3.save()
+
