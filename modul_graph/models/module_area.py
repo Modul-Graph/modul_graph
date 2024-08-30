@@ -1,4 +1,9 @@
-from neomodel import StructuredNode, OneOrMore, StringProperty, RelationshipTo, RelationshipFrom # type: ignore
+
+
+from neomodel import StructuredNode, ZeroOrMore, StringProperty, RelationshipTo, RelationshipFrom # type: ignore
+
+from modul_graph.models.standard_curriculum import StandardCurriculum
+from modul_graph.models.module import Module
 
 
 class ModuleArea(StructuredNode):
@@ -13,13 +18,13 @@ class ModuleArea(StructuredNode):
     """
 
     # connection to Module
-    filled_by_module = RelationshipFrom('modul_graph.models.module.Module', 'FILLS', cardinality=OneOrMore)
+    filled_by_module = RelationshipFrom('modul_graph.models.module.Module', 'FILLS', cardinality=ZeroOrMore)
     """
     Connection to module(s) which can be visited to fulfill this module area
     """
 
     # connection to ModuleCell
-    fills_module_cell = RelationshipTo('modul_graph.models.module_cell.ModuleCell', 'FILLS', cardinality=OneOrMore)
+    fills_module_cell = RelationshipTo('modul_graph.models.module_cell.ModuleCell', 'FILLS', cardinality=ZeroOrMore)
     """
     Connection to module cell(s) in which it resides
     """

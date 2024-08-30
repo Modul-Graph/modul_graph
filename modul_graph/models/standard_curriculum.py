@@ -1,4 +1,4 @@
-from neomodel import StructuredNode, StringProperty, OneOrMore, RelationshipTo, RelationshipFrom, BooleanProperty  # type: ignore
+from neomodel import StructuredNode, StringProperty, ZeroOrMore, RelationshipTo, RelationshipFrom, BooleanProperty  # type: ignore
 
 
 class StandardCurriculum(StructuredNode):
@@ -9,7 +9,7 @@ class StandardCurriculum(StructuredNode):
     start_winter = BooleanProperty()
 
     # connection to Module
-    has_module = RelationshipFrom('modul_graph.models.module.Module', 'BELONGS_TO', cardinality=OneOrMore)
+    has_module = RelationshipFrom('modul_graph.models.module.Module', 'BELONGS_TO', cardinality=ZeroOrMore)
 
     # connection to Semester
-    specifies_semester = RelationshipTo('modul_graph.models.semester.Semester', 'SPECIFIES', cardinality=OneOrMore)
+    specifies_semester = RelationshipTo('modul_graph.models.semester.Semester', 'SPECIFIES', cardinality=ZeroOrMore)
