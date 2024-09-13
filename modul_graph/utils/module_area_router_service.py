@@ -38,3 +38,25 @@ class ModuleAreaRouterService:
             if not mod:
                 raise HTTPException(status_code=404, detail=f'Module {elem} not found')
             mod_ar_to_save.filled_by_module.connect(mod)
+
+    def delete_module_area(self, name: str) -> None:
+        mod_ar: ModuleArea = ModuleArea.nodes.get(name=name)
+        if not mod_ar:
+            raise HTTPException(status_code=404, detail=f'Module area {name} not found')
+        mod_ar.delete()
+
+    @db.transaction
+    def update_module_area(self, name, mod_ar) -> None:
+        mod_ar_to_update: ModuleArea = ModuleArea.nodes.get(name=name)
+        if not mod_ar_to_update:
+            raise HTTPException(status_code=404, detail=f'Module area {name} not found')
+
+        mod_ar_to_update.name = mod_ar.name
+        mod_ar_to_update.save()
+        mod_ar_to_update.filled_by_module.disconnect_all()
+
+        for elem in mod_ar.filled_by_module:
+            mod: Module = Module.nodes.get(name=elem)
+            if not mod:
+                raise HTTPException(status_code=404, detail=f'Module {elem} not found')
+            mod_ar_to_update.filled_by_module.connect(mod)
