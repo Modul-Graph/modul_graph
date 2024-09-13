@@ -60,7 +60,7 @@ def get_curriculum_suggestion(
     suggestions = sorted(suggestions, key=lambda x: x[1].number)
 
     # Map each Competence to the module which provided it the most recent
-    competences_to_modules: dict[str, set(Module)] = {}
+    competences_to_modules: dict[str, set[Module]] = {}
 
     # competences should only be added to the dict if they happened in a past semester -> we store the competence -> module mapping here
     current_semester_num = -1
