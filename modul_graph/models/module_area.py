@@ -2,9 +2,6 @@
 
 from neomodel import StructuredNode, ZeroOrMore, StringProperty, RelationshipTo, RelationshipFrom # type: ignore
 
-from modul_graph.models.standard_curriculum import StandardCurriculum
-from modul_graph.models.module import Module
-
 
 class ModuleArea(StructuredNode):
     """

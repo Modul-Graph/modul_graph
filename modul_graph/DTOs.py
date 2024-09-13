@@ -24,8 +24,8 @@ class ModuleDTO(BaseModel):
     winter: bool
 
     # connections:
-    std_curr_names: list[str]
-    module_areas: list[str]
+    std_curr_names: Optional[list[str]] = None
+    module_areas: Optional[list[str]] = None
     needs_competences: Optional[list[str]] = None
     provides_competences: Optional[list[str]] = None
     needs_micro_units: Optional[list[str]] = None
@@ -35,10 +35,6 @@ class ModuleDTO(BaseModel):
 class ModuleAreaDTO(BaseModel):
     name: str
     filled_by_module: list[str]
-    # according to ModuleArea model, fills_module_cell is required
-    # but since we don't do anything with cells yet, it's not included for now
-    # also, module cells might be confusing for the user to see
-    # since they don't have a name but a random identifier instead
 
 
 
