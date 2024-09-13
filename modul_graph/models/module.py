@@ -1,6 +1,5 @@
-from neomodel import JSONProperty, StructuredNode, StringProperty, RelationshipTo, ZeroOrMore, RelationshipFrom, BooleanProperty # type: ignore
-
-from modul_graph.models.module_area import ModuleArea
+from neomodel import JSONProperty, StructuredNode, StringProperty, RelationshipTo, ZeroOrMore, \
+    RelationshipFrom, BooleanProperty  # type: ignore
 
 
 class Module(StructuredNode):
@@ -47,10 +46,12 @@ class Module(StructuredNode):
 
     # connection to MicroUnit
     needs_micro_unit = RelationshipTo('modul_graph.models.micro_unit.MicroUnit', 'NEEDS', cardinality=ZeroOrMore)
-    provided_by_micro_unit = RelationshipFrom('modul_graph.models.micro_unit.MicroUnit', 'PROVIDES', cardinality=ZeroOrMore)
+    provided_by_micro_unit = RelationshipFrom('modul_graph.models.micro_unit.MicroUnit', 'PROVIDES',
+                                              cardinality=ZeroOrMore)
 
     # connection to StandardCurriculum
-    belongs_to_standard_curriculum = RelationshipTo('modul_graph.models.standard_curriculum.StandardCurriculum', 'BELONGS_TO', cardinality=ZeroOrMore)
+    belongs_to_standard_curriculum = RelationshipTo('modul_graph.models.standard_curriculum.StandardCurriculum',
+                                                    'BELONGS_TO', cardinality=ZeroOrMore)
     """
     Connection indicates in which Standard Curricula the module can be visited
     """
@@ -61,6 +62,11 @@ class Module(StructuredNode):
     Connection to module are if module can be visited as an elected subject
     """
 
-    @property
-    def is_wpf(self) -> bool:
-        return len([x for x in ModuleArea.nodes.all() if x.is_connected(self)]) > 1
+    def __hash__(self):
+        return hash(self.name)
+
+    def __eq__(self, other: StructuredNode):
+        if not isinstance(other, Module):
+            return False
+        else:
+            return self.name == other.name

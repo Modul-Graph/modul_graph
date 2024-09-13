@@ -1,5 +1,5 @@
 from modul_graph.models.module_area import ModuleArea
-from ._modules import *
+from ._modules import *  # type: ignore
 from ._modules import softwareprojekt as softwareprojekt_module
 
 """
@@ -62,10 +62,20 @@ wpf_ti.filled_by_module.connect(computernetze_2)
 wpf_ti.filled_by_module.connect(parallele_programmierung)
 wpf_ti.filled_by_module.connect(parallele_programmierung)
 
-nebenfach = ModuleArea()
-nebenfach.name = "Nebenfach"
-nebenfach.save()
-nebenfach.filled_by_module.connect(dummy)
+nebenfach1 = ModuleArea()
+nebenfach1.name = "Nebenfach 1"
+nebenfach1.save()
+nebenfach1.filled_by_module.connect(module_nebenfach1)
+
+nebenfach2 = ModuleArea()
+nebenfach2.name = "Nebenfach 2"
+nebenfach2.save()
+nebenfach2.filled_by_module.connect(module_nebenfach2)
+
+nebenfach3 = ModuleArea()
+nebenfach3.name = "Nebenfach 3"
+nebenfach3.save()
+nebenfach3.filled_by_module.connect(module_nebenfach3)
 
 trainingsmodul_smk = ModuleArea()
 trainingsmodul_smk.name = "Trainingsmodul SMK"
@@ -83,12 +93,13 @@ wiss_seminar = ModuleArea()
 wiss_seminar.name = "Wiss. Seminar"
 wiss_seminar.save()
 
-wiss_seminar.filled_by_module.connect(wissenschaftliches_seminar)
+wiss_seminar.filled_by_module.connect(ethische_herausforderungen_im_digitalen_zeitalter)
 
 wpf_fin_smk = ModuleArea()
 wpf_fin_smk.name = "WPF FIN-SMK"
 wpf_fin_smk.save()
-wpf_fin_smk.filled_by_module.connect(dummy)
+# wpf_fin_smk.filled_by_module.connect(dummy)
+wpf_fin_smk.filled_by_module.connect(wahlpflichtfach_fin_schlüssel_und_methodenkompetenz)
 
 ba_praktikum = ModuleArea()
 ba_praktikum.name = "Betriebspraktikum/Bachelorprojekt und Bachelorarbeit"

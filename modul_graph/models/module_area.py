@@ -30,3 +30,6 @@ class ModuleArea(StructuredNode):
     @property
     def is_wpf(self) -> bool:
         return len(self.filled_by_module) > 1
+
+    def __hash__(self):
+        return hash(self.name)
