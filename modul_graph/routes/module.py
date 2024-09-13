@@ -13,15 +13,27 @@ async def get_module(name: str) -> ModuleDTO:
     return ModuleRouterService().get_module(name)
 
 
-@router.post("/")
-async def create_module(module: ModuleDTO) -> Response:
+@router.post("/elective/")
+async def create_elective_module(module: ModuleDTO) -> Response:
     ModuleRouterService().create_module(module)
     return Response(status_code=201)
 
 
-@router.delete("/{name}")
-async def delete_module(name: str) -> Response:
+@router.post("/required/")
+async def create_required_module(module: ModuleDTO) -> Response:
+    ModuleRouterService().create_required_module(module)  # type: ignore
+    return Response(status_code=201)
+
+
+@router.delete("/elective/{name}")
+async def delete_elective_module(name: str) -> Response:
     ModuleRouterService().delete_module(name)
+    return Response(status_code=200)
+
+
+@router.delete("/required/{name}")
+async def delete_required_module(name: str) -> Response:
+    ModuleRouterService().delete_required_module(name)
     return Response(status_code=200)
 
 

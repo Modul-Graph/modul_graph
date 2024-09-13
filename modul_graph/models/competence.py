@@ -1,4 +1,4 @@
-from neomodel import StructuredNode, StringProperty, ZeroOrMore, OneOrMore, RelationshipFrom  # type: ignore
+from neomodel import StructuredNode, StringProperty, ZeroOrMore, RelationshipFrom  # type: ignore
 
 
 class Competence(StructuredNode):
@@ -17,7 +17,7 @@ class Competence(StructuredNode):
     Connection to module which needs this competence
     """
 
-    is_provided_by = RelationshipFrom('modul_graph.models.module.Module', 'PROVIDES', cardinality=OneOrMore)
+    is_provided_by = RelationshipFrom('modul_graph.models.module.Module', 'PROVIDES', cardinality=ZeroOrMore)
     """
     Connection to model which provides this competence
     """

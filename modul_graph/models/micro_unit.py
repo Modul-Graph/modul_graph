@@ -1,4 +1,4 @@
-from neomodel import (StructuredNode, StringProperty, IntegerProperty, RelationshipTo, RelationshipFrom, ZeroOrMore, OneOrMore) # type: ignore
+from neomodel import (StructuredNode, StringProperty, IntegerProperty, RelationshipTo, RelationshipFrom, ZeroOrMore)  # type: ignore
 
 
 class MicroUnit(StructuredNode):
@@ -7,4 +7,4 @@ class MicroUnit(StructuredNode):
 
     # connection to Module
     needs_from_module = RelationshipFrom('modul_graph.models.module.Module', 'NEEDS', cardinality=ZeroOrMore)
-    provide_to_module = RelationshipTo('modul_graph.models.module.Module', 'PROVIDES', cardinality=OneOrMore)
+    provide_to_module = RelationshipTo('modul_graph.models.module.Module', 'PROVIDES', cardinality=ZeroOrMore)
