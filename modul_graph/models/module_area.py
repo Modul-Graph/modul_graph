@@ -1,6 +1,4 @@
-
-
-from neomodel import StructuredNode, ZeroOrMore, StringProperty, RelationshipTo, RelationshipFrom # type: ignore
+from neomodel import StructuredNode, ZeroOrMore, StringProperty, RelationshipTo, RelationshipFrom, IntegerProperty  # type: ignore
 
 from modul_graph.models.standard_curriculum import StandardCurriculum
 from modul_graph.models.module import Module
@@ -27,6 +25,11 @@ class ModuleArea(StructuredNode):
     fills_module_cell = RelationshipTo('modul_graph.models.module_cell.ModuleCell', 'FILLS', cardinality=ZeroOrMore)
     """
     Connection to module cell(s) in which it resides
+    """
+
+    cp = IntegerProperty(required=False)
+    """
+    Credit points of the module area. Is only set if the module area is a WPF!
     """
 
     # noinspection PyTypeChecker

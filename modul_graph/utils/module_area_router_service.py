@@ -9,10 +9,11 @@ from neomodel import db  # type: ignore
 class ModuleAreaRouterService:
     def get_module_area(self, mod_ar_name: str) -> ModuleAreaDTO:
         ret: ModuleArea = ModuleArea.nodes.get(name=mod_ar_name)
-        if not ret:
+        if not ret or not ret.is_wpf:
             raise HTTPException(status_code=404, detail=f'Module area {mod_ar_name} not found')
 
         return ModuleAreaDTO(name=ret.name,
+                             cp=ret.cp,
                              filled_by_module=[x.name for x in ret.filled_by_module.all()])
 
     @db.transaction
@@ -52,6 +53,7 @@ class ModuleAreaRouterService:
             raise HTTPException(status_code=404, detail=f'Module area {name} not found')
 
         mod_ar_to_update.name = mod_ar.name
+        mod_ar_to_update.cp = mod_ar.cp
         mod_ar_to_update.save()
         mod_ar_to_update.filled_by_module.disconnect_all()
 
@@ -60,3 +62,4 @@ class ModuleAreaRouterService:
             if not mod:
                 raise HTTPException(status_code=404, detail=f'Module {elem} not found')
             mod_ar_to_update.filled_by_module.connect(mod)
+

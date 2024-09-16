@@ -19,7 +19,7 @@ Module DTOs
 class ModuleDTO(BaseModel):
     name: str
     description: Optional[str] = None
-    cp_plus_description: Optional[dict[int, str]] = None
+    cp_plus_description: dict[str, int]
     summer: bool
     winter: bool
 
@@ -35,7 +35,7 @@ class ModuleDTO(BaseModel):
 class ModuleAreaDTO(BaseModel):
     name: str
     filled_by_module: list[str]
-
+    cp: Optional[int] = None
 
 
 """
@@ -146,7 +146,7 @@ class SuggestionRequestDTO(BaseModel):
         return existing_competences
 
 
-class SuggestionResponseEdgeDTO(BaseModel):
+class GraphDisplayResponseEdgeDTO(BaseModel):
     """
     Specifies the edge between two nodes/module in the suggestion graph
     """
@@ -158,7 +158,7 @@ class SuggestionResponseEdgeDTO(BaseModel):
         return hash(self.id)
 
 
-class SuggestionResponseNodeDTO(BaseModel):
+class GraphDisplayResponseNodeDTO(BaseModel):
     """
     Specifies nodes/modules in the suggestion response graph
     """
@@ -179,30 +179,31 @@ class SuggestionResponseNodeDTO(BaseModel):
         return hash(self.id)
 
 
-class SuggestionResponseDTO(BaseModel):
+class GraphDisplayResponseDTO(BaseModel):
     """
     Wrapper class for the suggestion response
     """
-    nodes: set[SuggestionResponseNodeDTO]
-    edges: set[SuggestionResponseEdgeDTO]
+    nodes: set[GraphDisplayResponseNodeDTO]
+    edges: set[GraphDisplayResponseEdgeDTO]
 
     @classmethod
-    def from_edge_list(cls, edge_list: list[tuple[SuggestionResponseNodeDTO, SuggestionResponseNodeDTO]]) -> Self:
+    def from_edge_list(cls, edge_list: list[tuple[GraphDisplayResponseNodeDTO, GraphDisplayResponseNodeDTO]]) -> Self:
         """
         Construct Suggestion Response DTO from edge list
         :param edge_list: edge list to construct the DTO from
         :return: the constructed DTO
         """
-        nodes: set[SuggestionResponseNodeDTO] = set()
-        edges: set[SuggestionResponseEdgeDTO] = set()
+        nodes: set[GraphDisplayResponseNodeDTO] = set()
+        edges: set[GraphDisplayResponseEdgeDTO] = set()
 
         for edge in edge_list:
             source, target = edge
             nodes.add(source)
             nodes.add(target)
-            edges.add(SuggestionResponseEdgeDTO(source=source.id, target=target.id, id=f"{source.id}-{target.id}"))
+            edges.add(GraphDisplayResponseEdgeDTO(source=source.id, target=target.id, id=f"{source.id}-{target.id}"))
 
         return cls(nodes=nodes, edges=edges)
+
 
 """
 Competence SC DTOs
@@ -242,3 +243,42 @@ class CompetenceScDTO(BaseModel):
 
     WPF: list[WpfDTO]
     pflichtmodule: list[PflichtmoduleDTO]
+
+
+class RichCPClusterCell(BaseModel):
+    """
+    This is a cell containing one Module/WPF inside the CPCluster
+    """
+    cp: float
+    sem: PositiveInt
+    name: str
+
+    cellId: str
+    """
+    ID referencing module_cell
+    """
+
+
+class RichCPCluster(BaseModel):
+    """
+    SC CP-Cluster enriched with the Module-Areas/Pflichtmodules that sit in it
+    """
+    cells: list[RichCPClusterCell]
+    cp_note: int
+
+    cp_cluster_id: str
+    """
+    ID referencing cp_cluster
+    """
+
+
+class CellDTO(BaseModel):
+    """
+    Cell DTO
+    """
+    contains_wpf: bool
+
+    data: ModuleDTO | ModuleAreaDTO
+    """
+    If contains_wpf is true, this is a ModuleAreaDTO, otherwise a ModuleDTO
+    """

@@ -30,8 +30,10 @@ class ModuleRouterService:
                                            winter=ret_mod.is_in_winter,
                                            needs_competences=[x.name for x in ret_mod.needs_competence.all()],
                                            provides_competences=[x.name for x in ret_mod.provides_competence.all()],
-                                           std_curr_names=[x.name for x in ret_mod.belongs_to_standard_curriculum.all()],
+                                           std_curr_names=[x.name for x in
+                                                           ret_mod.belongs_to_standard_curriculum.all()],
                                            module_areas=[x.name for x in ret_mod.fills_module_area.all()])
+        print(ret_mod_dto)
 
         return ret_mod_dto
 
@@ -54,8 +56,10 @@ class ModuleRouterService:
         self.__update_mod(Module.nodes.get(name=identifier), mod_new)
 
     def __does_mod_exist(self, mod_name: str) -> bool:
-        result = db.cypher_query('MATCH (m:Module {name:\'' + mod_name + '\'}) RETURN m')
-        return result[0]
+        result = Module.nodes.get_or_none(name=mod_name)
+        print(mod_name)
+        print(result)
+        return result is not None
 
     def __does_mod_exist__not_found_exception(self, mod_name: str) -> None:
         if not self.__does_mod_exist(mod_name):
@@ -112,12 +116,13 @@ class ModuleRouterService:
 
         # if no standard curriculum was specified -> invalid request
         if not mod_new.std_curr_names:
-            raise HTTPException(status_code=404, detail='No standard curricula specified')
+            mod_new.std_curr_names = [sc.name for sc in mod_db.belongs_to_standard_curriculum.all()]
 
         # connect new standard curricula
         for elem in mod_new.std_curr_names:
             # if elem is a valid standard curriculum and is not already connected
-            if elem in [x.name for x in StandardCurriculum.nodes.all()] and elem not in [x.name for x in mod_db.belongs_to_standard_curriculum.all()]:
+            if elem in [x.name for x in StandardCurriculum.nodes.all()] and elem not in [x.name for x in
+                                                                                         mod_db.belongs_to_standard_curriculum.all()]:
                 node = StandardCurriculum.nodes.get(name=elem)
                 mod_db.belongs_to_standard_curriculum.connect(node)
             elif elem not in [x.name for x in StandardCurriculum.nodes.all()]:
@@ -131,7 +136,8 @@ class ModuleRouterService:
         if mod_new.module_areas:
             for elem in mod_new.module_areas:
                 # if elem is a valid module area and is not already connected
-                if elem in [x.name for x in ModuleArea.nodes.all()] and elem not in [x.name for x in mod_db.fills_module_area.all()]:
+                if elem in [x.name for x in ModuleArea.nodes.all()] and elem not in [x.name for x in
+                                                                                     mod_db.fills_module_area.all()]:
                     node = ModuleArea.nodes.get(name=elem)
                     mod_db.fills_module_area.connect(node)
                 elif elem not in [x.name for x in ModuleArea.nodes.all()]:
@@ -139,19 +145,20 @@ class ModuleRouterService:
 
         # disconnect old module areas which are no longer used (disconnect everything in [old module areas minus new module areas])
         if not mod_new.module_areas:
-            mod_new.module_areas = []
+            mod_new.module_areas = [ma.name for ma in mod_db.fills_module_area.all()]
         for elem in set([x.name for x in mod_db.fills_module_area.all()]) - set(mod_new.module_areas):
             mod_db.fills_module_area.disconnect(ModuleArea.nodes.get(name=elem))
 
+
         # disconnect optional relationships
-        for elem in mod_db.needs_competence:
-            mod_db.needs_competence.disconnect(Competence.nodes.get(name=elem))
+        for elem in  mod_db.needs_competence.all():
+            mod_db.needs_competence.disconnect(elem)
         for elem in mod_db.provides_competence:
-            mod_db.provides_competence.disconnect(Competence.nodes.get(name=elem))
+            mod_db.provides_competence.disconnect(elem)
         for elem in mod_db.needs_micro_unit:
-            mod_db.needs_micro_unit.disconnect(MicroUnit.nodes.get(name=elem))
+            mod_db.needs_micro_unit.disconnect(elem)
         for elem in mod_db.provided_by_micro_unit:
-            mod_db.provided_by_micro_unit.disconnect(MicroUnit.nodes.get(name=elem))
+            mod_db.provided_by_micro_unit.disconnect(elem)
 
         self.__connect_optional_relationships(mod_db, mod_new)
 
@@ -214,7 +221,8 @@ class ModuleRouterService:
             cell_exists_already = False
 
         if mod_ar_exists_already or cell_exists_already:
-            raise HTTPException(status_code=409, detail='A module area or cell with the name ' + module.name + ' already exists')
+            raise HTTPException(status_code=409,
+                                detail='A module area or cell with the name ' + module.name + ' already exists')
 
         # create Module
         self.create_module(module)
@@ -231,7 +239,7 @@ class ModuleRouterService:
     @db.transaction
     def delete_required_module(self, name: str):
         # delete module area and cell
-        db.cypher_query('MATCH (m:ModuleCell)<-[:FILLS]-(r:ModuleArea)<-[:FILLS]-(mod:Module {name:\'' + name + '\'}) DETACH DELETE m, r')
+        db.cypher_query(
+            'MATCH (m:ModuleCell)<-[:FILLS]-(r:ModuleArea)<-[:FILLS]-(mod:Module {name:\'' + name + '\'}) DETACH DELETE m, r')
         # delete module
         self.delete_module(name)
-

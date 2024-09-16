@@ -321,7 +321,7 @@ introduction_to_simulation.provides_competence.connect(wahrscheinlichkeitstheori
 introduction_to_simulation.provides_competence.connect(statistik)
 
 it_projektmanagement = Module()
-it_projektmanagement.name = "IT-Projektmanagement "
+it_projektmanagement.name = "IT-Projektmanagement"
 it_projektmanagement.cp_plus_description = {'DEFAULT': 3.0}
 it_projektmanagement.module_description = "Projektvorbereitung: Projektbeschreibung, Zieldefinition, Aufbau- u. Ablauforganisation, Wirtschaftlichkeitsprognose Projektplanung: Budgetierung, Ablaufplanung, Terminmanagement, Kapazitätsplanung, Analyse kritischer Pfade Projektsteuerung: Fortschrittskontrolle, Budgetüberwachung, Dokumentation und Berichtswesen Projektabschluss: Projektabnahme, Erkenntnissicherung, Projektliquidation Projektunterstützende Maßnahmen: Projektmanagementwerkzeuge, Kreativitäts- und Arbeitstechniken, Konfigurationsmanagement Agiles Projektmanagment, SCRUM"
 it_projektmanagement.is_in_summer = True
@@ -529,7 +529,7 @@ sichere_systeme.provides_competence.connect(informatik_als_disziplin)
 sichere_systeme.provides_competence.connect(it_sicherheit)
 
 software_engineering_ = Module()
-software_engineering_.name = "Software Engineering "
+software_engineering_.name = "Software Engineering"
 software_engineering_.cp_plus_description = {'DEFAULT': 5.0}
 software_engineering_.module_description = "Vermittelt werden sollen hierbei Techniken und Tools, welche die Entwicklung von großen Softwareprojekten zwangsläufig notwendig machen. Dabei wird innerhalb des Semesters der gesamte Entwicklungszyklus vom ersten Requirement über das Softwaredesign bis zur Erstellung der Dokumentation durchgespielt. Die Veranstaltung richtet sich an alle Informatik-Bachelorstudenten."
 software_engineering_.is_in_summer = True
@@ -585,7 +585,7 @@ technische_informatik_ii.provides_competence.connect(digitaltechnik_und_rechnero
 technische_informatik_ii.provides_competence.connect(informatik_als_disziplin)
 
 trainingsmodul_schlüssel_und_methodenkompetenz_ = Module()
-trainingsmodul_schlüssel_und_methodenkompetenz_.name = "Trainingsmodul Schlüssel- und Methodenkompetenz "
+trainingsmodul_schlüssel_und_methodenkompetenz_.name = "Trainingsmodul Schlüssel- und Methodenkompetenz"
 trainingsmodul_schlüssel_und_methodenkompetenz_.cp_plus_description = {'DEFAULT': 3.0}
 trainingsmodul_schlüssel_und_methodenkompetenz_.module_description = "Dieses Modul wird durch unterschiedliche Lehrveranstaltungen implementiert. Die Inhalte sind daher angebotsspezifisch."
 trainingsmodul_schlüssel_und_methodenkompetenz_.is_in_summer = True

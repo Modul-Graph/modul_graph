@@ -7,6 +7,7 @@ Module areas which are not assigned to a specific module
 """
 wpf_inf = ModuleArea()
 wpf_inf.name = "WPF Informatik"
+wpf_inf.cp = 5
 wpf_inf.save()
 
 wpf_inf.filled_by_module.connect(computer_aided_geometric_design)
@@ -31,6 +32,7 @@ wpf_inf.filled_by_module.connect(visualisierung)
 
 wpf_inf_mat = ModuleArea()
 wpf_inf_mat.name = "WPF Informatik oder Mathematik"
+wpf_inf_mat.cp = 5
 wpf_inf_mat.save()
 
 wpf_inf_mat.filled_by_module.connect(computer_aided_geometric_design)
@@ -55,6 +57,7 @@ wpf_inf_mat.filled_by_module.connect(visualisierung)
 
 wpf_ti = ModuleArea()
 wpf_ti.name = "WPF Technische Informatik"
+wpf_ti.cp = 5
 wpf_ti.save()
 
 wpf_ti.filled_by_module.connect(computernetze)

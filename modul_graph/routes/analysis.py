@@ -3,8 +3,8 @@ from uuid import uuid4
 from fastapi import APIRouter, HTTPException
 from loguru import logger
 
-from modul_graph.DTOs import AnalysisResponseDTO, AnalysisStatus, SuggestionRequestDTO, SuggestionResponseDTO, \
-    SuggestionResponseNodeDTO, SuggestionResponseEdgeDTO
+from modul_graph.DTOs import AnalysisResponseDTO, AnalysisStatus, SuggestionRequestDTO, GraphDisplayResponseDTO, \
+    GraphDisplayResponseNodeDTO, GraphDisplayResponseEdgeDTO
 from modul_graph.experiments.pygad_suggestions import Suggestion
 from modul_graph.i18n import _
 from modul_graph.models.competence import Competence
@@ -40,7 +40,7 @@ def get_doability(sc: str) -> AnalysisResponseDTO:
 
 @router.put("/suggestion")
 def get_curriculum_suggestion(
-    req: SuggestionRequestDTO) -> SuggestionResponseDTO:
+    req: SuggestionRequestDTO) -> GraphDisplayResponseDTO:
     """
     Get a suggestion for a standard curriculum
     :param req: request DTO
@@ -51,8 +51,8 @@ def get_curriculum_suggestion(
 
     # suggestions = get_example_graph(wanted_competence=req.competences[0].name, standard_curriculum=req.standard_curriculum.name)
 
-    nodes: set[SuggestionResponseNodeDTO] = set()
-    edges: set[SuggestionResponseEdgeDTO] = set()
+    nodes: set[GraphDisplayResponseNodeDTO] = set()
+    edges: set[GraphDisplayResponseEdgeDTO] = set()
 
     suggestions, score = Suggestion(req.standard_curriculum, set(req.competences)).gen_suggestion()
 
@@ -80,7 +80,7 @@ def get_curriculum_suggestion(
             current_semester_num = semester.number
 
         # Add module as node
-        nodes.add(SuggestionResponseNodeDTO(id=module.name, label=module.name, semester=semester.number))
+        nodes.add(GraphDisplayResponseNodeDTO(id=module.name, label=module.name, semester=semester.number))
 
         required_competences: set[Competence] = set(module.needs_competence.all())
         provided_competences: set[Competence] = set(module.provides_competence.all())
@@ -94,7 +94,7 @@ def get_curriculum_suggestion(
             # If requird competence was provided by a module previously, add an edge from the providing module to the current module
             else:
                 for _module in competences_to_modules[required_competence.name]:
-                    edges.add(SuggestionResponseEdgeDTO(source=_module.name, target=module.name, id=f"{module.name}-{module.name}"))
+                    edges.add(GraphDisplayResponseEdgeDTO(source=_module.name, target=module.name, id=f"{module.name}-{module.name}"))
         for provided_competence in provided_competences:
             current_semester_module_competences.append((module, provided_competence))
 
@@ -107,4 +107,4 @@ def get_curriculum_suggestion(
     #             if not requirement:
     #                 continue
 
-    return SuggestionResponseDTO(nodes=nodes, edges=edges)
+    return GraphDisplayResponseDTO(nodes=nodes, edges=edges)
