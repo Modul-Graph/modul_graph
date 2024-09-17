@@ -38,14 +38,14 @@ def get_semester_range(cp_cluster: CpCluster) -> tuple[int, int]:
     return min(semester_nums), max(semester_nums)
 
 
-def get_cell_display_info(cp_cluster: CpCluster) -> list[tuple[str, int, int, str]]:
+def get_cell_display_info(cp_cluster: CpCluster) -> list[tuple[str, int, int, str, bool]]:
     """
     Get display information for a cell
     :param cp_cluster: CP Cluster to be considered
     :return: list of cell information. Cell is tuple of form: (pflichtmodule-/wpf-name, cp, semester, cell_id)
     """
 
-    res: list[tuple[str, int, int, str]] = []
+    res: list[tuple[str, int, int, str, bool]] = []
 
     module_cells: list[ModuleCell] = list(cp_cluster.consists_of_module_cell.all())
 
@@ -64,7 +64,7 @@ def get_cell_display_info(cp_cluster: CpCluster) -> list[tuple[str, int, int, st
             module_name = module.name
             cp = module.cp_plus_description["DEFAULT"]
 
-        res.append((module_name, cp, semester.number, cell_id))
+        res.append((module_name, cp, semester.number, cell_id, module_area.is_wpf))
 
     return res
 
@@ -78,8 +78,8 @@ def get_rich_cp_cluster(cp_cluster: CpCluster) -> RichCPCluster:
 
     cells: list[RichCPClusterCell] = []
 
-    for module_name, cp, semester, cell_id in get_cell_display_info(cp_cluster):
-        cells.append(RichCPClusterCell(cp=cp, sem=semester, name=module_name, cellId=cell_id))
+    for module_name, cp, semester, cell_id, isWPF in get_cell_display_info(cp_cluster):
+        cells.append(RichCPClusterCell(cp=cp, sem=semester, name=module_name, cellId=cell_id, isWPF=isWPF))
 
     return RichCPCluster(cells=cells, cp_note=cp_cluster.cp_number, cp_cluster_id=cp_cluster.identifier)
 

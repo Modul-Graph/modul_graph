@@ -13,6 +13,17 @@ async def get_module(name: str) -> ModuleDTO:
     return ModuleRouterService().get_module(name)
 
 
+@router.get("/{name}/winter_summer_info")
+async def get_module_winter_summer_info(name: str) -> tuple[bool, bool]:
+    """
+    Returns if the module is currently offered in winter and/or summer semester. This only applies to pflichtmodules
+    WPF modules are always (False, False)
+    :param name:
+    :return: tuple of form (offered in winter, offered in summer)
+    """
+    return ModuleRouterService().get_winter_summer_info(name)
+
+
 @router.post("/elective/")
 async def create_elective_module(module: ModuleDTO) -> Response:
     ModuleRouterService().create_module(module)
@@ -41,4 +52,3 @@ async def delete_required_module(name: str) -> Response:
 async def update_module(name: str, module: ModuleDTO) -> Response:
     ModuleRouterService().update_module(name, module)
     return Response(status_code=200)
-

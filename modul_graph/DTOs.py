@@ -252,6 +252,7 @@ class RichCPClusterCell(BaseModel):
     cp: float
     sem: PositiveInt
     name: str
+    isWPF: bool
 
     cellId: str
     """
@@ -281,4 +282,20 @@ class CellDTO(BaseModel):
     data: ModuleDTO | ModuleAreaDTO
     """
     If contains_wpf is true, this is a ModuleAreaDTO, otherwise a ModuleDTO
+    """
+
+class UpdateCPClusterCellDTO(BaseModel):
+    isWPF: bool
+    name: str
+    cp: PositiveInt
+    sem: PositiveInt
+    cellId: Optional[str] = None
+
+class UpdateCPClusterDTO(BaseModel):
+    cells: list[UpdateCPClusterCellDTO]
+    cp_note: int
+
+    clusterId: str
+    """
+    ID referencing cp_cluster
     """

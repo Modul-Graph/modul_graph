@@ -5,6 +5,7 @@ from modul_graph.models.competence import Competence
 from modul_graph.models.micro_unit import MicroUnit
 from modul_graph.models.module import Module
 from modul_graph.models.module_area import ModuleArea
+from modul_graph.models.semester import Semester
 from modul_graph.models.standard_curriculum import StandardCurriculum
 from modul_graph.DTOs import ModuleDTO, ModuleAreaDTO
 from neomodel import db  # type: ignore
@@ -149,9 +150,8 @@ class ModuleRouterService:
         for elem in set([x.name for x in mod_db.fills_module_area.all()]) - set(mod_new.module_areas):
             mod_db.fills_module_area.disconnect(ModuleArea.nodes.get(name=elem))
 
-
         # disconnect optional relationships
-        for elem in  mod_db.needs_competence.all():
+        for elem in mod_db.needs_competence.all():
             mod_db.needs_competence.disconnect(elem)
         for elem in mod_db.provides_competence:
             mod_db.provides_competence.disconnect(elem)
@@ -243,3 +243,29 @@ class ModuleRouterService:
             'MATCH (m:ModuleCell)<-[:FILLS]-(r:ModuleArea)<-[:FILLS]-(mod:Module {name:\'' + name + '\'}) DETACH DELETE m, r')
         # delete module
         self.delete_module(name)
+
+    def get_winter_summer_info(self, name: str) -> tuple[bool, bool]:
+        """
+        Get the winter and summer info of a module
+        :param name:
+        :return: tuple of form (is selected for winter, is selected for summer)
+        """
+        self.__does_mod_exist__not_found_exception(name)
+
+        sc: StandardCurriculum = StandardCurriculum.nodes.all()[0]
+
+        module: Module = Module.nodes.get(name=name)
+
+        # WPF Modules can be ignored
+        if len(module.fills_module_area.all()) > 1:
+            return False, False
+
+        module_area: ModuleArea = module.fills_module_area.single()
+        module_cell: ModuleCell = module_area.fills_module_cell.single()
+        semester: Semester = module_cell.is_in_semester.single()
+        sem_number: int = semester.number
+
+        if sc.start_winter:
+            return sem_number % 2 == 0, sem_number % 2 == 1
+        else:  # start in summer
+            return sem_number % 2 == 1, sem_number % 2 == 0
