@@ -1,3 +1,4 @@
+import math
 from uuid import uuid4
 
 from fastapi import APIRouter, HTTPException
@@ -9,6 +10,7 @@ from modul_graph.experiments.pygad_suggestions import Suggestion
 from modul_graph.i18n import _
 from modul_graph.models.competence import Competence
 from modul_graph.models.module import Module
+from modul_graph.models.standard_curriculum import StandardCurriculum
 from modul_graph.utils.analysis_controller import get_example_graph, is_feasible
 
 router = APIRouter(prefix="/analysis")
@@ -24,7 +26,15 @@ def get_doability(sc: str) -> AnalysisResponseDTO:
     """
 
     try:
-        is_ok: bool = is_feasible(sc)
+        sc_d: StandardCurriculum = StandardCurriculum.nodes.first_or_none(name=sc)
+
+        if sc is None:
+            raise ValueError("Standard curriculum does not exist")
+
+        suggestions, score = Suggestion(sc_d, set()).gen_suggestion()
+
+        is_ok = score > -math.inf
+
     except ValueError:
         raise HTTPException(400, "standard curriculum doesn't exist")
 
