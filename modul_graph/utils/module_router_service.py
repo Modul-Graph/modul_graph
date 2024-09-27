@@ -42,6 +42,20 @@ class ModuleRouterService:
         self.__does_mod_exist__exists_already_exception(mod.name)
         self.__create_module(mod)
 
+    def delete_module_auto_decide(self, mod_name: str) -> None:
+        """
+        Deletes a module and its corresponding module area and cell if it is not a WPF module
+        :param mod_name: name of the module
+        """
+        self.__does_mod_exist__not_found_exception(mod_name)
+
+        module: Module = Module.nodes.get(name=mod_name)
+        module_area: ModuleArea = module.fills_module_area.single()
+        if not module_area or module_area.is_wpf:
+            self.delete_module(mod_name)
+        else:
+            self.delete_required_module(mod_name)
+
     def delete_module(self, mod_name: str) -> None:
         self.__does_mod_exist__not_found_exception(mod_name)
         db.cypher_query('MATCH (m:Module {name:\'' + mod_name + '\'}) DETACH DELETE m')
@@ -214,13 +228,12 @@ class ModuleRouterService:
         except Exception:
             mod_ar_exists_already = False
 
-        cell_exists_already: bool = True
-        try:
-            ModuleCell.nodes.get(identifier=module.name)
-        except Exception:
-            cell_exists_already = False
+        # try: # No Module cell needed
+        #     ModuleCell.nodes.get(identifier=module.name)
+        # except Exception:
+        #     cell_exists_already = False
 
-        if mod_ar_exists_already or cell_exists_already:
+        if mod_ar_exists_already:
             raise HTTPException(status_code=409,
                                 detail='A module area or cell with the name ' + module.name + ' already exists')
 
@@ -229,12 +242,6 @@ class ModuleRouterService:
 
         # link it to new ModuleArea
         ModuleAreaRouterService().create_module_area(ModuleAreaDTO(name=module.name, filled_by_module=[module.name]))
-
-        # link ModuleArea to new ModuleCell
-        cell = ModuleCell()
-        cell.identifier = module.name
-        cell.save()
-        cell.filled_by_module_area.connect(ModuleArea.nodes.get(name=module.name))
 
     @db.transaction
     def delete_required_module(self, name: str):
@@ -262,6 +269,10 @@ class ModuleRouterService:
 
         module_area: ModuleArea = module.fills_module_area.single()
         module_cell: ModuleCell = module_area.fills_module_cell.single()
+
+        if module_cell is None:
+            return False, False
+
         semester: Semester = module_cell.is_in_semester.single()
         sem_number: int = semester.number
 

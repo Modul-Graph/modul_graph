@@ -31,6 +31,7 @@ class ModuleAreaRouterService:
         # create new ModuleArea
         mod_ar_to_save = ModuleArea()
         mod_ar_to_save.name = mod_ar.name
+        mod_ar_to_save.cp = mod_ar.cp
         mod_ar_to_save.save()
 
         # connect modules to new module area

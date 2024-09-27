@@ -24,13 +24,13 @@ async def get_module_winter_summer_info(name: str) -> tuple[bool, bool]:
     return ModuleRouterService().get_winter_summer_info(name)
 
 
-@router.post("/elective/")
+@router.post("/elective")
 async def create_elective_module(module: ModuleDTO) -> Response:
     ModuleRouterService().create_module(module)
     return Response(status_code=201)
 
 
-@router.post("/required/")
+@router.post("/required")
 async def create_required_module(module: ModuleDTO) -> Response:
     ModuleRouterService().create_required_module(module)  # type: ignore
     return Response(status_code=201)
@@ -45,6 +45,12 @@ async def delete_elective_module(name: str) -> Response:
 @router.delete("/required/{name}")
 async def delete_required_module(name: str) -> Response:
     ModuleRouterService().delete_required_module(name)
+    return Response(status_code=200)
+
+
+@router.delete("/{name}")
+async def delete_module(name: str) -> Response:
+    ModuleRouterService().delete_module_auto_decide(name)
     return Response(status_code=200)
 
 

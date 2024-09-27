@@ -19,7 +19,7 @@ Module DTOs
 class ModuleDTO(BaseModel):
     name: str
     description: Optional[str] = None
-    cp_plus_description: dict[str, int]
+    cp_plus_description: dict[str, int | float]
     summer: bool
     winter: bool
 
@@ -77,7 +77,7 @@ class AnalysisResponseDTO(BaseModel):
     """
     Generic analysis response class. Other analysis respond classes might inherit this class
     """
-    status: AnalysisStatus
+    status: str
     message: str
 
 
@@ -299,3 +299,7 @@ class UpdateCPClusterDTO(BaseModel):
     """
     ID referencing cp_cluster
     """
+
+class CreateCPClusterDTO(BaseModel):
+    cells: list[UpdateCPClusterCellDTO]
+    cp_note: int

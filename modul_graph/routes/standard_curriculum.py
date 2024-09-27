@@ -28,6 +28,25 @@ router = APIRouter(
 )
 
 
+@router.get("/module_areas")
+async def get_module_areas() -> List[str]:
+    """
+    Get all module areas of a standard curriculum
+    :return: list of all module areas
+    """
+    module_areas: list[ModuleArea] = ModuleArea.nodes.all()
+    return [module_area.name for module_area in module_areas]
+
+@router.get("/wpf_module_areas")
+async def get_all_wpf_module_areas() -> List[str]:
+    """
+    Get all WPF module areas
+    :return: list of all wpf module area names
+    """
+
+    module_areas: NodeSet = ModuleArea.nodes.all()
+    return [module_area.name for module_area in module_areas if module_area.is_wpf]
+
 @router.get("/get_all", tags=["READ"])
 async def get_standard_curriculums() -> List[StandardCurriculumDTO]:
     """
@@ -170,13 +189,17 @@ def get_potential_cell_content() -> list[CellDTO]:
     """
 
     module_areas: list[ModuleArea] = ModuleArea.nodes.all()
+    print(module_areas)
     pflicht_module_areas: list[Module] = [area.filled_by_module.single() for area in module_areas if
                                           not area.is_wpf and len(area.fills_module_cell.all()) == 0]
+
+    print(pflicht_module_areas)
     wpf_module_areas: list[ModuleArea] = [area for area in module_areas if area.is_wpf]
 
     res: list[CellDTO] = []
 
     for module in pflicht_module_areas:
+        print(module)
         res.append(CellDTO(contains_wpf=False, data=ModuleRouterService().get_module(module.name)))
 
     for module_area in wpf_module_areas:

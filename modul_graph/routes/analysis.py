@@ -38,7 +38,7 @@ def get_doability(sc: str) -> AnalysisResponseDTO:
     return res
 
 
-@router.put("/suggestion")
+@router.post("/suggestion")
 def get_curriculum_suggestion(
     req: SuggestionRequestDTO) -> GraphDisplayResponseDTO:
     """
@@ -53,6 +53,7 @@ def get_curriculum_suggestion(
 
     nodes: set[GraphDisplayResponseNodeDTO] = set()
     edges: set[GraphDisplayResponseEdgeDTO] = set()
+
 
     suggestions, score = Suggestion(req.standard_curriculum, set(req.competences)).gen_suggestion()
 

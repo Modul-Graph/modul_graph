@@ -1,8 +1,8 @@
 import math
 from typing import TypeVar
 
-from neomodel import config # type: ignore
-from pygad import GA # type: ignore
+from neomodel import config  # type: ignore
+from pygad import GA  # type: ignore
 
 from modul_graph.models.competence import Competence
 from modul_graph.models.module import Module
@@ -212,11 +212,12 @@ class Suggestion:
         unmet_prerequisites = self.__get_unmet_prerequisites_of_module(module, semester, additional_modules)
         provided_competences: set[Competence] = self.__modules_to_provided_competences[module]
 
-
-
-        # calculate fitness based on
-        provided_wanted_competences_amount = len(provided_competences.intersection(self.__wanted_competences))
-        provided_wanted_competences_rating = provided_wanted_competences_amount / len(self.__wanted_competences)
+        if len(self.__wanted_competences) == 0:
+            provided_wanted_competences_rating = 1.0
+        else:
+            # calculate fitness based on
+            provided_wanted_competences_amount = len(provided_competences.intersection(self.__wanted_competences))
+            provided_wanted_competences_rating = provided_wanted_competences_amount / len(self.__wanted_competences)
 
         # Check if suggested module requires competences that haven't been acquired yet
         unmet_prerequisites_rating = math.inf if len(unmet_prerequisites) > 0 else 0
@@ -265,7 +266,6 @@ class Suggestion:
         """
 
         start_winter = self.__sc.start_winter
-
 
         suggested_modules_to_sem: list[tuple[ModuleArea, Semester, Module]] = self.__suggestion_to_semester_modules(
             suggestion)

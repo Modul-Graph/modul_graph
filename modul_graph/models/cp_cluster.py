@@ -19,7 +19,7 @@ class CpCluster(StructuredNode):
     Minimum Number of CPs to write with a grade
     """
 
-    cp_number_grade = IntegerProperty
+    cp_number_grade = IntegerProperty()
 
     # connection to ModuleCell
     # should be TwoOrMore but that doesn't exist

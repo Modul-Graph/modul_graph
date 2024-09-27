@@ -2,7 +2,7 @@ from uuid import uuid4
 
 from neomodel import db
 
-from modul_graph.DTOs import UpdateCPClusterDTO
+from modul_graph.DTOs import UpdateCPClusterDTO, CreateCPClusterDTO
 from modul_graph.models.cp_cluster import CpCluster
 from modul_graph.models.module import Module
 from modul_graph.models.module_area import ModuleArea
@@ -11,7 +11,7 @@ from modul_graph.models.semester import Semester
 
 
 @db.transaction
-def util_update_cp_cluster(cp_cluster: CpCluster, cp_cluster_update: UpdateCPClusterDTO) -> None:
+def util_update_cp_cluster(cp_cluster: CpCluster, cp_cluster_update: UpdateCPClusterDTO | CreateCPClusterDTO) -> None:
     cp_cluster.cp_number_grade = cp_cluster_update.cp_note
 
     cells: list[ModuleCell] = cp_cluster.consists_of_module_cell.all()
@@ -28,6 +28,8 @@ def util_update_cp_cluster(cp_cluster: CpCluster, cp_cluster_update: UpdateCPClu
         module_cell: ModuleCell = ModuleCell(identifier=uuid4())
         module_cell.save()
         module_cell.is_in_semester.connect(semester)
+
+        cp_cluster.is_component_of_semester.connect(semester)
 
         module_area: ModuleArea
 

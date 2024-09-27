@@ -8,4 +8,4 @@ class GraphException(Exception):
         self.dto = AnalysisResponseDTO(status=AnalysisStatus.error, message=msg)
 
     def __str__(self):
-        return f'{self.dto.status.value}: {self.dto.message}'
+        return f'{self.dto.status}: {self.dto.message}'
