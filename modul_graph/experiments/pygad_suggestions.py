@@ -339,7 +339,7 @@ class Suggestion:
 
         ga_instance.run()
 
-        ga_instance.plot_fitness().savefig("fitness_plot.png")
+        # ga_instance.plot_fitness().savefig("fitness_plot.png")
 
         solution, score, _ = ga_instance.best_solution()
 
