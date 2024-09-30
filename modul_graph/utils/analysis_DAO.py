@@ -134,14 +134,6 @@ def da_get_possible_modules_via_existing_comps(comps: list[str]) -> list[str]:
     result: list[list[str]] = db_get_possible_modules_via_existing_comps(__prepare_list_as_cypher_var(comps))[0]
     return __unwind(result)
 
-
-# currently not in use
-def da_get_possible_modules_plus_provided_comps_via_existing_comps(comps: list[str]) -> list[list[str]]:
-    result: list[list[str]] = \
-        db_get_possible_modules_plus_provided_comps_via_existing_comps(__prepare_list_as_cypher_var(comps))[0]
-    return result
-
-
 def da_get_previous_modules_for_single_module(new_mod: str, existing_mods: list[str]) -> list[str]:
     result: list[list[str]] = \
         db_get_previous_modules_for_single_module(new_mod, __prepare_list_as_cypher_var(existing_mods))[0]
@@ -151,12 +143,6 @@ def da_get_previous_modules_for_single_module(new_mod: str, existing_mods: list[
 def da_get_modules_indirectly_connected_to_comp(comp: str) -> list[str]:
     result: list[list[str]] = db_get_modules_indirectly_connected_to_comp(comp)[0]
     return __unwind(result)
-
-
-def da_get_providing_modules_for_comp(comp: str) -> list[str]:
-    result: list[list[str]] = db_get_providing_modules_for_comp(comp)[0]
-    return __unwind(result)
-
 
 # ----------------------------------------------------------------------------------------------------------------------
 # get competence(s)
@@ -205,14 +191,6 @@ def da_get_provided_comps_for_module_list_plus_sem_of_provision_without_duplicat
 def da_get_needed_comps_for_module(module: str) -> list[str]:
     result: list[list[str]] = db_get_needed_comps_for_module(module)[0]
     return __unwind(result)
-
-
-def da_get_comp_existing(comp: str) -> bool:
-    result: list[list[str]] = db_get_comp_existing(comp)[0]
-    if not result[0][0]:
-        return False
-    return True
-
 
 # ----------------------------------------------------------------------------------------------------------------------
 # get module cell(s)

@@ -26,7 +26,7 @@ def update_cp_cluster(data: UpdateCPClusterDTO) -> None:
     cp_cluster: CpCluster | None = CpCluster.nodes.first_or_none(identifier=data.clusterId)
 
     if cp_cluster is None:
-        raise HTTPException(404, f"CpCluster with id {data.identifier} not found")
+        raise HTTPException(404, f"CpCluster with id {data.clusterId} not found")
 
     util_update_cp_cluster(cp_cluster, data)
 

@@ -1,6 +1,6 @@
 from uuid import uuid4
 
-from neomodel import db
+from neomodel import db # type: ignore
 
 from modul_graph.DTOs import UpdateCPClusterDTO, CreateCPClusterDTO
 from modul_graph.models.cp_cluster import CpCluster

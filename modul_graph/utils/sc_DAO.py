@@ -25,19 +25,6 @@ def get_cp_clusters(sc: StandardCurriculum) -> set[CpCluster]:
     return res
 
 
-def get_semester_range(cp_cluster: CpCluster) -> tuple[int, int]:
-    """
-    Get min/max semester from a CP cluster
-    :param cp_cluster: CP Cluster to be considered
-    :return: tuple of form: (min-semester, max-semester)
-    """
-
-    semesters: list[Semester] = list(cp_cluster.is_component_of_semester.all())
-    semester_nums: list[int] = [semester.number for semester in semesters]
-
-    return min(semester_nums), max(semester_nums)
-
-
 def get_cell_display_info(cp_cluster: CpCluster) -> list[tuple[str, int, int, str, bool]]:
     """
     Get display information for a cell

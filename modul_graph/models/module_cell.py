@@ -1,5 +1,4 @@
-from neomodel import StructuredNode, StringProperty, RelationshipTo, ZeroOrMore, RelationshipFrom, \
-    IntegerProperty  # type: ignore
+from neomodel import StructuredNode, StringProperty, RelationshipTo, ZeroOrMore, RelationshipFrom, IntegerProperty  # type: ignore
 
 
 class ModuleCell(StructuredNode):
