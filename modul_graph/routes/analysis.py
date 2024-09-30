@@ -1,5 +1,4 @@
 import math
-from uuid import uuid4
 
 from fastapi import APIRouter, HTTPException
 from loguru import logger
@@ -11,7 +10,6 @@ from modul_graph.i18n import _
 from modul_graph.models.competence import Competence
 from modul_graph.models.module import Module
 from modul_graph.models.standard_curriculum import StandardCurriculum
-from modul_graph.utils.analysis_controller import get_example_graph, is_feasible
 
 router = APIRouter(prefix="/analysis")
 
@@ -64,7 +62,6 @@ def get_curriculum_suggestion(
     nodes: set[GraphDisplayResponseNodeDTO] = set()
     edges: set[GraphDisplayResponseEdgeDTO] = set()
 
-
     suggestions, score = Suggestion(req.standard_curriculum, set(req.competences)).gen_suggestion()
 
     # sort suggestions by semester
@@ -105,7 +102,8 @@ def get_curriculum_suggestion(
             # If requird competence was provided by a module previously, add an edge from the providing module to the current module
             else:
                 for _module in competences_to_modules[required_competence.name]:
-                    edges.add(GraphDisplayResponseEdgeDTO(source=_module.name, target=module.name, id=f"{module.name}-{module.name}"))
+                    edges.add(GraphDisplayResponseEdgeDTO(source=_module.name, target=module.name,
+                                                          id=f"{module.name}-{module.name}"))
         for provided_competence in provided_competences:
             current_semester_module_competences.append((module, provided_competence))
 

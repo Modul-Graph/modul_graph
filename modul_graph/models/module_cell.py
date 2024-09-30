@@ -1,4 +1,5 @@
-from neomodel import StructuredNode, StringProperty, RelationshipTo, ZeroOrMore, One, RelationshipFrom, IntegerProperty  # type: ignore
+from neomodel import StructuredNode, StringProperty, RelationshipTo, ZeroOrMore, RelationshipFrom, \
+    IntegerProperty  # type: ignore
 
 
 class ModuleCell(StructuredNode):
@@ -17,7 +18,8 @@ class ModuleCell(StructuredNode):
     """
 
     # connection to ModuleArea
-    filled_by_module_area = RelationshipFrom('modul_graph.models.module_area.ModuleArea', 'FILLS', cardinality=ZeroOrMore)
+    filled_by_module_area = RelationshipFrom('modul_graph.models.module_area.ModuleArea', 'FILLS',
+                                             cardinality=ZeroOrMore)
     """
     Connection to the module area which resides in the module cell. This is the content of the module cell. In terms 
     of the standard curriculum it would be "WPF Informatik" or "Mathe I" 
@@ -30,7 +32,8 @@ class ModuleCell(StructuredNode):
     """
 
     # connection to CpCluster
-    is_component_of_cp_cluster = RelationshipFrom('modul_graph.models.cp_cluster.CpCluster', 'CONSISTS_OF', cardinality=ZeroOrMore)
+    is_component_of_cp_cluster = RelationshipFrom('modul_graph.models.cp_cluster.CpCluster', 'CONSISTS_OF',
+                                                  cardinality=ZeroOrMore)
     """
     Connection to the CP Cluster where the module cell is part of
     """

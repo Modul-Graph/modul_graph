@@ -86,6 +86,7 @@ Suggestion DTOs
 """
 
 
+# noinspection PyNestedDecorators
 class SuggestionRequestDTO(BaseModel):
     """
     Request DTO for the suggestion endpoint

@@ -1,13 +1,14 @@
 from fastapi import HTTPException
+from neomodel import db  # type: ignore
 
+from modul_graph.DTOs import ModuleAreaDTO
 from modul_graph.models.module import Module
 from modul_graph.models.module_area import ModuleArea
-from modul_graph.DTOs import ModuleAreaDTO
-from neomodel import db  # type: ignore
 
 
 class ModuleAreaRouterService:
-    def get_module_area(self, mod_ar_name: str) -> ModuleAreaDTO:
+    @staticmethod
+    def get_module_area(mod_ar_name: str) -> ModuleAreaDTO:
         ret: ModuleArea = ModuleArea.nodes.get(name=mod_ar_name)
         if not ret or not ret.is_wpf:
             raise HTTPException(status_code=404, detail=f'Module area {mod_ar_name} not found')
@@ -41,7 +42,8 @@ class ModuleAreaRouterService:
                 raise HTTPException(status_code=404, detail=f'Module {elem} not found')
             mod_ar_to_save.filled_by_module.connect(mod)
 
-    def delete_module_area(self, name: str) -> None:
+    @staticmethod
+    def delete_module_area(name: str) -> None:
         mod_ar: ModuleArea = ModuleArea.nodes.get(name=name)
         if not mod_ar:
             raise HTTPException(status_code=404, detail=f'Module area {name} not found')
@@ -63,4 +65,3 @@ class ModuleAreaRouterService:
             if not mod:
                 raise HTTPException(status_code=404, detail=f'Module {elem} not found')
             mod_ar_to_update.filled_by_module.connect(mod)
-

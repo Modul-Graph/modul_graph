@@ -1,4 +1,5 @@
-from neomodel import JSONProperty, StructuredNode, StringProperty, RelationshipTo, ZeroOrMore, RelationshipFrom, BooleanProperty  # type: ignore
+from neomodel import JSONProperty, StructuredNode, StringProperty, RelationshipTo, ZeroOrMore, RelationshipFrom, \
+    BooleanProperty  # type: ignore
 
 
 class Module(StructuredNode):

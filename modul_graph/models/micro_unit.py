@@ -1,4 +1,5 @@
-from neomodel import (StructuredNode, StringProperty, IntegerProperty, RelationshipTo, RelationshipFrom, ZeroOrMore)  # type: ignore
+from neomodel import (StructuredNode, StringProperty, IntegerProperty, RelationshipTo, RelationshipFrom,
+                      ZeroOrMore)  # type: ignore
 
 
 class MicroUnit(StructuredNode):

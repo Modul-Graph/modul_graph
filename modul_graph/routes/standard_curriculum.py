@@ -5,16 +5,11 @@ from typing import List
 from uuid import uuid4
 
 from fastapi import APIRouter, HTTPException, Response
-
-from modul_graph.models.competence import Competence
-from modul_graph.utils.module_area_router_service import ModuleAreaRouterService
-from modul_graph.utils.module_router_service import ModuleRouterService
-from modul_graph.utils.sc_DAO import get_rich_cp_clusters
-from modul_graph.utils.sc_router_service import ScRouterService  # type: ignore
 from neomodel import NodeSet, CardinalityViolation  # type: ignore
 
 from modul_graph.DTOs import StandardCurriculumDTO, CompetenceScDTO, GraphDisplayResponseDTO, RichCPCluster, \
     GraphDisplayResponseNodeDTO, CellDTO
+from modul_graph.models.competence import Competence
 from modul_graph.models.module import Module
 from modul_graph.models.module_area import ModuleArea
 from modul_graph.models.module_cell import ModuleCell
@@ -22,6 +17,10 @@ from modul_graph.models.semester import Semester
 from modul_graph.models.standard_curriculum import StandardCurriculum
 from modul_graph.utils.analysis_DAO import da_get_standard_curricula
 from modul_graph.utils.analysis_controller import get_competence_sc as get_competence_sc_service
+from modul_graph.utils.module_area_router_service import ModuleAreaRouterService
+from modul_graph.utils.module_router_service import ModuleRouterService
+from modul_graph.utils.sc_DAO import get_rich_cp_clusters
+from modul_graph.utils.sc_router_service import ScRouterService  # type: ignore
 
 router = APIRouter(
     prefix="/sc",
@@ -37,6 +36,7 @@ async def get_module_areas() -> List[str]:
     module_areas: list[ModuleArea] = ModuleArea.nodes.all()
     return [module_area.name for module_area in module_areas]
 
+
 @router.get("/wpf_module_areas")
 async def get_all_wpf_module_areas() -> List[str]:
     """
@@ -46,6 +46,7 @@ async def get_all_wpf_module_areas() -> List[str]:
 
     module_areas: NodeSet = ModuleArea.nodes.all()
     return [module_area.name for module_area in module_areas if module_area.is_wpf]
+
 
 @router.get("/get_all", tags=["READ"])
 async def get_standard_curriculums() -> List[StandardCurriculumDTO]:
@@ -218,6 +219,7 @@ def get_semesters() -> list[int]:
 
     return [semester.number for semester in Semester.nodes.all()]
 
+
 @router.put("/competence/{name}")
 def create_competence(name: str) -> None:
     """
@@ -232,6 +234,8 @@ def create_competence(name: str) -> None:
 
     comp: Competence = Competence(name=name)
     comp.save()
+
+
 @router.delete("/competence/{name}")
 def delete_competence(name: str) -> None:
     """

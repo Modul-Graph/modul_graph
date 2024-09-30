@@ -83,6 +83,7 @@ def get_rich_cp_cluster(cp_cluster: CpCluster) -> RichCPCluster:
 
     return RichCPCluster(cells=cells, cp_note=cp_cluster.cp_number, cp_cluster_id=cp_cluster.identifier)
 
+
 def get_rich_cp_clusters(sc: StandardCurriculum) -> list[RichCPCluster]:
     """
     Get rich CP clusters of a standard curriculum

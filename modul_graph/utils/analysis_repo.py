@@ -1,4 +1,5 @@
-from neomodel import db # type: ignore
+from neomodel import db  # type: ignore
+
 from .std_curr import std_curr
 
 
@@ -16,56 +17,74 @@ def db_get_standard_curricula() -> tuple[list[list[str]], list[str]]:
 # ----------------------------------------------------------------------------------------------------------------------
 # get module area(s)
 def db_get_module_areas_of_obligatory_modules() -> tuple[list[list[str]], list[str]]:
-    return db.cypher_query('MATCH (n:ModuleArea)<-[:FILLS]-(m:Module)-[:BELONGS_TO]->(:StandardCurriculum {name:\'' + std_curr.name + '\'}) WITH n, count(DISTINCT m) AS relCount WHERE relCount = 1 RETURN n.name')
+    return db.cypher_query(
+        'MATCH (n:ModuleArea)<-[:FILLS]-(m:Module)-[:BELONGS_TO]->(:StandardCurriculum {name:\'' + std_curr.name + '\'}) WITH n, count(DISTINCT m) AS relCount WHERE relCount = 1 RETURN n.name')
 
 
 def db_get_module_areas_for_module(module: str) -> tuple[list[list[str]], list[str]]:
-    return db.cypher_query('MATCH (n:ModuleArea)<-[:FILLS]-(:Module {name:\'' + module + '\'})-[:BELONGS_TO]->(:StandardCurriculum {name:\'' + std_curr.name + '\'}) RETURN n.name')
+    return db.cypher_query(
+        'MATCH (n:ModuleArea)<-[:FILLS]-(:Module {name:\'' + module + '\'})-[:BELONGS_TO]->(:StandardCurriculum {name:\'' + std_curr.name + '\'}) RETURN n.name')
 
 
 def db_get_module_areas_of_optional_modules(obl_module_areas: list[str]) -> tuple[list[list[str]], list[str]]:
-    return db.cypher_query('MATCH (n:ModuleArea)<-[:FILLS]-(:Module)-[:BELONGS_TO]->(:StandardCurriculum {name:\'' + std_curr.name + '\'}) WHERE not n.name IN [' + ', '.join(obl_module_areas) + '] RETURN n.name')
+    return db.cypher_query(
+        'MATCH (n:ModuleArea)<-[:FILLS]-(:Module)-[:BELONGS_TO]->(:StandardCurriculum {name:\'' + std_curr.name + '\'}) WHERE not n.name IN [' + ', '.join(
+            obl_module_areas) + '] RETURN n.name')
 
 
 def db_get_module_area_for_module_cell(module_cell: str) -> tuple[list[list[str]], list[str]]:
-    return db.cypher_query('MATCH (:ModuleCell {identifier:\'' + module_cell + '\'})<-[:FILLS]-(m:ModuleArea)<-[:FILLS]-(:Module)-[:BELONGS_TO]->(:StandardCurriculum {name:\'' + std_curr.name + '\'}) RETURN m.name')
+    return db.cypher_query(
+        'MATCH (:ModuleCell {identifier:\'' + module_cell + '\'})<-[:FILLS]-(m:ModuleArea)<-[:FILLS]-(:Module)-[:BELONGS_TO]->(:StandardCurriculum {name:\'' + std_curr.name + '\'}) RETURN m.name')
 
 
 # ----------------------------------------------------------------------------------------------------------------------
 # get semester(s)
 def db_get_semester_for_obl_module_via_module_area(module_area: str) -> tuple[list[list[int]], list[str]]:
-    return db.cypher_query('MATCH (:StandardCurriculum {name:\'' + std_curr.name + '\'})<-[:BELONGS_TO]-(:Module)-[:FILLS]->(m:ModuleArea {name: \'' + module_area + '\'})-[:FILLS]->(:ModuleCell)-[:IS_IN]->(s:Semester) RETURN s.number')
+    return db.cypher_query(
+        'MATCH (:StandardCurriculum {name:\'' + std_curr.name + '\'})<-[:BELONGS_TO]-(:Module)-[:FILLS]->(m:ModuleArea {name: \'' + module_area + '\'})-[:FILLS]->(:ModuleCell)-[:IS_IN]->(s:Semester) RETURN s.number')
 
 
 def db_get_semester_of_module_cell(module_cell: str) -> tuple[list[list[int]], list[str]]:
-    return db.cypher_query('MATCH (:StandardCurriculum {name:\'' + std_curr.name + '\'})<-[:BELONGS_TO]-(:Module)-[:FILLS]->(:ModuleArea)-[:FILLS]->(:ModuleCell {identifier:\'' + module_cell + '\'})-[:IS_IN]->(s:Semester) RETURN s.number')
+    return db.cypher_query(
+        'MATCH (:StandardCurriculum {name:\'' + std_curr.name + '\'})<-[:BELONGS_TO]-(:Module)-[:FILLS]->(:ModuleArea)-[:FILLS]->(:ModuleCell {identifier:\'' + module_cell + '\'})-[:IS_IN]->(s:Semester) RETURN s.number')
 
 
 def db_get_highest_semester_of_std_curr() -> tuple[list[list[int]], list[str]]:
-    return db.cypher_query('MATCH (:StandardCurriculum {name:\'' + std_curr.name + '\'})-[:SPECIFIES]->(s:Semester) RETURN max(s.number)')
+    return db.cypher_query(
+        'MATCH (:StandardCurriculum {name:\'' + std_curr.name + '\'})-[:SPECIFIES]->(s:Semester) RETURN max(s.number)')
 
 
 # ----------------------------------------------------------------------------------------------------------------------
 # get module(s)
 def db_get_module_via_module_area(module_area: str) -> tuple[list[list[str]], list[str]]:
-    return db.cypher_query('MATCH (m:ModuleArea {name: \'' + module_area + '\'})<-[:FILLS]-(n:Module)-[:BELONGS_TO]->(:StandardCurriculum {name:\'' + std_curr.name + '\'}) RETURN n.name')
+    return db.cypher_query(
+        'MATCH (m:ModuleArea {name: \'' + module_area + '\'})<-[:FILLS]-(n:Module)-[:BELONGS_TO]->(:StandardCurriculum {name:\'' + std_curr.name + '\'}) RETURN n.name')
 
 
 def db_get_possible_modules_via_existing_comps(comps: list[str]) -> tuple[list[list[str]], list[str]]:
-    return db.cypher_query('MATCH (c:Competence)<-[:NEEDS]-(m:Module)-[:BELONGS_TO]->(:StandardCurriculum {name:\'' + std_curr.name + '\'}) WHERE c.name in [' + ', '.join(comps) + '] RETURN m.name')
+    return db.cypher_query(
+        'MATCH (c:Competence)<-[:NEEDS]-(m:Module)-[:BELONGS_TO]->(:StandardCurriculum {name:\'' + std_curr.name + '\'}) WHERE c.name in [' + ', '.join(
+            comps) + '] RETURN m.name')
 
 
 # currently not in use
-def db_get_possible_modules_plus_provided_comps_via_existing_comps(comps: list[str]) -> tuple[list[list[str]], list[str]]:
-    return db.cypher_query('MATCH (c1:Competence)<-[:NEEDS]-(m:Module)-[:PROVIDES]->(c2:Competence), (m)-[:BELONGS_TO]->(:StandardCurriculum {name:\'' + std_curr.name + '\'}) WHERE c1.name in [' + ', '.join(comps) + '] RETURN m.name, c2.name')
+def db_get_possible_modules_plus_provided_comps_via_existing_comps(comps: list[str]) -> tuple[
+    list[list[str]], list[str]]:
+    return db.cypher_query(
+        'MATCH (c1:Competence)<-[:NEEDS]-(m:Module)-[:PROVIDES]->(c2:Competence), (m)-[:BELONGS_TO]->(:StandardCurriculum {name:\'' + std_curr.name + '\'}) WHERE c1.name in [' + ', '.join(
+            comps) + '] RETURN m.name, c2.name')
 
 
-def db_get_previous_modules_for_single_module(new_mod: str, existing_mods: list[str]) -> tuple[list[list[str]], list[str]]:
-    return db.cypher_query('MATCH (:StandardCurriculum {name:\'' + std_curr.name + '\'})<-[:BELONGS_TO]-(m1:Module {name:\'' + new_mod + '\'})-[:NEEDS]->(c:Competence)<-[:PROVIDES]-(m2:Module) WHERE m2.name in [' + ', '.join(existing_mods) + '] RETURN m2.name')
+def db_get_previous_modules_for_single_module(new_mod: str, existing_mods: list[str]) -> tuple[
+    list[list[str]], list[str]]:
+    return db.cypher_query(
+        'MATCH (:StandardCurriculum {name:\'' + std_curr.name + '\'})<-[:BELONGS_TO]-(m1:Module {name:\'' + new_mod + '\'})-[:NEEDS]->(c:Competence)<-[:PROVIDES]-(m2:Module) WHERE m2.name in [' + ', '.join(
+            existing_mods) + '] RETURN m2.name')
 
 
 def db_get_modules_indirectly_connected_to_comp(comp: str) -> tuple[list[list[str]], list[str]]:
-    return db.cypher_query('MATCH (:StandardCurriculum {name:\'' + std_curr.name + '\'})<-[:BELONGS_TO]-(m:Module) ((:Module)-[:PROVIDES]->(:Competence)<-[:NEEDS]-(:Module)){0,1} (:Module)-[:PROVIDES]->(:Competence {name:\'' + comp + '\'}) RETURN m.name')
+    return db.cypher_query(
+        'MATCH (:StandardCurriculum {name:\'' + std_curr.name + '\'})<-[:BELONGS_TO]-(m:Module) ((:Module)-[:PROVIDES]->(:Competence)<-[:NEEDS]-(:Module)){0,1} (:Module)-[:PROVIDES]->(:Competence {name:\'' + comp + '\'}) RETURN m.name')
 
 
 def db_get_providing_modules_for_comp(comp: str) -> tuple[list[list[str]], list[str]]:
@@ -75,15 +94,20 @@ def db_get_providing_modules_for_comp(comp: str) -> tuple[list[list[str]], list[
 # ----------------------------------------------------------------------------------------------------------------------
 # get competence(s)
 def db_get_provided_comps_for_module(module: str) -> tuple[list[list[str]], list[str]]:
-    return db.cypher_query('MATCH (:StandardCurriculum {name:\'' + std_curr.name + '\'})<-[:BELONGS_TO]-(m:Module {name: \'' + module + '\'})-[:PROVIDES]->(c:Competence) RETURN c.name')
+    return db.cypher_query(
+        'MATCH (:StandardCurriculum {name:\'' + std_curr.name + '\'})<-[:BELONGS_TO]-(m:Module {name: \'' + module + '\'})-[:PROVIDES]->(c:Competence) RETURN c.name')
 
 
-def db_get_provided_comps_for_module_list_plus_sem_of_provision(modules: list[str]) -> tuple[list[tuple[str | int]], list[str]]:
-    return db.cypher_query('MATCH (:StandardCurriculum {name:\'' + std_curr.name + '\'})<-[:BELONGS_TO]-(m:Module)-[:PROVIDES]->(c:Competence), (m)-[:FILLS]->(:ModuleArea)-[:FILLS]->(:ModuleCell)-[:IS_IN]->(s:Semester) WHERE m.name in [' + ', '.join(modules) + '] RETURN c.name, s.number')
+def db_get_provided_comps_for_module_list_plus_sem_of_provision(modules: list[str]) -> tuple[
+    list[tuple[str | int]], list[str]]:
+    return db.cypher_query(
+        'MATCH (:StandardCurriculum {name:\'' + std_curr.name + '\'})<-[:BELONGS_TO]-(m:Module)-[:PROVIDES]->(c:Competence), (m)-[:FILLS]->(:ModuleArea)-[:FILLS]->(:ModuleCell)-[:IS_IN]->(s:Semester) WHERE m.name in [' + ', '.join(
+            modules) + '] RETURN c.name, s.number')
 
 
 def db_get_needed_comps_for_module(module: str) -> tuple[list[list[str]], list[str]]:
-    return db.cypher_query('MATCH (:StandardCurriculum {name:\'' + std_curr.name + '\'})<-[:BELONGS_TO]-(m:Module {name: \'' + module + '\'})-[:NEEDS]->(c:Competence) RETURN c.name')
+    return db.cypher_query(
+        'MATCH (:StandardCurriculum {name:\'' + std_curr.name + '\'})<-[:BELONGS_TO]-(m:Module {name: \'' + module + '\'})-[:NEEDS]->(c:Competence) RETURN c.name')
 
 
 def db_get_comp_existing(comp: str) -> tuple[list[list[str]], list[str]]:
@@ -93,17 +117,21 @@ def db_get_comp_existing(comp: str) -> tuple[list[list[str]], list[str]]:
 # ----------------------------------------------------------------------------------------------------------------------
 # get module cell(s)
 def db_get_module_cells_connected_to_module_areas(module_areas: list[str]) -> tuple[list[list[str]], list[str]]:
-    return db.cypher_query('MATCH (mc:ModuleCell)<-[:FILLS]-(ma:ModuleArea)<-[:FILLS]-(:Module)-[:BELONGS_TO]->(:StandardCurriculum {name:\'' + std_curr.name + '\'}) WHERE ma.name in [' + ', '.join(module_areas) + '] RETURN mc.identifier')
+    return db.cypher_query(
+        'MATCH (mc:ModuleCell)<-[:FILLS]-(ma:ModuleArea)<-[:FILLS]-(:Module)-[:BELONGS_TO]->(:StandardCurriculum {name:\'' + std_curr.name + '\'}) WHERE ma.name in [' + ', '.join(
+            module_areas) + '] RETURN mc.identifier')
 
 
 # ----------------------------------------------------------------------------------------------------------------------
 # get season(s) for modules and standard curriculum
 def db_get_summer_for_module(module: str) -> tuple[list[list[bool]], list[str]]:
-    return db.cypher_query('MATCH (m:Module {name:\'' + module + '\'})-[:BELONGS_TO]->(:StandardCurriculum {name:\'' + std_curr.name + '\'}) RETURN m.is_in_summer')
+    return db.cypher_query(
+        'MATCH (m:Module {name:\'' + module + '\'})-[:BELONGS_TO]->(:StandardCurriculum {name:\'' + std_curr.name + '\'}) RETURN m.is_in_summer')
 
 
 def db_get_winter_for_module(module: str) -> tuple[list[list[bool]], list[str]]:
-    return db.cypher_query('MATCH (m:Module {name:\'' + module + '\'})-[:BELONGS_TO]->(:StandardCurriculum {name:\'' + std_curr.name + '\'}) RETURN m.is_in_winter')
+    return db.cypher_query(
+        'MATCH (m:Module {name:\'' + module + '\'})-[:BELONGS_TO]->(:StandardCurriculum {name:\'' + std_curr.name + '\'}) RETURN m.is_in_winter')
 
 
 def db_get_winter_for_standard_curriculum(name: str) -> tuple[list[list[bool]], list[str]]:

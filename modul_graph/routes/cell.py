@@ -25,5 +25,3 @@ def get_cell_data(cell_id: str) -> CellDTO:
     else:
         return CellDTO(contains_wpf=False,
                        data=ModuleRouterService().get_module(module_area.filled_by_module.single().name))
-
-

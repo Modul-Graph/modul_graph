@@ -3,11 +3,11 @@ from neomodel import config  # type: ignore
 from starlette.middleware.cors import CORSMiddleware
 
 from .routes.analysis import router as analysis_router
-from .routes.module import router as module_router
-from .routes.standard_curriculum import router as sc_router
-from .routes.module_area import router as module_area_router
 from .routes.cell import router as cell_router
 from .routes.cp_cluster import router as cp_cluster_router
+from .routes.module import router as module_router
+from .routes.module_area import router as module_area_router
+from .routes.standard_curriculum import router as sc_router
 
 # Setup DB connection params
 config.DATABASE_URL = 'bolt://neo4j:password@localhost:7687'  # default

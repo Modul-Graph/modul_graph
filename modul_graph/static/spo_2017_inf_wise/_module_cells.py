@@ -61,5 +61,3 @@ module_cells[35].filled_by_module_area.connect(wpf_fin_smk)
 
 # Semester 7
 module_cells[36].filled_by_module_area.connect(ba_praktikum)
-
-

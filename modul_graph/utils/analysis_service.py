@@ -1,7 +1,15 @@
 from collections import Counter
 from random import shuffle
 
-from .analysis_DAO import da_get_winter_for_module, da_get_module_areas_of_optional_modules_unwound_no_duplicates, da_get_semester_for_obl_module_via_module_area, da_get_module_areas_of_obligatory_modules, da_get_semester_of_module_cell, da_get_summer_for_module, da_get_module_area_for_module_cell, da_get_module_cells_connected_to_module_areas_without_duplicates, da_get_module_areas_for_module, da_get_provided_comps_for_module_list_plus_sem_of_provision_without_duplicates, da_get_provided_comps_per_module, da_get_possible_modules_via_existing_comps, da_get_obl_module_via_module_area, da_get_winter_for_standard_curriculum, da_get_needed_comps_for_module, da_get_previous_modules_for_single_module, da_get_highest_semester_of_std_curr, da_get_modules_indirectly_connected_to_comp, da_get_semester_to_module_area_for_standard_curriculum  # type: ignore
+from .analysis_DAO import da_get_winter_for_module, da_get_module_areas_of_optional_modules_unwound_no_duplicates, \
+    da_get_semester_for_obl_module_via_module_area, da_get_module_areas_of_obligatory_modules, \
+    da_get_semester_of_module_cell, da_get_summer_for_module, da_get_module_area_for_module_cell, \
+    da_get_module_cells_connected_to_module_areas_without_duplicates, da_get_module_areas_for_module, \
+    da_get_provided_comps_for_module_list_plus_sem_of_provision_without_duplicates, da_get_provided_comps_per_module, \
+    da_get_possible_modules_via_existing_comps, da_get_obl_module_via_module_area, \
+    da_get_winter_for_standard_curriculum, da_get_needed_comps_for_module, da_get_previous_modules_for_single_module, \
+    da_get_highest_semester_of_std_curr, da_get_modules_indirectly_connected_to_comp, \
+    da_get_semester_to_module_area_for_standard_curriculum  # type: ignore
 from .graph_exception import GraphException  # type: ignore
 from .std_curr import std_curr, instantiate_std_curr_obj  # type: ignore
 from ..DTOs import PflichtmoduleDTO, WpfDTO, ModuleCompetenceDTO, CompetenceScDTO  # type: ignore
@@ -60,7 +68,7 @@ def get_competence_sc(sc: StandardCurriculum) -> CompetenceScDTO:
 # public functions (accessed by controller)
 
 def get_path_to_competence(comp: str, standard_curriculum: str) -> list[
-        tuple[str, str, list[int], list[str]]]:
+    tuple[str, str, list[int], list[str]]]:
     instantiate_std_curr_obj(standard_curriculum)
     start_comps_plus_sem_and_obl_mods: tuple[
         dict[str, int], dict[str, list[int]]] = get_start_competences_plus_sems_and_obl_mods_plus_sems()
@@ -344,7 +352,7 @@ def __fit_possible_modules_to_free_slots(wanted_comp: str, possible_modules: lis
     # get modules to the front which (indirectly) provide the wanted competence
     for i in range(len(possible_modules)):
         if possible_modules[i] in da_get_modules_indirectly_connected_to_comp(
-                wanted_comp) or wanted_comp in da_get_provided_comps_per_module(possible_modules[i]):
+            wanted_comp) or wanted_comp in da_get_provided_comps_per_module(possible_modules[i]):
             possible_modules = [possible_modules[i]] + possible_modules[:i] + possible_modules[i + 1:]
 
     # compute for each module if it can be visited during winter or summer
@@ -358,9 +366,9 @@ def __fit_possible_modules_to_free_slots(wanted_comp: str, possible_modules: lis
         for j, single_slot_type in enumerate(slot):
             for k, mod in enumerate(possible_modules):
                 matches_summer_winter: bool = (possible_mods_season_summer[k] and not winter_of_free_slots[j]) or (
-                        possible_mods_season_winter[k] and winter_of_free_slots[j])
+                    possible_mods_season_winter[k] and winter_of_free_slots[j])
                 if matches_summer_winter and single_slot_type in da_get_module_areas_for_module(mod) and \
-                        sems_of_free_slots[i] == curr_sem:
+                    sems_of_free_slots[i] == curr_sem:
                     found_module = mod
                     break
             if found_module != '':

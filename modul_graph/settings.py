@@ -8,4 +8,3 @@ class Settings(BaseSettings):
 
     ADMIN_USER = "admin"
     ADMIN_PASSWORD = "admin"
-

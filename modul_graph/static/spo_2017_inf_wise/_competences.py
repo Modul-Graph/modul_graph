@@ -111,5 +111,3 @@ analytische_geometrie.save()
 dummy_competence = Competence()
 dummy_competence.name = "Dummy Competence"
 dummy_competence.save()
-
-

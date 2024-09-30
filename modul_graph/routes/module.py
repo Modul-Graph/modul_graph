@@ -2,8 +2,9 @@
 This file contains all routes that get, create, edit or delete modules
 """
 from fastapi import APIRouter, Response
-from modul_graph.utils.module_router_service import ModuleRouterService
+
 from modul_graph.DTOs import ModuleDTO
+from modul_graph.utils.module_router_service import ModuleRouterService
 
 router = APIRouter(prefix="/module")
 

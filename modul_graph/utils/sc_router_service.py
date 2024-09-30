@@ -1,9 +1,10 @@
 from typing import List
+
 from fastapi import HTTPException
+from neomodel import db  # type: ignore
 
 from modul_graph.models.semester import Semester
 from modul_graph.models.standard_curriculum import StandardCurriculum
-from neomodel import db  # type: ignore
 
 
 class ScRouterService:

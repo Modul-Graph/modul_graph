@@ -1,4 +1,5 @@
-from neomodel import StructuredNode, StringProperty, RelationshipTo, IntegerProperty, RelationshipFrom , ZeroOrMore  # type: ignore
+from neomodel import StructuredNode, StringProperty, RelationshipTo, IntegerProperty, RelationshipFrom, \
+    ZeroOrMore  # type: ignore
 
 
 class CpCluster(StructuredNode):

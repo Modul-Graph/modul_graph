@@ -1,7 +1,5 @@
-from neomodel import StructuredNode, ZeroOrMore, StringProperty, RelationshipTo, RelationshipFrom, IntegerProperty  # type: ignore
-
-from modul_graph.models.standard_curriculum import StandardCurriculum
-from modul_graph.models.module import Module
+from neomodel import StructuredNode, ZeroOrMore, StringProperty, RelationshipTo, RelationshipFrom, \
+    IntegerProperty  # type: ignore
 
 
 class ModuleArea(StructuredNode):

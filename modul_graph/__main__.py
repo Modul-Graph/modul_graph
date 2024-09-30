@@ -2,13 +2,6 @@ import gettext
 
 import uvicorn
 from neomodel import config, db  # type: ignore
-from rich.pretty import pretty_repr
-
-from modul_graph.experiments.pygad_suggestions import Suggestion
-from modul_graph.models.competence import Competence
-from modul_graph.models.module import Module
-from modul_graph.models.semester import Semester
-from modul_graph.models.standard_curriculum import StandardCurriculum
 
 # from modul_graph.utils.std_curr import instantiate_std_curr_obj
 
@@ -36,7 +29,7 @@ config.DATABASE_URL = 'bolt://neo4j:password@localhost:7687'  # default
 # s = Suggestion(sc, {competence})
 # print(pretty_repr(s.__gen_suggested_wpf()))
 
-#print(get_unmet_prerequisites_of_module(module, sc, sem, set()))
+# print(get_unmet_prerequisites_of_module(module, sc, sem, set()))
 
 
 '''

@@ -1,4 +1,5 @@
-from neomodel import StructuredNode, StringProperty, ZeroOrMore, RelationshipTo, RelationshipFrom, BooleanProperty  # type: ignore
+from neomodel import StructuredNode, StringProperty, ZeroOrMore, RelationshipTo, RelationshipFrom, \
+    BooleanProperty  # type: ignore
 
 
 class StandardCurriculum(StructuredNode):

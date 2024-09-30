@@ -1,14 +1,14 @@
 from fastapi import HTTPException
+from neomodel import db  # type: ignore
 
-from modul_graph.models.module_cell import ModuleCell
+from modul_graph.DTOs import ModuleDTO, ModuleAreaDTO
 from modul_graph.models.competence import Competence
 from modul_graph.models.micro_unit import MicroUnit
 from modul_graph.models.module import Module
 from modul_graph.models.module_area import ModuleArea
+from modul_graph.models.module_cell import ModuleCell
 from modul_graph.models.semester import Semester
 from modul_graph.models.standard_curriculum import StandardCurriculum
-from modul_graph.DTOs import ModuleDTO, ModuleAreaDTO
-from neomodel import db  # type: ignore
 from modul_graph.utils.module_area_router_service import ModuleAreaRouterService
 
 """
@@ -70,7 +70,8 @@ class ModuleRouterService:
             self.__does_mod_exist__exists_already_exception(mod_new.name)
         self.__update_mod(Module.nodes.get(name=identifier), mod_new)
 
-    def __does_mod_exist(self, mod_name: str) -> bool:
+    @staticmethod
+    def __does_mod_exist(mod_name: str) -> bool:
         result = Module.nodes.get_or_none(name=mod_name)
         print(mod_name)
         print(result)
@@ -176,7 +177,8 @@ class ModuleRouterService:
 
         self.__connect_optional_relationships(mod_db, mod_new)
 
-    def __assign_attributes(self, module: Module, moduleDTO: ModuleDTO) -> Module:
+    @staticmethod
+    def __assign_attributes(module: Module, moduleDTO: ModuleDTO) -> Module:
         module.name = moduleDTO.name
         module.module_description = moduleDTO.description
         module.cp_plus_description = moduleDTO.cp_plus_description
@@ -185,7 +187,8 @@ class ModuleRouterService:
 
         return module
 
-    def __connect_optional_relationships(self, module: Module, moduleDTO: ModuleDTO):
+    @staticmethod
+    def __connect_optional_relationships(module: Module, moduleDTO: ModuleDTO):
         # connect needed comps
         if moduleDTO.needs_competences:
             for elem in moduleDTO.needs_competences:

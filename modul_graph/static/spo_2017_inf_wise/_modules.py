@@ -115,7 +115,6 @@ einführung_in_die_informatik.provides_competence.connect(programmiersprachen_un
 einführung_in_die_informatik.provides_competence.connect(projekt_und_teamkompetenz)
 einführung_in_die_informatik.provides_competence.connect(algorithmen_und_datenstrukturen_)
 
-
 einführung_in_digitale_spiele = Module()
 einführung_in_digitale_spiele.name = "Einführung in Digitale Spiele"
 einführung_in_digitale_spiele.cp_plus_description = {'DEFAULT': 5.0}
@@ -498,7 +497,6 @@ schlüsselkompetenzen_i.is_in_summer = True
 schlüsselkompetenzen_i.is_in_winter = True
 schlüsselkompetenzen_i.save()
 
-
 schlüsselkompetenzen_i.provides_competence.connect(informatik_und_gesellschaft)
 schlüsselkompetenzen_i.provides_competence.connect(projekt_und_teamkompetenz)
 
@@ -509,7 +507,6 @@ schlüsselkompetenzen_ii.module_description = "Studienplanung & erfolgreiches St
 schlüsselkompetenzen_ii.is_in_summer = True
 schlüsselkompetenzen_ii.is_in_winter = True
 schlüsselkompetenzen_ii.save()
-
 
 schlüsselkompetenzen_ii.provides_competence.connect(informatik_und_gesellschaft)
 schlüsselkompetenzen_ii.provides_competence.connect(projekt_und_teamkompetenz)
@@ -670,4 +667,3 @@ module_nebenfach3.is_in_summer = True
 module_nebenfach3.is_in_winter = True
 module_nebenfach3.provides_competence.connect(dummy_competence)
 module_nebenfach3.save()
-
