@@ -77,7 +77,7 @@ class AnalysisResponseDTO(BaseModel):
     """
     Generic analysis response class. Other analysis respond classes might inherit this class
     """
-    status: str
+    status: AnalysisStatus
     message: str
 
 
@@ -284,12 +284,14 @@ class CellDTO(BaseModel):
     If contains_wpf is true, this is a ModuleAreaDTO, otherwise a ModuleDTO
     """
 
+
 class UpdateCPClusterCellDTO(BaseModel):
     isWPF: bool
     name: str
     cp: PositiveInt
     sem: PositiveInt
     cellId: Optional[str] = None
+
 
 class UpdateCPClusterDTO(BaseModel):
     cells: list[UpdateCPClusterCellDTO]
@@ -299,6 +301,7 @@ class UpdateCPClusterDTO(BaseModel):
     """
     ID referencing cp_cluster
     """
+
 
 class CreateCPClusterDTO(BaseModel):
     cells: list[UpdateCPClusterCellDTO]
