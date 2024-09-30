@@ -217,3 +217,32 @@ def get_semesters() -> list[int]:
     """
 
     return [semester.number for semester in Semester.nodes.all()]
+
+@router.put("/competence/{name}")
+def create_competence(name: str) -> None:
+    """
+    Create a competence
+    :param name: the name of the competence
+    """
+
+    c = Competence.nodes.first_or_none(name=name)
+
+    if c is not None:
+        return
+
+    comp: Competence = Competence(name=name)
+    comp.save()
+@router.delete("/competence/{name}")
+def delete_competence(name: str) -> None:
+    """
+    Delete a competence
+    :param name:
+    :return:
+    """
+
+    c = Competence.nodes.first_or_none(name=name)
+
+    if c is None:
+        return
+
+    c.delete()
