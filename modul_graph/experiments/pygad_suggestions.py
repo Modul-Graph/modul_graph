@@ -305,7 +305,7 @@ class Suggestion:
         """
         fitness_function = self._fitness
 
-        num_generations = 50000
+        num_generations = 5000
         num_parents_mating = 1
 
         sol_per_pop = 100
