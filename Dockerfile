@@ -22,7 +22,7 @@ ENV VIRTUAL_ENV=/app/.venv \
     PATH="/app/.venv/bin:$PATH"
 
 COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
-COPY --form=builder /app/locales locales
+COPY --from=builder /app/locales locales
 
 
 COPY modul_graph ./modul_graph
