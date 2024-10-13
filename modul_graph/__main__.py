@@ -1,5 +1,8 @@
 import gettext
 
+import argparse
+
+import loguru
 import uvicorn
 from neomodel import config, db  # type: ignore
 
@@ -31,7 +34,19 @@ config.DATABASE_URL = Settings().NEO4J_URI  # default
 # s = Suggestion(sc, {competence})
 # print(pretty_repr(s.__gen_suggested_wpf()))
 
-# print(get_unmet_prerequisites_of_module(module, sc, sem, set()))
+# print(get_unmet_prerequisites_of_module(module, sc, sem, set())
+
+parser = argparse.ArgumentParser("ModulGraph Backend")
+parser.add_argument("--recreate-graph", dest="recreate_graph", help="Clears and recreates the graph", default=False, action="store_true")
+
+args = parser.parse_args()
+
+if args.recreate_graph:
+
+    # noinspection PyUnresolvedReferences
+    import modul_graph.static.spo_2017_inf_wise._standard_curricula
+    loguru.logger.info("Recreated Graph")
+    exit(0)
 
 
 '''
@@ -98,4 +113,4 @@ config.DATABASE_URL = Settings().NEO4J_URI  # default
 
 translation = gettext.translation(domain="modul_graph", localedir="./locales", languages=["de"])
 translation.install()
-uvicorn.run(app="modul_graph.fast_api:app", port=8080, workers=4)
+uvicorn.run(app="modul_graph.fast_api:app", port=8080, workers=4, reload=Settings().DEV)

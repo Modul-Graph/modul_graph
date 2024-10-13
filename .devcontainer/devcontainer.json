@@ -11,5 +11,7 @@
         "7474:7474",
         "7687:7687"
     ],
+
+    postCreateCommand: [""],
     "postStartCommand": "git config --global --add safe.directory ${containerWorkspaceFolder}"
 }
