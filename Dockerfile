@@ -11,7 +11,8 @@ ENV POETRY_NO_INTERACTION=1 \
 
 WORKDIR /app
 COPY pyproject.toml poetry.lock ./
-COPY locales gen_translations.sh ./
+COPY gen_translations.sh ./
+COPY locales/ ./locales/
 
 RUN --mount=type=cache,target=$POETRY_CACHE_DIR poetry install --without dev --no-root
 RUN ./gen_translations.sh
@@ -24,6 +25,7 @@ ENV VIRTUAL_ENV=/app/.venv \
 
 COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 COPY --from=builder /app/locales locales
+
 
 COPY modul_graph ./modul_graph
 
