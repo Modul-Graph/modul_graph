@@ -25,8 +25,6 @@ ENV VIRTUAL_ENV=/app/.venv \
 COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 COPY --from=builder /app/locales locales
 
-
 COPY modul_graph ./modul_graph
-
 
 ENTRYPOINT ["python", "-m", "modul_graph"]
