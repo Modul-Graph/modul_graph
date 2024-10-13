@@ -8,9 +8,10 @@ from .routes.cp_cluster import router as cp_cluster_router
 from .routes.module import router as module_router
 from .routes.module_area import router as module_area_router
 from .routes.standard_curriculum import router as sc_router
+from .settings import Settings
 
 # Setup DB connection params
-config.DATABASE_URL = 'bolt://neo4j:password@localhost:7687'  # default
+config.DATABASE_URL = Settings().NEO4J_URI  # default
 
 app = FastAPI(root_path="/api/v1", response_model_exclude_none=True)
 

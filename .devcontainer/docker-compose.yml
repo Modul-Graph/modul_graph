@@ -5,6 +5,8 @@ services:
     build:
       context: .
       dockerfile: ./.devcontainer/Dockerfile
+    env_file:
+      - ./.devcontainer/.env
   neo4j:
     env_file: !override
       - ./.devcontainer/.neo4j.env

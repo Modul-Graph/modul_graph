@@ -3,9 +3,11 @@ import gettext
 import uvicorn
 from neomodel import config, db  # type: ignore
 
+from modul_graph.settings import Settings
+
 # from modul_graph.utils.std_curr import instantiate_std_curr_obj
 
-config.DATABASE_URL = 'bolt://neo4j:password@localhost:7687'  # default
+config.DATABASE_URL = Settings().NEO4J_URI  # default
 # results, meta = db.cypher_query("MATCH (n) DETACH DELETE n")
 # import modul_graph.static.spo_2017_inf_wise._standard_curricula
 
