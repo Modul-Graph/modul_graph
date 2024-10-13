@@ -177,4 +177,4 @@ pyrightconfig.json
 # End of https://www.toptal.com/developers/gitignore/api/python
 
 # Devcontainer env can stay
-!./.devcontainer/.env
+!.devcontainer/.env
