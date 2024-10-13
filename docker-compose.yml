@@ -1,5 +1,3 @@
-version: '3.8'
-
 # The different services that make up our "network" of containers
 services:
   neo4j:
