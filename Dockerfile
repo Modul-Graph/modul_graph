@@ -1,4 +1,4 @@
-FROM python:3.12 as builder
+FROM --platform=$BUILDPLATFORM python:3.12 as builder
 RUN pip install poetry
 RUN apt-get update
 RUN apt-get install -y libgl1-mesa-dev ghostscript python3-tk gettext
@@ -17,7 +17,7 @@ COPY locales/ ./locales/
 RUN --mount=type=cache,target=$POETRY_CACHE_DIR poetry install --without dev --no-root
 RUN ./gen_translations.sh
 
-FROM python:3.12 as runtime
+FROM --platform=$BUILDPLATFORM python:3.12 as runtime
 
 WORKDIR /app
 ENV VIRTUAL_ENV=/app/.venv \
