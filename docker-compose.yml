@@ -25,11 +25,6 @@ services:
     depends_on:
       neo4j:
         condition: service_healthy
-    healthcheck:
-      test: ["CMD", "curl", "--fail", "http://localhost:8080/health", "||", "exit", "1"]
-      interval: 10s
-      timeout: 2s
-      retries: 10
 
 ## volumes to be generated, these are saved somewhere for repeated use by docker
 volumes:
