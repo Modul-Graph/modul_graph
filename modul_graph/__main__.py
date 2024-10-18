@@ -113,4 +113,4 @@ if args.recreate_graph:
 
 translation = gettext.translation(domain="modul_graph", localedir="./locales", languages=["de"])
 translation.install()
-uvicorn.run(app="modul_graph.fast_api:app", port=8080, workers=4, reload=Settings().DEV)
+uvicorn.run(app="modul_graph.fast_api:app", port=8080, workers=4, reload=Settings().DEV, host="0.0.0.0")
